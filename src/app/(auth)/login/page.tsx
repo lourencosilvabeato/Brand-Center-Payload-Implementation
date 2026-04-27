@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { getPayload } from '@/lib/payload'
 import type { Media, LoginSetting, FooterSetting } from '@/payload-types'
 import { LoginForm } from '@/components/auth/LoginForm'
