@@ -106,11 +106,13 @@ export interface Config {
     homePage: HomePage;
     navigation: Navigation;
     footerSettings: FooterSetting;
+    loginSettings: LoginSetting;
   };
   globalsSelect: {
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     footerSettings: FooterSettingsSelect<false> | FooterSettingsSelect<true>;
+    loginSettings: LoginSettingsSelect<false> | LoginSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1127,6 +1129,36 @@ export interface FooterSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "loginSettings".
+ */
+export interface LoginSetting {
+  id: number;
+  image: number | Media;
+  /**
+   * Main heading shown above the login form.
+   */
+  title?: string | null;
+  /**
+   * Optional introductory paragraph shown below the title.
+   */
+  introduction?: string | null;
+  /**
+   * Optional secondary text shown below the introduction.
+   */
+  subtitle?: string | null;
+  /**
+   * Label for the institutional link (e.g. "Visit ascendum.com").
+   */
+  institutionalLinkLabel?: string | null;
+  /**
+   * URL for the institutional link. Opens in a new tab.
+   */
+  institutionalLinkUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homePage_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -1210,6 +1242,21 @@ export interface FooterSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "loginSettings_select".
+ */
+export interface LoginSettingsSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  introduction?: T;
+  subtitle?: T;
+  institutionalLinkLabel?: T;
+  institutionalLinkUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
