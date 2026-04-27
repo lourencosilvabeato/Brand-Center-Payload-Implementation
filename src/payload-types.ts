@@ -237,6 +237,7 @@ export interface Invitation {
   tokenHash: string;
   expiresAt: string;
   used?: boolean | null;
+  cancelled?: boolean | null;
   invitedBy: number | PlatformUser;
   updatedAt: string;
   createdAt: string;
@@ -722,6 +723,7 @@ export interface InvitationsSelect<T extends boolean = true> {
   tokenHash?: T;
   expiresAt?: T;
   used?: T;
+  cancelled?: T;
   invitedBy?: T;
   updatedAt?: T;
   createdAt?: T;
