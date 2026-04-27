@@ -7,9 +7,7 @@ export const PlatformUsers: CollectionConfig = {
     useAsTitle: 'email',
     group: 'Users',
   },
-  auth: {
-    disableLocalStrategy: true,
-  },
+  auth: true,
   fields: [
     {
       name: 'displayName',
