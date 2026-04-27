@@ -63,12 +63,20 @@ export type SupportedTimezones =
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
+    platformUsers: PlatformUserAuthOperations;
+    externalUsers: ExternalUserAuthOperations;
   };
   blocks: {};
   collections: {
-    users: User;
+    platformUsers: PlatformUser;
+    externalUsers: ExternalUser;
+    invitations: Invitation;
+    passwordResets: PasswordReset;
+    channelPages: ChannelPage;
+    contentPages: ContentPage;
+    legalPages: LegalPage;
     media: Media;
+    protectedFiles: ProtectedFile;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -76,30 +84,63 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
+    platformUsers: PlatformUsersSelect<false> | PlatformUsersSelect<true>;
+    externalUsers: ExternalUsersSelect<false> | ExternalUsersSelect<true>;
+    invitations: InvitationsSelect<false> | InvitationsSelect<true>;
+    passwordResets: PasswordResetsSelect<false> | PasswordResetsSelect<true>;
+    channelPages: ChannelPagesSelect<false> | ChannelPagesSelect<true>;
+    contentPages: ContentPagesSelect<false> | ContentPagesSelect<true>;
+    legalPages: LegalPagesSelect<false> | LegalPagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    protectedFiles: ProtectedFilesSelect<false> | ProtectedFilesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    homePage: HomePage;
+    navigation: Navigation;
+    footerSettings: FooterSetting;
+  };
+  globalsSelect: {
+    homePage: HomePageSelect<false> | HomePageSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    footerSettings: FooterSettingsSelect<false> | FooterSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: PlatformUser | ExternalUser;
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
-export interface UserAuthOperations {
+export interface PlatformUserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface ExternalUserAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -119,10 +160,34 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "platformUsers".
  */
-export interface User {
-  id: string;
+export interface PlatformUser {
+  id: number;
+  displayName?: string | null;
+  role: 'admin' | 'localAdmin' | 'internal';
+  /**
+   * Azure AD object ID — populated automatically on first SSO login.
+   */
+  azureId?: string | null;
+  /**
+   * Profile photo URL from Microsoft Graph — updated on each SSO login.
+   */
+  avatarUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  collection: 'platformUsers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "externalUsers".
+ */
+export interface ExternalUser {
+  id: number;
+  /**
+   * External users always have the external role.
+   */
+  role: 'external';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -140,15 +205,95 @@ export interface User {
       }[]
     | null;
   password?: string | null;
-  collection: 'users';
+  collection: 'externalUsers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invitations".
+ */
+export interface Invitation {
+  id: number;
+  email: string;
+  /**
+   * SHA-256 hash of the raw invite token — never store the raw token.
+   */
+  tokenHash: string;
+  expiresAt: string;
+  used?: boolean | null;
+  invitedBy: number | PlatformUser;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "passwordResets".
+ */
+export interface PasswordReset {
+  id: number;
+  user: number | ExternalUser;
+  /**
+   * SHA-256 hash of the raw reset token — never store the raw token.
+   */
+  tokenHash: string;
+  expiresAt: string;
+  used?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channelPages".
+ */
+export interface ChannelPage {
+  id: number;
+  title: string;
+  /**
+   * URL segment for this page (e.g. "brand-identity" for /brand-identity/).
+   */
+  slug: string;
+  excerpt?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  buttons?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  cards?:
+    | {
+        title: string;
+        excerpt?: string | null;
+        image?: (number | null) | Media;
+        link: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
-  alt: string;
+  id: number;
+  alt?: string | null;
+  caption?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -163,10 +308,239 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contentPages".
+ */
+export interface ContentPage {
+  id: number;
+  title: string;
+  /**
+   * URL segment for this page (e.g. "logo-usage" for /brand-identity/logo-usage/).
+   */
+  slug: string;
+  excerpt?: string | null;
+  layout?:
+    | (
+        | {
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            alt?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageBlock';
+          }
+        | {
+            text: string;
+            attribution?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quoteBlock';
+          }
+        | {
+            text: string;
+            type: 'info' | 'warning';
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'noteBlock';
+          }
+        | {
+            rows: {
+              cells: {
+                content?: string | null;
+                isHeader?: boolean | null;
+                id?: string | null;
+              }[];
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'tableBlock';
+          }
+        | {
+            columns: '1' | '2' | '3' | '4' | '6';
+            items: {
+              image?: (number | null) | Media;
+              title: string;
+              url?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gridBlock';
+          }
+        | {
+            title: string;
+            image?: (number | null) | Media;
+            link: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'collectionCardBlock';
+          }
+        | {
+            label: string;
+            file: number | ProtectedFile;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'downloadBlock';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dividerBlock';
+          }
+        | {
+            items: {
+              question: string;
+              answer: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faqBlock';
+          }
+      )[]
+    | null;
+  /**
+   * Anchor navigation links shown in the anchor bar above the content.
+   */
+  anchors?:
+    | {
+        label: string;
+        /**
+         * The anchor ID to scroll to (without the # prefix).
+         */
+        anchor: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "protectedFiles".
+ */
+export interface ProtectedFile {
+  id: number;
+  /**
+   * Display name shown to users when downloading.
+   */
+  label?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legalPages".
+ */
+export interface LegalPage {
+  id: number;
+  title: string;
+  /**
+   * URL segment for this page (e.g. "privacy-policy").
+   */
+  slug: string;
+  layout?:
+    | (
+        | {
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'richText';
+          }
+        | {
+            image: number | Media;
+            caption?: string | null;
+            alt?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageBlock';
+          }
+        | {
+            text: string;
+            attribution?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'quoteBlock';
+          }
+        | {
+            text: string;
+            type: 'info' | 'warning';
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'noteBlock';
+          }
+        | {
+            rows: {
+              cells: {
+                content?: string | null;
+                isHeader?: boolean | null;
+                id?: string | null;
+              }[];
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'tableBlock';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dividerBlock';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,21 +557,54 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
+        relationTo: 'platformUsers';
+        value: number | PlatformUser;
+      } | null)
+    | ({
+        relationTo: 'externalUsers';
+        value: number | ExternalUser;
+      } | null)
+    | ({
+        relationTo: 'invitations';
+        value: number | Invitation;
+      } | null)
+    | ({
+        relationTo: 'passwordResets';
+        value: number | PasswordReset;
+      } | null)
+    | ({
+        relationTo: 'channelPages';
+        value: number | ChannelPage;
+      } | null)
+    | ({
+        relationTo: 'contentPages';
+        value: number | ContentPage;
+      } | null)
+    | ({
+        relationTo: 'legalPages';
+        value: number | LegalPage;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'protectedFiles';
+        value: number | ProtectedFile;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'platformUsers';
+        value: number | PlatformUser;
+      }
+    | {
+        relationTo: 'externalUsers';
+        value: number | ExternalUser;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -206,11 +613,16 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  id: number;
+  user:
+    | {
+        relationTo: 'platformUsers';
+        value: number | PlatformUser;
+      }
+    | {
+        relationTo: 'externalUsers';
+        value: number | ExternalUser;
+      };
   key?: string | null;
   value?:
     | {
@@ -229,7 +641,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -237,9 +649,22 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "platformUsers_select".
  */
-export interface UsersSelect<T extends boolean = true> {
+export interface PlatformUsersSelect<T extends boolean = true> {
+  displayName?: T;
+  role?: T;
+  azureId?: T;
+  avatarUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "externalUsers_select".
+ */
+export interface ExternalUsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -259,10 +684,275 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "invitations_select".
+ */
+export interface InvitationsSelect<T extends boolean = true> {
+  email?: T;
+  tokenHash?: T;
+  expiresAt?: T;
+  used?: T;
+  invitedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "passwordResets_select".
+ */
+export interface PasswordResetsSelect<T extends boolean = true> {
+  user?: T;
+  tokenHash?: T;
+  expiresAt?: T;
+  used?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "channelPages_select".
+ */
+export interface ChannelPagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  description?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  cards?:
+    | T
+    | {
+        title?: T;
+        excerpt?: T;
+        image?: T;
+        link?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contentPages_select".
+ */
+export interface ContentPagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  layout?:
+    | T
+    | {
+        richText?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageBlock?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              alt?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quoteBlock?:
+          | T
+          | {
+              text?: T;
+              attribution?: T;
+              id?: T;
+              blockName?: T;
+            };
+        noteBlock?:
+          | T
+          | {
+              text?: T;
+              type?: T;
+              id?: T;
+              blockName?: T;
+            };
+        tableBlock?:
+          | T
+          | {
+              rows?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          content?: T;
+                          isHeader?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        gridBlock?:
+          | T
+          | {
+              columns?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    url?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        collectionCardBlock?:
+          | T
+          | {
+              title?: T;
+              image?: T;
+              link?: T;
+              id?: T;
+              blockName?: T;
+            };
+        downloadBlock?:
+          | T
+          | {
+              label?: T;
+              file?: T;
+              id?: T;
+              blockName?: T;
+            };
+        dividerBlock?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+        faqBlock?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  anchors?:
+    | T
+    | {
+        label?: T;
+        anchor?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legalPages_select".
+ */
+export interface LegalPagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  layout?:
+    | T
+    | {
+        richText?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageBlock?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              alt?: T;
+              id?: T;
+              blockName?: T;
+            };
+        quoteBlock?:
+          | T
+          | {
+              text?: T;
+              attribution?: T;
+              id?: T;
+              blockName?: T;
+            };
+        noteBlock?:
+          | T
+          | {
+              text?: T;
+              type?: T;
+              id?: T;
+              blockName?: T;
+            };
+        tableBlock?:
+          | T
+          | {
+              rows?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          content?: T;
+                          isHeader?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        dividerBlock?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "protectedFiles_select".
+ */
+export interface ProtectedFilesSelect<T extends boolean = true> {
+  label?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -314,6 +1004,215 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homePage".
+ */
+export interface HomePage {
+  id: number;
+  /**
+   * "New in" section items shown on the homepage.
+   */
+  newInItems?:
+    | {
+        title: string;
+        excerpt?: string | null;
+        image?: (number | null) | Media;
+        link: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Quick access shortcuts shown on the homepage.
+   */
+  quickAccessItems?:
+    | {
+        title: string;
+        link: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Help/support buttons shown on the homepage.
+   */
+  helpButtons?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  /**
+   * Top-level navigation items (L1). Each can have L2 children, each L2 can have L3 children.
+   */
+  items?:
+    | {
+        label: string;
+        page?:
+          | ({
+              relationTo: 'channelPages';
+              value: number | ChannelPage;
+            } | null)
+          | ({
+              relationTo: 'contentPages';
+              value: number | ContentPage;
+            } | null);
+        children?:
+          | {
+              label: string;
+              page?:
+                | ({
+                    relationTo: 'channelPages';
+                    value: number | ChannelPage;
+                  } | null)
+                | ({
+                    relationTo: 'contentPages';
+                    value: number | ContentPage;
+                  } | null);
+              children?:
+                | {
+                    label: string;
+                    page?: (number | null) | ContentPage;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footerSettings".
+ */
+export interface FooterSetting {
+  id: number;
+  brandName?: string | null;
+  contactEmail?: string | null;
+  copyright?: string | null;
+  socialLinks?:
+    | {
+        platform: 'linkedin' | 'youtube' | 'instagram' | 'facebook' | 'twitter';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  legalLinks?:
+    | {
+        label: string;
+        page?: (number | null) | LegalPage;
+        /**
+         * Use this for external links instead of a legal page.
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homePage_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  newInItems?:
+    | T
+    | {
+        title?: T;
+        excerpt?: T;
+        image?: T;
+        link?: T;
+        id?: T;
+      };
+  quickAccessItems?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        id?: T;
+      };
+  helpButtons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        label?: T;
+        page?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              page?: T;
+              children?:
+                | T
+                | {
+                    label?: T;
+                    page?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footerSettings_select".
+ */
+export interface FooterSettingsSelect<T extends boolean = true> {
+  brandName?: T;
+  contactEmail?: T;
+  copyright?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        page?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

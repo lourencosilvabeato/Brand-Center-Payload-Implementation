@@ -1,3 +1,3 @@
-// Globals are defined here (feature/collections — prompt 0c)
-// homePage, navigation, footerSettings
-export {}
+export { HomePage } from './homePage'
+export { Navigation } from './navigation'
+export { FooterSettings } from './footerSettings'

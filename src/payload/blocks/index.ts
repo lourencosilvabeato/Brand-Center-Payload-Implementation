@@ -1,4 +1,10 @@
-// Block definitions are defined here (feature/blocks — prompt 17)
-// richText, imageBlock, quoteBlock, noteBlock, tableBlock,
-// gridBlock, collectionCardBlock, downloadBlock, dividerBlock, faqBlock
-export {}
+export { RichTextBlock } from './richText'
+export { ImageBlock } from './imageBlock'
+export { QuoteBlock } from './quoteBlock'
+export { NoteBlock } from './noteBlock'
+export { TableBlock } from './tableBlock'
+export { GridBlock } from './gridBlock'
+export { CollectionCardBlock } from './collectionCardBlock'
+export { DownloadBlock } from './downloadBlock'
+export { DividerBlock } from './dividerBlock'
+export { FaqBlock } from './faqBlock'
