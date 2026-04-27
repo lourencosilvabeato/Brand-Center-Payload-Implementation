@@ -12,11 +12,11 @@ type SocialLinkItem = NonNullable<FooterSetting['socialLinks']>[number]
 type LegalLinkItem = NonNullable<FooterSetting['legalLinks']>[number]
 
 interface Props {
-  searchParams: Promise<{ token?: string }>
+  searchParams: Promise<{ token?: string; type?: string }>
 }
 
 export default async function SetPasswordPage({ searchParams }: Props) {
-  const { token } = await searchParams
+  const { token, type } = await searchParams
 
   if (!token) redirect('/expired-link')
 
@@ -24,20 +24,37 @@ export default async function SetPasswordPage({ searchParams }: Props) {
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
   const now = new Date().toISOString()
 
-  const invitations = await payload.find({
-    collection: 'invitations',
-    where: {
-      and: [
-        { tokenHash: { equals: tokenHash } },
-        { used: { equals: false } },
-        { cancelled: { equals: false } },
-        { expiresAt: { greater_than: now } },
-      ],
-    },
-    limit: 1,
-  })
+  const isReset = type === 'reset'
 
-  if (invitations.totalDocs === 0) redirect('/expired-link')
+  if (isReset) {
+    const resets = await payload.find({
+      collection: 'passwordResets',
+      where: {
+        and: [
+          { tokenHash: { equals: tokenHash } },
+          { used: { equals: false } },
+          { expiresAt: { greater_than: now } },
+        ],
+      },
+      limit: 1,
+      depth: 0,
+    })
+    if (resets.totalDocs === 0) redirect('/expired-link')
+  } else {
+    const invitations = await payload.find({
+      collection: 'invitations',
+      where: {
+        and: [
+          { tokenHash: { equals: tokenHash } },
+          { used: { equals: false } },
+          { cancelled: { equals: false } },
+          { expiresAt: { greater_than: now } },
+        ],
+      },
+      limit: 1,
+    })
+    if (invitations.totalDocs === 0) redirect('/expired-link')
+  }
 
   const [loginSettings, footerSettings] = await Promise.all([
     payload
@@ -74,7 +91,10 @@ export default async function SetPasswordPage({ searchParams }: Props) {
             </div>
           )}
 
-          <SetPasswordForm token={token} />
+          <SetPasswordForm
+            token={token}
+            confirmUrl={isReset ? '/api/reset-password/confirm' : '/api/set-password'}
+          />
         </div>
 
         <footer className={styles.footer}>

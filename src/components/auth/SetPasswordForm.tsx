@@ -7,6 +7,7 @@ import styles from './SetPasswordForm.module.css'
 
 interface SetPasswordFormProps {
   token: string
+  confirmUrl?: string
 }
 
 const PASSWORD_HINT =
@@ -18,7 +19,7 @@ type FieldErrors = {
   confirmPassword?: string
 }
 
-export function SetPasswordForm({ token }: SetPasswordFormProps) {
+export function SetPasswordForm({ token, confirmUrl }: SetPasswordFormProps) {
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -53,7 +54,7 @@ export function SetPasswordForm({ token }: SetPasswordFormProps) {
 
     setIsLoading(true)
     try {
-      const res = await fetch('/api/set-password', {
+      const res = await fetch(confirmUrl ?? '/api/set-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password, confirmPassword }),
