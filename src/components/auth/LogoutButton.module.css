@@ -1,0 +1,39 @@
+/* ── LogoutButton ────────────────────────────────────────────
+   Designed as a dropdown / mobile-menu item.
+   Container (dropdown or mobile nav) provides background.
+──────────────────────────────────────────────────────────── */
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 24px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--white);
+  text-align: left;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.btn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+}
