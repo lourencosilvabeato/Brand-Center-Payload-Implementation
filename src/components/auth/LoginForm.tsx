@@ -7,6 +7,7 @@ import styles from './LoginForm.module.css'
 
 interface LoginFormProps {
   ssoUrl: string
+  subtitle?: string | null
 }
 
 type FieldErrors = {
@@ -14,7 +15,7 @@ type FieldErrors = {
   password?: string
 }
 
-export function LoginForm({ ssoUrl }: LoginFormProps) {
+export function LoginForm({ ssoUrl, subtitle }: LoginFormProps) {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -49,7 +50,7 @@ export function LoginForm({ ssoUrl }: LoginFormProps) {
     setIsLoading(true)
 
     try {
-      const res = await fetch('/api/external-users/login', {
+      const res = await fetch('/api/externalUsers/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password, rememberMe }),
@@ -97,6 +98,8 @@ export function LoginForm({ ssoUrl }: LoginFormProps) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
+      {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+
       <div className={styles.field}>
         <input
           className={`${styles.input}${fieldErrors.email ? ` ${styles.inputError}` : ''}`}

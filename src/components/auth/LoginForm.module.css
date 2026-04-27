@@ -5,6 +5,16 @@
   width: 100%;
 }
 
+/* ── Form subtitle label ──────────────────────────────────── */
+
+.subtitle {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+}
+
 /* ── Inputs ───────────────────────────────────────────────── */
 
 .field {
