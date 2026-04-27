@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { getPayload } from '@/lib/payload'
 import type { Media, LoginSetting, FooterSetting } from '@/payload-types'
 import { LoginForm } from '@/components/auth/LoginForm'
@@ -47,12 +46,10 @@ export default async function LoginPage() {
       {/* ── Hero image ───────────────────────────────────────── */}
       <div className={styles.hero}>
         {imageUrl ? (
-          <Image
+          <img
             src={imageUrl}
             alt={image?.alt ?? 'Ascendum Brand Center'}
-            fill
             className={styles.heroImg}
-            priority
           />
         ) : (
           <div className={styles.heroFallback} />
@@ -62,8 +59,8 @@ export default async function LoginPage() {
       {/* ── Main column (form + footer) ───────────────────────── */}
       <div className={styles.main}>
         <div className={styles.formWrapper}>
-          {/* Optional editorial content above form */}
-          {(loginSettings?.title || loginSettings?.introduction || loginSettings?.subtitle) && (
+          {/* Headline: title + introduction (above form) */}
+          {(loginSettings?.title || loginSettings?.introduction) && (
             <div className={styles.editorial}>
               {loginSettings.title && (
                 <h1 className={styles.title}>{loginSettings.title}</h1>
@@ -71,14 +68,11 @@ export default async function LoginPage() {
               {loginSettings.introduction && (
                 <p className={styles.introduction}>{loginSettings.introduction}</p>
               )}
-              {loginSettings.subtitle && (
-                <p className={styles.subtitle}>{loginSettings.subtitle}</p>
-              )}
             </div>
           )}
 
-          {/* Login form (client component) */}
-          <LoginForm ssoUrl={ssoUrl} />
+          {/* Login form — subtitle rendered as label inside */}
+          <LoginForm ssoUrl={ssoUrl} subtitle={loginSettings?.subtitle} />
 
           {/* Institutional link */}
           {loginSettings?.institutionalLinkLabel && loginSettings.institutionalLinkUrl && (

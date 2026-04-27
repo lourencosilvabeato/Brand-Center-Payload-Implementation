@@ -19,7 +19,7 @@ export const Media: CollectionConfig = {
   ],
   access: {
     create: isAdminOrLocalAdmin,
-    read: isAuthenticated,
+    read: () => true,
     update: isAdminOrLocalAdmin,
     delete: isAdminOrLocalAdmin,
   },
