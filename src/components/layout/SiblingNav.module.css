@@ -1,0 +1,33 @@
+.nav {
+  border-top: 1px solid var(--grey-ascendum);
+  padding-top: 32px;
+  margin-top: 48px;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.btn:hover {
+  opacity: 0.75;
+}
+
+.next {
+  margin-left: auto;
+}
