@@ -24,16 +24,10 @@ export const FooterSettings: GlobalConfig = {
       type: 'array',
       fields: [
         {
-          name: 'platform',
-          type: 'select',
+          name: 'icon',
+          type: 'upload',
+          relationTo: 'media',
           required: true,
-          options: [
-            { label: 'LinkedIn', value: 'linkedin' },
-            { label: 'YouTube', value: 'youtube' },
-            { label: 'Instagram', value: 'instagram' },
-            { label: 'Facebook', value: 'facebook' },
-            { label: 'X (Twitter)', value: 'twitter' },
-          ],
         },
         {
           name: 'url',

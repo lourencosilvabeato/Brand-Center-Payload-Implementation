@@ -1139,7 +1139,7 @@ export interface FooterSetting {
   copyright?: string | null;
   socialLinks?:
     | {
-        platform: 'linkedin' | 'youtube' | 'instagram' | 'facebook' | 'twitter';
+        icon: number | Media;
         url: string;
         id?: string | null;
       }[]
@@ -1269,7 +1269,7 @@ export interface FooterSettingsSelect<T extends boolean = true> {
   socialLinks?:
     | T
     | {
-        platform?: T;
+        icon?: T;
         url?: T;
         id?: T;
       };

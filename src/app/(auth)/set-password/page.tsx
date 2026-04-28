@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import { getPayload } from '@/lib/payload'
 import type { LoginSetting, FooterSetting, Media } from '@/payload-types'
 import { SetPasswordForm } from '@/components/auth/SetPasswordForm'
-import { SocialIcon } from '@/components/ui/SocialIcon'
+import Image from 'next/image'
 import styles from './set-password.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -114,7 +114,12 @@ export default async function SetPasswordPage({ searchParams }: Props) {
                       rel="noopener noreferrer"
                       className={styles.socialLink}
                     >
-                      <SocialIcon platform={item.platform} />
+                      {(() => {
+                        const icon = item.icon as Media
+                        return icon?.url ? (
+                          <Image src={icon.url} alt={icon.alt ?? ''} width={32} height={32} style={{ objectFit: 'contain' }} />
+                        ) : null
+                      })()}
                     </a>
                   ))}
                 </div>
