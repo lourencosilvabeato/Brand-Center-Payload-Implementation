@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import Link from 'next/link'
 import type { Navigation, ChannelPage, ContentPage } from '@/payload-types'
 import styles from './MegaMenu.module.css'
@@ -24,7 +23,6 @@ interface MegaMenuProps {
   l1Item: NavL1
   l1Slug: string
   onClose: () => void
-  onMouseLeave: () => void
 }
 
 const MAX_LINES_PER_COL = 8
@@ -49,15 +47,7 @@ function buildColumns(l2Items: NavL2[]): NavL2[][] {
   return columns
 }
 
-export function MegaMenu({ l1Item, l1Slug, onClose, onMouseLeave }: MegaMenuProps) {
-  useEffect(() => {
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleKey)
-    return () => document.removeEventListener('keydown', handleKey)
-  }, [onClose])
-
+export function MegaMenu({ l1Item, l1Slug, onClose }: MegaMenuProps) {
   const columns = buildColumns(l1Item.children ?? [])
 
   if (columns.length === 0) return null
@@ -65,7 +55,6 @@ export function MegaMenu({ l1Item, l1Slug, onClose, onMouseLeave }: MegaMenuProp
   return (
     <div
       className={styles.overlay}
-      onMouseLeave={onMouseLeave}
       role="region"
       aria-label="Navigation menu"
     >
