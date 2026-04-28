@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import type { Navigation } from '@/payload-types'
 import type { ChannelPage, ContentPage } from '@/payload-types'
 import { MegaMenu } from './MegaMenu'
@@ -33,8 +33,12 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
   const [profileOpen, setProfileOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const searchRef = useRef<HTMLInputElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const router = useRouter()
+  const pathname = usePathname()
+
+  // First path segment identifies the active L1 section
+  const activeL1Slug = pathname.split('/').filter(Boolean)[0] ?? null
 
   const openMegaMenu = useCallback((item: NavL1, slug: string) => {
     setMegaMenuL1(item)
@@ -46,6 +50,29 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
     setMegaMenuL1(null)
     setMegaMenuL1Slug(null)
   }, [])
+
+  // Close mega-menu when clicking outside the header
+  useEffect(() => {
+    function handleDocumentClick(e: MouseEvent) {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        closeMegaMenu()
+      }
+    }
+    document.addEventListener('mousedown', handleDocumentClick)
+    return () => document.removeEventListener('mousedown', handleDocumentClick)
+  }, [closeMegaMenu])
+
+  // Close mega-menu on Escape
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        closeMegaMenu()
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => document.removeEventListener('keydown', handleKey)
+  }, [closeMegaMenu])
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -60,10 +87,10 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
 
   return (
     <>
-      <header className={styles.header}>
+      <header ref={headerRef} className={styles.header}>
         <div className={styles.inner}>
           {/* Logo */}
-          <Link href="/" className={styles.logo} aria-label="Ascendum Brand Center home">
+          <Link href="/" className={styles.logo} aria-label="Ascendum Brand Center home" onClick={closeMegaMenu}>
             <Image
               src="/logo.svg"
               alt="Ascendum"
@@ -78,7 +105,9 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
             <ul className={styles.navList}>
               {(items ?? []).map((item) => {
                 const slug = getPolySlug(item.page)
-                const isActive = megaMenuL1?.id === item.id
+                const isPathActive = slug !== null && slug === activeL1Slug
+                const isMenuOpen = megaMenuL1?.id === item.id
+                const isActive = isPathActive || isMenuOpen
 
                 return (
                   <li key={item.id ?? item.label} className={styles.navItem}>
@@ -86,15 +115,15 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
                       <button
                         type="button"
                         className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-                        onMouseEnter={() => slug && openMegaMenu(item, slug)}
                         onClick={() => {
-                          if (isActive) {
+                          if (isMenuOpen) {
                             closeMegaMenu()
                           } else if (slug) {
                             openMegaMenu(item, slug)
                           }
+                          setProfileOpen(false)
                         }}
-                        aria-expanded={isActive}
+                        aria-expanded={isMenuOpen}
                       >
                         {item.label}
                       </button>
@@ -102,7 +131,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
                       <Link
                         href={`/${slug}`}
                         className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-                        onMouseEnter={closeMegaMenu}
                         onClick={closeMegaMenu}
                       >
                         {item.label}
@@ -123,7 +151,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
             </label>
             <div className={styles.searchWrap}>
               <input
-                ref={searchRef}
                 id="header-search"
                 type="search"
                 className={styles.searchInput}
@@ -196,7 +223,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
             l1Item={megaMenuL1}
             l1Slug={megaMenuL1Slug}
             onClose={closeMegaMenu}
-            onMouseLeave={closeMegaMenu}
           />
         )}
       </header>
