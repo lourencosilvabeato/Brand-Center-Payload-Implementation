@@ -21,6 +21,11 @@
   --font-h2-size: 30px;
   --font-h2-line-height: 1.3;
 
+  --font-h3-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  --font-h3-weight: 700;
+  --font-h3-size: 26px;
+  --font-h3-line-height: 1.3;
+
   --font-h4-family: var(--font-montserrat), 'Montserrat', sans-serif;
   --font-h4-weight: 700;
   --font-h4-size: 18px;
