@@ -3,8 +3,61 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  padding-top: 8px;
 }
+
+/* ── Search input ─────────────────────────────────────────── */
+
+.searchSection {
+  padding: 0 0 32px 24px;
+}
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid var(--blue-ascendum);
+  gap: 8px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--blue-ascendum);
+}
+
+.searchInput::placeholder {
+  color: var(--blue-ascendum-60);
+}
+
+.searchClear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--blue-ascendum-60);
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.searchClear:hover {
+  opacity: 0.75;
+}
+
+/* ── Navigation links ─────────────────────────────────────── */
 
 .list {
   list-style: none;
@@ -16,7 +69,7 @@
   display: block;
   padding: 12px 32px 12px 24px;
   font-family: var(--font-body-m-family);
-  font-weight: 400;
+  font-weight: var(--font-body-m-weight);
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
   color: var(--darker-grey);
@@ -36,13 +89,15 @@
   border-left-color: var(--red-ascendum);
 }
 
+/* ── Extras (Navigation Tips + FAQs) ─────────────────────── */
+
 .extras {
   display: flex;
   flex-direction: column;
-  padding: 0 32px 0 24px;
+  padding: 16px 32px 0 24px;
   gap: 8px;
   border-top: 1px solid var(--grey-ascendum);
-  padding-top: 16px;
+  margin-top: 8px;
 }
 
 .extraLink {
