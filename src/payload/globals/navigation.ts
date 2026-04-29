@@ -25,6 +25,14 @@ export const Navigation: GlobalConfig = {
           relationTo: ['channelPages', 'contentPages'],
         },
         {
+          name: 'showAsSearchFilter',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Show as a filter option in the homepage search bar.',
+          },
+        },
+        {
           name: 'children',
           type: 'array',
           fields: [
@@ -37,6 +45,14 @@ export const Navigation: GlobalConfig = {
               name: 'page',
               type: 'relationship',
               relationTo: ['channelPages', 'contentPages'],
+            },
+            {
+              name: 'showAsSearchFilter',
+              type: 'checkbox',
+              defaultValue: false,
+              admin: {
+                description: 'Show as a filter option in the homepage search bar.',
+              },
             },
             {
               name: 'children',

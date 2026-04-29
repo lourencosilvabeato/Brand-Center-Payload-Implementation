@@ -1044,35 +1044,58 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HomePage {
   id: number;
+  heroImage: number | Media;
+  heroHeadline: string;
   /**
-   * "New in" section items shown on the homepage.
+   * Optional intro text shown below the headline (desktop only).
+   */
+  heroIntroText?: string | null;
+  newInTitle: string;
+  newInBody?: string | null;
+  /**
+   * "New in" section items. Recommended 4.
    */
   newInItems?:
     | {
         title: string;
-        excerpt?: string | null;
-        image?: (number | null) | Media;
-        link: string;
+        image: number | Media;
+        link?: string | null;
+        /**
+         * Open link in a new tab.
+         */
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
+  quickAccessTitle: string;
+  quickAccessBody?: string | null;
   /**
-   * Quick access shortcuts shown on the homepage.
+   * Quick access shortcuts. Recommended 4.
    */
   quickAccessItems?:
     | {
         title: string;
-        link: string;
+        image: number | Media;
+        link?: string | null;
+        /**
+         * Open link in a new tab.
+         */
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * Help/support buttons shown on the homepage.
+   * Help/support buttons shown at the bottom of the homepage. Recommended 3.
    */
   helpButtons?:
     | {
         label: string;
         url: string;
+        newTab?: boolean | null;
+        /**
+         * Show this button on the homepage.
+         */
+        enabled?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1100,6 +1123,10 @@ export interface Navigation {
               relationTo: 'contentPages';
               value: number | ContentPage;
             } | null);
+        /**
+         * Show as a filter option in the homepage search bar.
+         */
+        showAsSearchFilter?: boolean | null;
         children?:
           | {
               label: string;
@@ -1112,6 +1139,10 @@ export interface Navigation {
                     relationTo: 'contentPages';
                     value: number | ContentPage;
                   } | null);
+              /**
+               * Show as a filter option in the homepage search bar.
+               */
+              showAsSearchFilter?: boolean | null;
               children?:
                 | {
                     label: string;
@@ -1201,20 +1232,29 @@ export interface LoginSetting {
  * via the `definition` "homePage_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
+  heroImage?: T;
+  heroHeadline?: T;
+  heroIntroText?: T;
+  newInTitle?: T;
+  newInBody?: T;
   newInItems?:
     | T
     | {
         title?: T;
-        excerpt?: T;
         image?: T;
         link?: T;
+        newTab?: T;
         id?: T;
       };
+  quickAccessTitle?: T;
+  quickAccessBody?: T;
   quickAccessItems?:
     | T
     | {
         title?: T;
+        image?: T;
         link?: T;
+        newTab?: T;
         id?: T;
       };
   helpButtons?:
@@ -1222,6 +1262,8 @@ export interface HomePageSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
+        newTab?: T;
+        enabled?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -1238,11 +1280,13 @@ export interface NavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         page?: T;
+        showAsSearchFilter?: T;
         children?:
           | T
           | {
               label?: T;
               page?: T;
+              showAsSearchFilter?: T;
               children?:
                 | T
                 | {
