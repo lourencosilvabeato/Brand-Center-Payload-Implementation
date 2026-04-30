@@ -1,0 +1,289 @@
+/* ── Image block ─────────────────────────────────────────────── */
+
+.imageBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.imageBlock img {
+  width: 100%;
+  height: 362px;
+  object-fit: cover;
+  display: block;
+}
+
+.imageCaption {
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  line-height: var(--font-body-s-regular-line-height);
+  color: var(--grey);
+}
+
+/* ── Quote block ─────────────────────────────────────────────── */
+
+.quoteBlock {
+  border-left: 3px solid var(--red-ascendum);
+  padding: 8px 0 8px 24px;
+}
+
+.quoteText {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  margin: 0 0 8px;
+  font-style: italic;
+}
+
+.quoteAttribution {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--grey);
+  margin: 0;
+}
+
+/* ── Note block ──────────────────────────────────────────────── */
+
+.noteBlock {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.noteInfo {
+  background-color: rgba(0, 56, 70, 0.06);
+  border-left: 3px solid var(--blue-ascendum);
+}
+
+.noteWarning {
+  background-color: rgba(227, 29, 26, 0.06);
+  border-left: 3px solid var(--red-ascendum);
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--blue-ascendum);
+}
+
+.noteWarning .noteIcon {
+  color: var(--red-ascendum);
+}
+
+.noteText {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  margin: 0;
+}
+
+/* ── Table block ─────────────────────────────────────────────── */
+
+.tableWrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  text-align: left;
+  border: 1px solid var(--grey-ascendum);
+  color: var(--darker-grey);
+}
+
+.table th {
+  background-color: var(--lightest-grey);
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  color: var(--blue-ascendum);
+}
+
+/* ── Grid block ──────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+.gridCols1 { grid-template-columns: 1fr; }
+.gridCols2 { grid-template-columns: repeat(2, 1fr); }
+.gridCols3 { grid-template-columns: repeat(3, 1fr); }
+.gridCols4 { grid-template-columns: repeat(4, 1fr); }
+.gridCols6 { grid-template-columns: repeat(6, 1fr); }
+
+.gridItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.gridItemImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background-color: var(--grey-ascendum);
+}
+
+.gridItemTitle {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--darker-grey);
+}
+
+/* ── Collection card block ───────────────────────────────────── */
+
+.collectionCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--grey-ascendum);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+.collectionCard:hover {
+  border-color: var(--blue-ascendum);
+}
+
+.collectionCardImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--grey-ascendum);
+}
+
+.collectionCardTitle {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+}
+
+/* ── Download block ──────────────────────────────────────────── */
+
+.downloadBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border: 1px solid var(--grey-ascendum);
+  width: fit-content;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.downloadBlock:hover {
+  border-color: var(--blue-ascendum);
+}
+
+.downloadIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--blue-ascendum);
+  flex-shrink: 0;
+}
+
+.downloadLabel {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+}
+
+/* ── Divider block ───────────────────────────────────────────── */
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--grey-ascendum);
+  margin: 0;
+}
+
+/* ── FAQ block ───────────────────────────────────────────────── */
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--grey-ascendum);
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--grey-ascendum);
+}
+
+.faqQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+}
+
+.faqCaret {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--blue-ascendum);
+  transition: transform 0.2s;
+}
+
+.faqCaretOpen {
+  transform: rotate(180deg);
+}
+
+.faqAnswer {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  padding: 0 0 16px;
+  white-space: pre-line;
+}
+
+@media (max-width: 768px) {
+  .gridCols3 { grid-template-columns: repeat(2, 1fr); }
+  .gridCols4 { grid-template-columns: repeat(2, 1fr); }
+  .gridCols6 { grid-template-columns: repeat(3, 1fr); }
+
+  .imageBlock img {
+    height: 193px;
+  }
+}
