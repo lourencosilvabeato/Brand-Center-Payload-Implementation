@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import type { Navigation } from '@/payload-types'
 import type { ChannelPage, ContentPage } from '@/payload-types'
 import { MegaMenu } from './MegaMenu'
@@ -32,9 +32,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
   const [megaMenuL1Slug, setMegaMenuL1Slug] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const headerRef = useRef<HTMLElement>(null)
-  const router = useRouter()
   const pathname = usePathname()
 
   // First path segment identifies the active L1 section
@@ -73,15 +71,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [closeMegaMenu])
-
-  function handleSearchSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    const q = searchQuery.trim()
-    if (q) {
-      router.push(`/search?q=${encodeURIComponent(q)}`)
-      setSearchQuery('')
-    }
-  }
 
   const firstLetter = displayName?.charAt(0)?.toUpperCase() ?? '?'
 
@@ -143,27 +132,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
               })}
             </ul>
           </nav>
-
-          {/* Search */}
-          <form className={styles.searchForm} onSubmit={handleSearchSubmit} role="search">
-            <label htmlFor="header-search" className={styles.srOnly}>
-              Search
-            </label>
-            <div className={styles.searchWrap}>
-              <input
-                id="header-search"
-                type="search"
-                className={styles.searchInput}
-                placeholder="Search…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={closeMegaMenu}
-              />
-              <button type="submit" className={styles.searchBtn} aria-label="Submit search">
-                <SearchIcon />
-              </button>
-            </div>
-          </form>
 
           {/* Profile */}
           <div className={styles.profileWrap}>
@@ -238,15 +206,6 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
         />
       )}
     </>
-  )
-}
-
-function SearchIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
   )
 }
 
