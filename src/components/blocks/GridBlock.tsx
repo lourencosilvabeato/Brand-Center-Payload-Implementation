@@ -12,19 +12,23 @@ const colClass: Record<string, string> = {
 }
 
 export function GridBlock({ block }: { block: Block }) {
+  const isThumb = block.columns === '6'
+
   return (
     <div className={`${styles.grid} ${colClass[block.columns] ?? styles.gridCols3}`}>
       {block.items.map((item, i) => {
         const media = item.image && typeof item.image !== 'number' ? (item.image as Media) : null
+        const imageWrapClass = `${styles.gridImageWrap} ${isThumb ? styles.gridImageWrapSquare : ''}`
+
         const inner = (
           <>
-            {media?.url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={media.url} alt={item.title} className={styles.gridItemImage} />
-            ) : (
-              <div className={styles.gridItemImage} aria-hidden="true" />
-            )}
-            <span className={styles.gridItemTitle}>{item.title}</span>
+            <div className={imageWrapClass}>
+              {media?.url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={media.url} alt={item.title} />
+              )}
+            </div>
+            <span className={styles.gridTitle}>{item.title}</span>
           </>
         )
 

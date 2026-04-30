@@ -5,11 +5,15 @@ type Block = Extract<NonNullable<ContentPage['layout']>[number], { blockType: 'q
 
 export function QuoteBlock({ block }: { block: Block }) {
   return (
-    <blockquote className={styles.quoteBlock}>
-      <p className={styles.quoteText}>{block.text}</p>
+    <figure className={styles.quoteBlock}>
+      <div className={styles.quoteTextRow}>
+        <span className={styles.quoteMark} aria-hidden="true">&ldquo;</span>
+        <blockquote className={styles.quoteText}>{block.text}</blockquote>
+      </div>
       {block.attribution && (
-        <cite className={styles.quoteAttribution}>{block.attribution}</cite>
+        <figcaption className={styles.quoteAttribution}>{block.attribution}</figcaption>
       )}
-    </blockquote>
+      <span className={styles.quoteMarkClose} aria-hidden="true">&rdquo;</span>
+    </figure>
   )
 }

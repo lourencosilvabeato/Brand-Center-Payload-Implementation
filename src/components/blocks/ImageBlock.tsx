@@ -12,8 +12,10 @@ export function ImageBlock({ block }: { block: Block }) {
 
   return (
     <figure className={styles.imageBlock}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} />
+      <div className={styles.imageWrap}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={alt} />
+      </div>
       {block.caption && (
         <figcaption className={styles.imageCaption}>{block.caption}</figcaption>
       )}

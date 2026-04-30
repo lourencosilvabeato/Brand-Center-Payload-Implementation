@@ -1,81 +1,117 @@
-/* ── Image block ─────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   IMAGE BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .imageBlock {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 
-.imageBlock img {
+.imageWrap {
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: var(--lightest-grey);
+}
+
+.imageWrap img {
   width: 100%;
-  height: 362px;
+  height: 100%;
   object-fit: cover;
   display: block;
 }
 
 .imageCaption {
-  font-family: var(--font-body-s-regular-family);
-  font-weight: var(--font-body-s-regular-weight);
-  font-size: var(--font-body-s-regular-size);
-  line-height: var(--font-body-s-regular-line-height);
-  color: var(--grey);
-}
-
-/* ── Quote block ─────────────────────────────────────────────── */
-
-.quoteBlock {
-  border-left: 3px solid var(--red-ascendum);
-  padding: 8px 0 8px 24px;
-}
-
-.quoteText {
   font-family: var(--font-body-m-family);
   font-weight: var(--font-body-m-weight);
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
   color: var(--darker-grey);
-  margin: 0 0 8px;
-  font-style: italic;
-}
-
-.quoteAttribution {
-  font-family: var(--font-body-s-family);
-  font-weight: var(--font-body-s-weight);
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--grey);
   margin: 0;
 }
 
-/* ── Note block ──────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   QUOTE BLOCK
+   ═══════════════════════════════════════════════════════════════ */
+
+.quoteBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.quoteTextRow {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+.quoteMark {
+  font-family: var(--font-h1-family);
+  font-weight: var(--font-h1-weight);
+  font-size: 40px;
+  line-height: 1.3;
+  color: var(--blue-ascendum-60);
+  flex-shrink: 0;
+  width: 21px;
+  align-self: flex-start;
+  user-select: none;
+}
+
+.quoteMarkClose {
+  font-family: var(--font-h1-family);
+  font-weight: var(--font-h1-weight);
+  font-size: 40px;
+  line-height: 1.3;
+  color: var(--blue-ascendum-60);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.quoteText {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-h2-family);
+  font-weight: var(--font-h2-weight);
+  font-size: var(--font-h2-size);
+  line-height: var(--font-h2-line-height);
+  color: var(--blue-ascendum);
+  margin: 0;
+}
+
+.quoteAttribution {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0.48px;
+  text-transform: uppercase;
+  color: var(--blue-ascendum-60);
+  font-style: normal;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOTE BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .noteBlock {
   display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 16px;
-  border-radius: 4px;
+  align-items: center;
+  padding: 6px 20px;
 }
 
 .noteInfo {
-  background-color: rgba(0, 56, 70, 0.06);
-  border-left: 3px solid var(--blue-ascendum);
+  background: rgba(0, 56, 70, 0.08);
+  border-left: 4px solid var(--blue-ascendum-90);
 }
 
 .noteWarning {
-  background-color: rgba(227, 29, 26, 0.06);
-  border-left: 3px solid var(--red-ascendum);
-}
-
-.noteIcon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  color: var(--blue-ascendum);
-}
-
-.noteWarning .noteIcon {
-  color: var(--red-ascendum);
+  background: rgba(227, 29, 26, 0.08);
+  border-left: 4px solid var(--red-ascendum);
 }
 
 .noteText {
@@ -83,11 +119,21 @@
   font-weight: var(--font-body-m-weight);
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
-  color: var(--darker-grey);
+  color: var(--blue-ascendum);
   margin: 0;
 }
 
-/* ── Table block ─────────────────────────────────────────────── */
+.noteWarning .noteText {
+  color: var(--darker-grey);
+}
+
+.noteBold {
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLE BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .tableWrapper {
   overflow-x: auto;
@@ -96,29 +142,43 @@
 
 .table {
   width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-body-m-family);
-  font-weight: var(--font-body-m-weight);
-  font-size: var(--font-body-m-size);
-  line-height: var(--font-body-m-line-height);
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .table th,
 .table td {
-  padding: 12px 16px;
-  text-align: left;
-  border: 1px solid var(--grey-ascendum);
-  color: var(--darker-grey);
+  padding: 8px;
+  text-align: center;
 }
 
 .table th {
-  background-color: var(--lightest-grey);
-  font-family: var(--font-body-m-semibold-family);
-  font-weight: var(--font-body-m-semibold-weight);
-  color: var(--blue-ascendum);
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--darker-grey);
+  border-bottom: 1px solid var(--blue-ascendum);
 }
 
-/* ── Grid block ──────────────────────────────────────────────── */
+.table th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.table td {
+  padding: 16px 8px;
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  line-height: normal;
+  color: var(--darker-grey);
+  background: var(--white);
+  border-bottom: 1px solid var(--grey-ascendum);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .grid {
   display: grid;
@@ -134,79 +194,126 @@
 .gridItem {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
   text-decoration: none;
 }
 
-.gridItemImage {
+.gridImageWrap {
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: var(--lightest-grey);
+}
+
+.gridImageWrapSquare {
+  aspect-ratio: 1 / 1;
+}
+
+.gridImageWrap img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
-  background-color: var(--grey-ascendum);
+  display: block;
 }
 
-.gridItemTitle {
-  font-family: var(--font-body-s-family);
-  font-weight: var(--font-body-s-weight);
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--darker-grey);
+.gridTitle {
+  font-family: var(--font-h4-family);
+  font-weight: var(--font-h4-weight);
+  font-size: var(--font-h4-size);
+  line-height: var(--font-h4-line-height);
+  color: var(--blue-ascendum);
 }
 
-/* ── Collection card block ───────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   COLLECTION CARD BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .collectionCard {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 16px;
-  padding: 16px;
-  border: 1px solid var(--grey-ascendum);
   text-decoration: none;
-  transition: border-color 0.15s;
+  cursor: pointer;
 }
 
-.collectionCard:hover {
-  border-color: var(--blue-ascendum);
+.collectionCardImageWrap {
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background-color: var(--lightest-grey);
 }
 
-.collectionCardImage {
-  width: 80px;
-  height: 80px;
+.collectionCardImageWrap img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  flex-shrink: 0;
-  background-color: var(--grey-ascendum);
+  display: block;
+}
+
+.collectionCardBody {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 12px;
 }
 
 .collectionCardTitle {
-  font-family: var(--font-body-m-semibold-family);
-  font-weight: var(--font-body-m-semibold-weight);
-  font-size: var(--font-body-m-semibold-size);
-  line-height: var(--font-body-m-semibold-line-height);
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-h4-family);
+  font-weight: var(--font-h4-weight);
+  font-size: var(--font-h4-size);
+  line-height: var(--font-h4-line-height);
   color: var(--blue-ascendum);
 }
 
-/* ── Download block ──────────────────────────────────────────── */
-
-.downloadBlock {
+.collectionCardBtn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 100px;
+  border: 1px solid var(--blue-ascendum);
+  background: transparent;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 24px;
-  border: 1px solid var(--grey-ascendum);
-  width: fit-content;
+  justify-content: center;
+  color: var(--blue-ascendum);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.collectionCard:hover .collectionCardBtn {
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DOWNLOAD BLOCK
+   ═══════════════════════════════════════════════════════════════ */
+
+.downloadBlock {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  border: 1px solid var(--blue-ascendum);
+  border-radius: 100px;
+  background: transparent;
   text-decoration: none;
-  transition: border-color 0.15s, color 0.15s;
+  color: var(--blue-ascendum);
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .downloadBlock:hover {
-  border-color: var(--blue-ascendum);
+  background-color: var(--blue-ascendum);
+  color: var(--white);
 }
 
 .downloadIcon {
+  flex-shrink: 0;
   width: 20px;
   height: 20px;
-  color: var(--blue-ascendum);
-  flex-shrink: 0;
 }
 
 .downloadLabel {
@@ -214,23 +321,27 @@
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
-  color: var(--blue-ascendum);
+  white-space: nowrap;
 }
 
-/* ── Divider block ───────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   DIVIDER BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .divider {
   border: none;
   border-top: 1px solid var(--grey-ascendum);
   margin: 0;
+  width: 100%;
 }
 
-/* ── FAQ block ───────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   FAQ BLOCK
+   ═══════════════════════════════════════════════════════════════ */
 
 .faqList {
   display: flex;
   flex-direction: column;
-  gap: 0;
   border-top: 1px solid var(--grey-ascendum);
 }
 
@@ -241,26 +352,34 @@
 .faqQuestion {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
   padding: 16px 0;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
-  font-family: var(--font-body-m-semibold-family);
-  font-weight: var(--font-body-m-semibold-weight);
-  font-size: var(--font-body-m-semibold-size);
-  line-height: var(--font-body-m-semibold-line-height);
   color: var(--blue-ascendum);
+  transition: color 0.15s;
+}
+
+.faqQuestion:hover {
+  color: var(--red-ascendum);
+}
+
+.faqQuestionText {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-h5-family);
+  font-weight: var(--font-h5-weight);
+  font-size: var(--font-h5-size);
+  line-height: var(--font-h5-line-height);
 }
 
 .faqCaret {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  color: var(--blue-ascendum);
+  width: 20px;
+  height: 20px;
   transition: transform 0.2s;
 }
 
@@ -274,16 +393,25 @@
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
   color: var(--darker-grey);
+  margin: 0;
   padding: 0 0 16px;
   white-space: pre-line;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
   .gridCols3 { grid-template-columns: repeat(2, 1fr); }
   .gridCols4 { grid-template-columns: repeat(2, 1fr); }
   .gridCols6 { grid-template-columns: repeat(3, 1fr); }
 
-  .imageBlock img {
-    height: 193px;
+  .quoteTextRow {
+    gap: 16px;
+  }
+
+  .quoteText {
+    font-size: 26px; /* mobile H2 */
   }
 }
