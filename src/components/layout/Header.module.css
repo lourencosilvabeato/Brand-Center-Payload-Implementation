@@ -9,11 +9,12 @@
 .inner {
   display: flex;
   align-items: center;
-  gap: 40px;
+  justify-content: space-between;
   max-width: 1440px;
   margin: 0 auto;
   padding: 16px 32px;
   height: 72px;
+  position: relative;
 }
 
 .logo {
@@ -28,9 +29,11 @@
   object-fit: contain;
 }
 
-/* Desktop nav */
+/* Desktop nav — absolutely centered so it's equidistant from logo and profile */
 .nav {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .navList {
