@@ -22,12 +22,12 @@ export function GridBlock({ block }: { block: Block }) {
 
         const inner = (
           <>
-            <div className={imageWrapClass}>
-              {media?.url && (
-                // eslint-disable-next-line @next/next/no-img-element
+            {media?.url && (
+              <div className={imageWrapClass}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={media.url} alt={item.title} />
-              )}
-            </div>
+              </div>
+            )}
             <span className={styles.gridTitle}>{item.title}</span>
           </>
         )

@@ -22,12 +22,12 @@ export function CollectionCardBlock({ block }: { block: Block }) {
 
   return (
     <a href={block.link} className={styles.collectionCard}>
-      <div className={styles.collectionCardImageWrap}>
-        {media?.url && (
-          // eslint-disable-next-line @next/next/no-img-element
+      {media?.url && (
+        <div className={styles.collectionCardImageWrap}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={media.url} alt={block.title} />
-        )}
-      </div>
+        </div>
+      )}
       <div className={styles.collectionCardBody}>
         <span className={styles.collectionCardTitle}>{block.title}</span>
         <span className={styles.collectionCardBtn} aria-hidden="true">
