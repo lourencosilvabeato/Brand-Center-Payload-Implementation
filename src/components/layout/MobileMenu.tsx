@@ -16,7 +16,7 @@ function getPolySlug(page: NavL1['page'] | NavL2['page']): string | null {
   return (val as ChannelPage | ContentPage).slug ?? null
 }
 
-function getDirectSlug(page: NonNullable<NavL2['children']>[number]['page']): string | null {
+function getDirectSlug(page: NonNullable<NavL2['l3Items']>[number]['page']): string | null {
   if (!page || typeof page === 'number') return null
   return (page as ContentPage).slug ?? null
 }
@@ -138,9 +138,9 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
                       <span className={styles.l2Title}>{l2.label}</span>
                     )}
 
-                    {l2.children && l2.children.length > 0 && (
+                    {l2.l3Items && l2.l3Items.length > 0 && (
                       <ul className={styles.l3List}>
-                        {l2.children.map((l3) => {
+                        {l2.l3Items.map((l3) => {
                           const l3Slug = getDirectSlug(l3.page)
                           const l3Href =
                             l1Slug && l2Slug && l3Slug

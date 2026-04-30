@@ -55,7 +55,8 @@ export const Navigation: GlobalConfig = {
               },
             },
             {
-              name: 'children',
+              name: 'l3Items',
+              label: 'L3 Pages',
               type: 'array',
               fields: [
                 {
