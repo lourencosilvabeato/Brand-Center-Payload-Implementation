@@ -6,10 +6,16 @@ import styles from './Blocks.module.css'
 
 type Block = Extract<NonNullable<ContentPage['layout']>[number], { blockType: 'faqBlock' }>
 
-function CaretIcon({ className }: { className?: string }) {
+function ChevronDownIcon() {
   return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M5 7.5L10 12.5L15 7.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
@@ -25,12 +31,12 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
-        <span>{question}</span>
-        <CaretIcon className={`${styles.faqCaret} ${open ? styles.faqCaretOpen : ''}`} />
+        <span className={styles.faqQuestionText}>{question}</span>
+        <span className={`${styles.faqCaret} ${open ? styles.faqCaretOpen : ''}`}>
+          <ChevronDownIcon />
+        </span>
       </button>
-      {open && (
-        <p className={styles.faqAnswer}>{answer}</p>
-      )}
+      {open && <p className={styles.faqAnswer}>{answer}</p>}
     </div>
   )
 }
