@@ -1143,7 +1143,7 @@ export interface Navigation {
                * Show as a filter option in the homepage search bar.
                */
               showAsSearchFilter?: boolean | null;
-              children?:
+              l3Items?:
                 | {
                     label: string;
                     page?: (number | null) | ContentPage;
@@ -1287,7 +1287,7 @@ export interface NavigationSelect<T extends boolean = true> {
               label?: T;
               page?: T;
               showAsSearchFilter?: T;
-              children?:
+              l3Items?:
                 | T
                 | {
                     label?: T;
