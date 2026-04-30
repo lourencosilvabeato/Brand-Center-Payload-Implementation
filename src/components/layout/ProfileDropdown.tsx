@@ -32,9 +32,9 @@ export function ProfileDropdown({ role, onClose }: ProfileDropdownProps) {
   return (
     <div ref={ref} className={styles.dropdown} role="menu">
       {role === 'admin' && (
-        <a href="/admin" className={styles.item} role="menuitem">
+        <a href="/admin" className={`${styles.item} ${styles.withBorder}`} role="menuitem">
           <AdminIcon className={styles.icon} />
-          <span>Admin Console</span>
+          <span>Go to management panel</span>
         </a>
       )}
 
