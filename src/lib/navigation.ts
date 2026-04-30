@@ -14,7 +14,7 @@ export interface SiblingItem {
 
 type NavL1 = NonNullable<Navigation['items']>[number]
 type NavL2 = NonNullable<NavL1['children']>[number]
-type NavL3 = NonNullable<NavL2['children']>[number]
+type NavL3 = NonNullable<NavL2['l3Items']>[number]
 
 function getPolySlug(
   page: NavL1['page'] | NavL2['page'],
@@ -62,9 +62,9 @@ export function buildBreadcrumb(
         current: pathSegments.length === 2,
       })
 
-      if (!l3Seg || !l2.children) return trail
+      if (!l3Seg || !l2.l3Items) return trail
 
-      for (const l3 of l2.children) {
+      for (const l3 of l2.l3Items) {
         const l3Slug = getDirectSlug(l3.page)
         if (!l3Slug || l3Slug !== l3Seg) continue
 
@@ -118,9 +118,9 @@ export function findSiblings(
         })
       }
 
-      if (!l2.children) return []
+      if (!l2.l3Items) return []
 
-      return l2.children.flatMap((item) => {
+      return l2.l3Items.flatMap((item) => {
         const slug = getDirectSlug(item.page)
         return slug
           ? [{ label: item.label, href: href(l1Slug, l2Slug, slug), id: item.id ?? '' }]

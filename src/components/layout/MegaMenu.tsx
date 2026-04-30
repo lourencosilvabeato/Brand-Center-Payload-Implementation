@@ -14,7 +14,7 @@ function getPolySlug(page: NavL1['page'] | NavL2['page']): string | null {
   return (val as ChannelPage | ContentPage).slug ?? null
 }
 
-function getDirectSlug(page: NonNullable<NavL2['children']>[number]['page']): string | null {
+function getDirectSlug(page: NonNullable<NavL2['l3Items']>[number]['page']): string | null {
   if (!page || typeof page === 'number') return null
   return (page as ContentPage).slug ?? null
 }
@@ -33,7 +33,7 @@ function buildColumns(l2Items: NavL2[]): NavL2[][] {
   let currentLines = 0
 
   for (const item of l2Items) {
-    const groupLines = 1 + (item.children?.length ?? 0)
+    const groupLines = 1 + (item.l3Items?.length ?? 0)
     if (currentLines + groupLines > MAX_LINES_PER_COL && currentCol.length > 0) {
       columns.push(currentCol)
       currentCol = []
@@ -77,9 +77,9 @@ export function MegaMenu({ l1Item, l1Slug, onClose }: MegaMenuProps) {
                     )}
                   </div>
 
-                  {l2.children && l2.children.length > 0 && (
+                  {l2.l3Items && l2.l3Items.length > 0 && (
                     <ul className={styles.l3List}>
-                      {l2.children.map((l3) => {
+                      {l2.l3Items.map((l3) => {
                         const l3Slug = getDirectSlug(l3.page)
                         const l3Href = l3Slug ? `/${l1Slug}/${l2Slug}/${l3Slug}` : undefined
 
