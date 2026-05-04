@@ -11,6 +11,8 @@ import {
   DownloadBlock,
   DividerBlock,
   FaqBlock,
+  SectionBlock,
+  IconLibraryBlock,
 } from '../blocks'
 
 export const ContentPages: CollectionConfig = {
@@ -43,6 +45,7 @@ export const ContentPages: CollectionConfig = {
       name: 'layout',
       type: 'blocks',
       blocks: [
+        SectionBlock,
         RichTextBlock,
         ImageBlock,
         QuoteBlock,
@@ -53,28 +56,7 @@ export const ContentPages: CollectionConfig = {
         DownloadBlock,
         DividerBlock,
         FaqBlock,
-      ],
-    },
-    {
-      name: 'anchors',
-      type: 'array',
-      admin: {
-        description: 'Anchor navigation links shown in the anchor bar above the content.',
-      },
-      fields: [
-        {
-          name: 'label',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'anchor',
-          type: 'text',
-          required: true,
-          admin: {
-            description: 'The anchor ID to scroll to (without the # prefix).',
-          },
-        },
+        IconLibraryBlock,
       ],
     },
   ],

@@ -9,6 +9,8 @@ import { CollectionCardBlock } from './blocks/CollectionCardBlock'
 import { DownloadBlock } from './blocks/DownloadBlock'
 import { DividerBlock } from './blocks/DividerBlock'
 import { FaqBlock } from './blocks/FaqBlock'
+import { SectionBlock } from './blocks/SectionBlock'
+import { IconLibraryBlock } from './blocks/IconLibraryBlock'
 
 type Block = NonNullable<ContentPage['layout']>[number]
 
@@ -39,9 +41,13 @@ export function BlockRenderer({ blocks }: Props) {
           case 'downloadBlock':
             return <DownloadBlock key={key} block={block} />
           case 'dividerBlock':
-            return <DividerBlock key={key} />
+            return <DividerBlock key={key} block={block} />
           case 'faqBlock':
             return <FaqBlock key={key} block={block} />
+          case 'sectionBlock':
+            return <SectionBlock key={key} block={block} />
+          case 'iconLibraryBlock':
+            return <IconLibraryBlock key={key} block={block} />
           default:
             return null
         }

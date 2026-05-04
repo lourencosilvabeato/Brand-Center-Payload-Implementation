@@ -1,4 +1,5 @@
-import type { ContentPage, Media } from '@/payload-types'
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import type { ContentPage, Media, ProtectedFile } from '@/payload-types'
 import styles from './Blocks.module.css'
 
 type Block = Extract<NonNullable<ContentPage['layout']>[number], { blockType: 'gridBlock' }>
@@ -20,6 +21,15 @@ export function GridBlock({ block }: { block: Block }) {
         const media = item.image && typeof item.image !== 'number' ? (item.image as Media) : null
         const imageWrapClass = `${styles.gridImageWrap} ${isThumb ? styles.gridImageWrapSquare : ''}`
 
+        const fileId =
+          item.button?.file && typeof item.button.file !== 'number'
+            ? (item.button.file as ProtectedFile).id
+            : typeof item.button?.file === 'number'
+              ? item.button.file
+              : null
+
+        const href = item.button?.url ?? (fileId ? `/api/download/${fileId}` : undefined)
+
         const inner = (
           <>
             {media?.url && (
@@ -29,14 +39,18 @@ export function GridBlock({ block }: { block: Block }) {
               </div>
             )}
             <span className={styles.gridTitle}>{item.title}</span>
+            {item.description && (
+              <RichText data={item.description} className={styles.gridDescription} />
+            )}
+            {item.button?.label && href && (
+              <a href={href} className={styles.gridBtn}>
+                {item.button.label}
+              </a>
+            )}
           </>
         )
 
-        return item.url ? (
-          <a key={item.id ?? i} href={item.url} className={styles.gridItem}>
-            {inner}
-          </a>
-        ) : (
+        return (
           <div key={item.id ?? i} className={styles.gridItem}>
             {inner}
           </div>

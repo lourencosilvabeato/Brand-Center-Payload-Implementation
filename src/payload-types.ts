@@ -339,6 +339,19 @@ export interface ContentPage {
   layout?:
     | (
         | {
+            /**
+             * Visible section heading and anchor bar label.
+             */
+            label: string;
+            /**
+             * Anchor ID used in the URL hash (e.g. "colours"). No spaces or special characters.
+             */
+            anchorName: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectionBlock';
+          }
+        | {
             content: {
               root: {
                 type: string;
@@ -374,8 +387,23 @@ export interface ContentPage {
             blockType: 'quoteBlock';
           }
         | {
-            text: string;
             type: 'info' | 'warning';
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'noteBlock';
@@ -398,7 +426,26 @@ export interface ContentPage {
             items: {
               image?: (number | null) | Media;
               title: string;
-              url?: string | null;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              button?: {
+                label?: string | null;
+                url?: string | null;
+                file?: (number | null) | ProtectedFile;
+              };
               id?: string | null;
             }[];
             id?: string | null;
@@ -407,8 +454,29 @@ export interface ContentPage {
           }
         | {
             title: string;
-            image?: (number | null) | Media;
-            link: string;
+            thumbnail?: (number | null) | Media;
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            assets?:
+              | {
+                  label: string;
+                  file: number | ProtectedFile;
+                  id?: string | null;
+                }[]
+              | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'collectionCardBlock';
@@ -421,6 +489,7 @@ export interface ContentPage {
             blockType: 'downloadBlock';
           }
         | {
+            variant: 'long' | 'short';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
@@ -435,20 +504,24 @@ export interface ContentPage {
             blockName?: string | null;
             blockType: 'faqBlock';
           }
+        | {
+            title?: string | null;
+            items: {
+              name: string;
+              icon: number | Media;
+              tags?:
+                | {
+                    tag: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'iconLibraryBlock';
+          }
       )[]
-    | null;
-  /**
-   * Anchor navigation links shown in the anchor bar above the content.
-   */
-  anchors?:
-    | {
-        label: string;
-        /**
-         * The anchor ID to scroll to (without the # prefix).
-         */
-        anchor: string;
-        id?: string | null;
-      }[]
     | null;
   updatedAt: string;
   createdAt: string;
@@ -524,8 +597,23 @@ export interface LegalPage {
             blockType: 'quoteBlock';
           }
         | {
-            text: string;
             type: 'info' | 'warning';
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'noteBlock';
@@ -544,6 +632,7 @@ export interface LegalPage {
             blockType: 'tableBlock';
           }
         | {
+            variant: 'long' | 'short';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
@@ -779,6 +868,14 @@ export interface ContentPagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        sectionBlock?:
+          | T
+          | {
+              label?: T;
+              anchorName?: T;
+              id?: T;
+              blockName?: T;
+            };
         richText?:
           | T
           | {
@@ -806,8 +903,9 @@ export interface ContentPagesSelect<T extends boolean = true> {
         noteBlock?:
           | T
           | {
-              text?: T;
               type?: T;
+              title?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -838,7 +936,14 @@ export interface ContentPagesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     title?: T;
-                    url?: T;
+                    description?: T;
+                    button?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          file?: T;
+                        };
                     id?: T;
                   };
               id?: T;
@@ -848,8 +953,15 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
-              image?: T;
-              link?: T;
+              thumbnail?: T;
+              description?: T;
+              assets?:
+                | T
+                | {
+                    label?: T;
+                    file?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -864,6 +976,7 @@ export interface ContentPagesSelect<T extends boolean = true> {
         dividerBlock?:
           | T
           | {
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -880,13 +993,26 @@ export interface ContentPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-      };
-  anchors?:
-    | T
-    | {
-        label?: T;
-        anchor?: T;
-        id?: T;
+        iconLibraryBlock?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    name?: T;
+                    icon?: T;
+                    tags?:
+                      | T
+                      | {
+                          tag?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -928,8 +1054,9 @@ export interface LegalPagesSelect<T extends boolean = true> {
         noteBlock?:
           | T
           | {
-              text?: T;
               type?: T;
+              title?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -954,6 +1081,7 @@ export interface LegalPagesSelect<T extends boolean = true> {
         dividerBlock?:
           | T
           | {
+              variant?: T;
               id?: T;
               blockName?: T;
             };

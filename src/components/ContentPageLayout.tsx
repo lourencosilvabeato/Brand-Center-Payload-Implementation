@@ -14,10 +14,9 @@ interface Props {
 }
 
 export function ContentPageLayout({ page, trail, siblings, currentHref }: Props) {
-  const anchors: AnchorItem[] = (page.anchors ?? []).map((a) => ({
-    id: a.anchor,
-    label: a.label,
-  }))
+  const anchors: AnchorItem[] = (page.layout ?? [])
+    .filter((b): b is Extract<typeof b, { blockType: 'sectionBlock' }> => b.blockType === 'sectionBlock')
+    .map((b) => ({ id: b.anchorName, label: b.label }))
 
   const hasBreadcrumb = trail.length > 0
   const hasSidebar = siblings.length > 0
