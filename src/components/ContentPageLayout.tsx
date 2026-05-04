@@ -42,39 +42,38 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
         </div>
       )}
 
-      <div
-        className={styles.titleRow}
-        {...(page.headerAnchorName ? { id: page.headerAnchorName } : {})}
-      >
-        <h1 className={styles.title}>{page.title}</h1>
-        {page.excerpt && (
-          <div className={styles.excerpt}>
-            <RichText data={page.excerpt} />
-          </div>
-        )}
-        {page.buttons && page.buttons.length > 0 && (
-          <div className={styles.headerButtons}>
-            {page.buttons.map((btn, i) => {
-              const fileId =
-                btn.file && typeof btn.file !== 'number'
-                  ? (btn.file as ProtectedFile).id
-                  : typeof btn.file === 'number'
-                    ? btn.file
-                    : null
-              const href = btn.url ?? (fileId ? `/api/download/${fileId}` : '#')
-              return (
-                <a key={btn.id ?? i} href={href} className={styles.headerBtn}>
-                  {btn.label}
-                </a>
-              )
-            })}
-          </div>
-        )}
-      </div>
-
       <div className={styles.body}>
         {hasSidebar && <LeftSidebar siblings={siblings} currentHref={currentHref} />}
         <main className={styles.content}>
+          <div
+            className={styles.titleRow}
+            {...(page.headerAnchorName ? { id: page.headerAnchorName } : {})}
+          >
+            <h1 className={styles.title}>{page.title}</h1>
+            {page.excerpt && (
+              <div className={styles.excerpt}>
+                <RichText data={page.excerpt} />
+              </div>
+            )}
+            {page.buttons && page.buttons.length > 0 && (
+              <div className={styles.headerButtons}>
+                {page.buttons.map((btn, i) => {
+                  const fileId =
+                    btn.file && typeof btn.file !== 'number'
+                      ? (btn.file as ProtectedFile).id
+                      : typeof btn.file === 'number'
+                        ? btn.file
+                        : null
+                  const href = btn.url ?? (fileId ? `/api/download/${fileId}` : '#')
+                  return (
+                    <a key={btn.id ?? i} href={href} className={styles.headerBtn}>
+                      {btn.label}
+                    </a>
+                  )
+                })}
+              </div>
+            )}
+          </div>
           <BlockRenderer blocks={page.layout ?? []} />
           {hasSidebar && (prev || next) && <SiblingNav prev={prev} next={next} />}
         </main>
