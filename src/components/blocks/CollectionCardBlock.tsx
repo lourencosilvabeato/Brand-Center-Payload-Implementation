@@ -19,48 +19,63 @@ function DownloadIcon() {
 }
 
 export function CollectionCardBlock({ block }: { block: Block }) {
-  const media =
-    block.thumbnail && typeof block.thumbnail !== 'number' ? (block.thumbnail as Media) : null
+  const downloadFileId =
+    block.downloadFile && typeof block.downloadFile !== 'number'
+      ? (block.downloadFile as ProtectedFile).id
+      : typeof block.downloadFile === 'number'
+        ? block.downloadFile
+        : null
+
+  const isLarge = block.cardModel === 'large'
 
   return (
     <div className={styles.collectionCard}>
-      {media?.url && (
-        <div className={styles.collectionCardImageWrap}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={media.url} alt={block.title} />
-        </div>
-      )}
-
-      <div className={styles.collectionCardBody}>
+      <div className={styles.collectionCardHeader}>
+        {block.label && <p className={styles.collectionCardLabel}>{block.label}</p>}
         <h3 className={styles.collectionCardTitle}>{block.title}</h3>
         {block.description && (
-          <RichText data={block.description} className={styles.collectionCardDescription} />
+          <div className={styles.collectionCardDescription}>
+            <RichText data={block.description} />
+          </div>
         )}
       </div>
 
       {block.assets && block.assets.length > 0 && (
-        <ul className={styles.collectionCardAssets}>
+        <div
+          className={`${styles.collectionCardAssets} ${isLarge ? styles.collectionCardAssetsLarge : styles.collectionCardAssetsSmall}`}
+        >
           {block.assets.map((asset, i) => {
-            const fileId =
-              asset.file && typeof asset.file !== 'number'
-                ? (asset.file as ProtectedFile).id
-                : typeof asset.file === 'number'
-                  ? asset.file
-                  : null
-
+            const media =
+              asset.image && typeof asset.image !== 'number' ? (asset.image as Media) : null
             return (
-              <li key={asset.id ?? i}>
-                <a
-                  href={fileId ? `/api/download/${fileId}` : '#'}
-                  className={styles.collectionCardAssetLink}
-                >
-                  <DownloadIcon />
-                  <span>{asset.label}</span>
-                </a>
-              </li>
+              <div key={asset.id ?? i} className={styles.collectionAssetItem}>
+                {media?.url && (
+                  <div className={styles.collectionAssetImageWrap}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={media.url} alt={media.alt ?? ''} />
+                  </div>
+                )}
+                {asset.description && (
+                  <div className={styles.collectionAssetDescription}>
+                    <RichText data={asset.description} />
+                  </div>
+                )}
+              </div>
             )
           })}
-        </ul>
+        </div>
+      )}
+
+      {downloadFileId && (
+        <div className={styles.collectionCardFooter}>
+          <a
+            href={`/api/download/${downloadFileId}`}
+            className={styles.collectionCardDownload}
+          >
+            <DownloadIcon />
+            <span>Download collection</span>
+          </a>
+        </div>
       )}
     </div>
   )

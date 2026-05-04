@@ -335,18 +335,80 @@ export interface ContentPage {
    * URL segment for this page (e.g. "logo-usage" for /brand-identity/logo-usage/).
    */
   slug: string;
-  excerpt?: string | null;
+  /**
+   * Anchor ID for the page title — used as the first entry in the anchor bar.
+   */
+  headerAnchorName: string;
+  /**
+   * Optional intro text displayed below the page title.
+   */
+  excerpt?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  buttons?:
+    | {
+        label: string;
+        /**
+         * Fill either URL or File, not both.
+         */
+        url?: string | null;
+        file?: (number | null) | ProtectedFile;
+        id?: string | null;
+      }[]
+    | null;
   layout?:
     | (
         | {
             /**
-             * Visible section heading and anchor bar label.
+             * Optional small label displayed above the section title.
              */
-            label: string;
+            label?: string | null;
             /**
-             * Anchor ID used in the URL hash (e.g. "colours"). No spaces or special characters.
+             * Section heading (H2). Also used as the anchor bar label.
              */
-            anchorName: string;
+            title: string;
+            /**
+             * Anchor ID for this section (optional — defaults to the title if left empty). No spaces or special characters.
+             */
+            anchorName?: string | null;
+            buttons?:
+              | {
+                  label: string;
+                  /**
+                   * Fill either URL or File, not both.
+                   */
+                  url?: string | null;
+                  file?: (number | null) | ProtectedFile;
+                  id?: string | null;
+                }[]
+              | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'sectionBlock';
@@ -370,14 +432,6 @@ export interface ContentPage {
             id?: string | null;
             blockName?: string | null;
             blockType: 'richText';
-          }
-        | {
-            image: number | Media;
-            caption?: string | null;
-            alt?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageBlock';
           }
         | {
             text: string;
@@ -453,8 +507,11 @@ export interface ContentPage {
             blockType: 'gridBlock';
           }
         | {
+            /**
+             * Optional small label displayed above the collection title.
+             */
+            label?: string | null;
             title: string;
-            thumbnail?: (number | null) | Media;
             description?: {
               root: {
                 type: string;
@@ -470,45 +527,71 @@ export interface ContentPage {
               };
               [k: string]: unknown;
             } | null;
-            assets?:
-              | {
-                  label: string;
-                  file: number | ProtectedFile;
-                  id?: string | null;
-                }[]
-              | null;
+            cardModel: 'large' | 'small';
+            assets: {
+              image: number | Media;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional. When set, a "Download collection" button appears at the bottom.
+             */
+            downloadFile?: (number | null) | ProtectedFile;
             id?: string | null;
             blockName?: string | null;
             blockType: 'collectionCardBlock';
           }
         | {
-            label: string;
-            file: number | ProtectedFile;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'downloadBlock';
-          }
-        | {
-            variant: 'long' | 'short';
+            variant: 'short' | 'long';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
           }
         | {
-            items: {
-              question: string;
-              answer: string;
-              id?: string | null;
-            }[];
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'faqBlock';
-          }
-        | {
             title?: string | null;
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Optional. When set, a "Download all" button appears at the bottom.
+             */
+            downloadFile?: (number | null) | ProtectedFile;
             items: {
+              /**
+               * Icon name — also used as the search filter criterion.
+               */
               name: string;
               icon: number | Media;
+              /**
+               * Optional. Activates a per-icon download button.
+               */
+              iconFile?: (number | null) | ProtectedFile;
               tags?:
                 | {
                     tag: string;
@@ -582,14 +665,6 @@ export interface LegalPage {
             blockType: 'richText';
           }
         | {
-            image: number | Media;
-            caption?: string | null;
-            alt?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageBlock';
-          }
-        | {
             text: string;
             attribution?: string | null;
             id?: string | null;
@@ -632,7 +707,7 @@ export interface LegalPage {
             blockType: 'tableBlock';
           }
         | {
-            variant: 'long' | 'short';
+            variant: 'short' | 'long';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
@@ -864,7 +939,16 @@ export interface ChannelPagesSelect<T extends boolean = true> {
 export interface ContentPagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  headerAnchorName?: T;
   excerpt?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        file?: T;
+        id?: T;
+      };
   layout?:
     | T
     | {
@@ -872,7 +956,17 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               label?: T;
+              title?: T;
               anchorName?: T;
+              buttons?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    file?: T;
+                    id?: T;
+                  };
+              body?: T;
               id?: T;
               blockName?: T;
             };
@@ -880,15 +974,6 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
-              id?: T;
-              blockName?: T;
-            };
-        imageBlock?:
-          | T
-          | {
-              image?: T;
-              caption?: T;
-              alt?: T;
               id?: T;
               blockName?: T;
             };
@@ -952,24 +1037,18 @@ export interface ContentPagesSelect<T extends boolean = true> {
         collectionCardBlock?:
           | T
           | {
+              label?: T;
               title?: T;
-              thumbnail?: T;
               description?: T;
+              cardModel?: T;
               assets?:
                 | T
                 | {
-                    label?: T;
-                    file?: T;
+                    image?: T;
+                    description?: T;
                     id?: T;
                   };
-              id?: T;
-              blockName?: T;
-            };
-        downloadBlock?:
-          | T
-          | {
-              label?: T;
-              file?: T;
+              downloadFile?: T;
               id?: T;
               blockName?: T;
             };
@@ -980,28 +1059,18 @@ export interface ContentPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        faqBlock?:
-          | T
-          | {
-              items?:
-                | T
-                | {
-                    question?: T;
-                    answer?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
         iconLibraryBlock?:
           | T
           | {
               title?: T;
+              description?: T;
+              downloadFile?: T;
               items?:
                 | T
                 | {
                     name?: T;
                     icon?: T;
+                    iconFile?: T;
                     tags?:
                       | T
                       | {
@@ -1031,15 +1100,6 @@ export interface LegalPagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
-              id?: T;
-              blockName?: T;
-            };
-        imageBlock?:
-          | T
-          | {
-              image?: T;
-              caption?: T;
-              alt?: T;
               id?: T;
               blockName?: T;
             };

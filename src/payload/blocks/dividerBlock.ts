@@ -7,10 +7,10 @@ export const DividerBlock: Block = {
       name: 'variant',
       type: 'select',
       required: true,
-      defaultValue: 'long',
+      defaultValue: 'short',
       options: [
-        { label: 'Long (full width)', value: 'long' },
         { label: 'Short (centred)', value: 'short' },
+        { label: 'Long (full width)', value: 'long' },
       ],
     },
   ],

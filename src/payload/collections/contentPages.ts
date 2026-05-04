@@ -1,16 +1,14 @@
 import type { CollectionConfig } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
 import {
   RichTextBlock,
-  ImageBlock,
   QuoteBlock,
   NoteBlock,
   TableBlock,
   GridBlock,
   CollectionCardBlock,
-  DownloadBlock,
   DividerBlock,
-  FaqBlock,
   SectionBlock,
   IconLibraryBlock,
 } from '../blocks'
@@ -38,8 +36,41 @@ export const ContentPages: CollectionConfig = {
       },
     },
     {
+      name: 'headerAnchorName',
+      type: 'text',
+      required: true,
+      admin: {
+        description: 'Anchor ID for the page title — used as the first entry in the anchor bar.',
+      },
+    },
+    {
       name: 'excerpt',
-      type: 'textarea',
+      type: 'richText',
+      editor: lexicalEditor(),
+      admin: {
+        description: 'Optional intro text displayed below the page title.',
+      },
+    },
+    {
+      name: 'buttons',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          admin: { description: 'Fill either URL or File, not both.' },
+        },
+        {
+          name: 'file',
+          type: 'relationship',
+          relationTo: 'protectedFiles',
+        },
+      ],
     },
     {
       name: 'layout',
@@ -47,15 +78,12 @@ export const ContentPages: CollectionConfig = {
       blocks: [
         SectionBlock,
         RichTextBlock,
-        ImageBlock,
         QuoteBlock,
         NoteBlock,
         TableBlock,
         GridBlock,
         CollectionCardBlock,
-        DownloadBlock,
         DividerBlock,
-        FaqBlock,
         IconLibraryBlock,
       ],
     },
