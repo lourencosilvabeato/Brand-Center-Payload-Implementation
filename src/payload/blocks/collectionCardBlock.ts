@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const CollectionCardBlock: Block = {
   slug: 'collectionCardBlock',
@@ -9,14 +10,31 @@ export const CollectionCardBlock: Block = {
       required: true,
     },
     {
-      name: 'image',
+      name: 'thumbnail',
       type: 'relationship',
       relationTo: 'media',
     },
     {
-      name: 'link',
-      type: 'text',
-      required: true,
+      name: 'description',
+      type: 'richText',
+      editor: lexicalEditor(),
+    },
+    {
+      name: 'assets',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'file',
+          type: 'relationship',
+          relationTo: 'protectedFiles',
+          required: true,
+        },
+      ],
     },
   ],
 }

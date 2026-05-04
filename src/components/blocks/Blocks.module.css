@@ -95,13 +95,31 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   SECTION BLOCK
+   ═══════════════════════════════════════════════════════════════ */
+
+.sectionBlock {
+  padding-top: 8px;
+}
+
+.sectionTitle {
+  font-family: var(--font-h2-family);
+  font-weight: var(--font-h2-weight);
+  font-size: var(--font-h2-size);
+  line-height: var(--font-h2-line-height);
+  color: var(--blue-ascendum);
+  margin: 0 0 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    NOTE BLOCK
    ═══════════════════════════════════════════════════════════════ */
 
 .noteBlock {
   display: flex;
-  align-items: center;
-  padding: 6px 20px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px;
 }
 
 .noteInfo {
@@ -114,21 +132,36 @@
   border-left: 4px solid var(--red-ascendum);
 }
 
-.noteText {
+.noteTitle {
+  margin: 0;
+}
+
+.noteBold {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+}
+
+.noteWarning .noteBold {
+  color: var(--darker-grey);
+}
+
+.noteContent {
   font-family: var(--font-body-m-family);
   font-weight: var(--font-body-m-weight);
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
   color: var(--blue-ascendum);
-  margin: 0;
 }
 
-.noteWarning .noteText {
+.noteWarning .noteContent {
   color: var(--darker-grey);
 }
 
-.noteBold {
-  font-weight: 700;
+.noteContent p {
+  margin: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -225,24 +258,58 @@
   color: var(--blue-ascendum);
 }
 
+.gridDescription {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.gridDescription p {
+  margin: 0;
+}
+
+.gridBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  border: 1px solid var(--blue-ascendum);
+  border-radius: 100px;
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  color: var(--blue-ascendum);
+  transition: background-color 0.15s, color 0.15s;
+  align-self: flex-start;
+}
+
+.gridBtn:hover {
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+}
+
 /* ═══════════════════════════════════════════════════════════════
-   COLLECTION CARD BLOCK
+   COLLECTION CARD BLOCK (asset library card)
    ═══════════════════════════════════════════════════════════════ */
 
 .collectionCard {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.collectionCardImageWrap {
+  gap: 20px;
   border: 1px solid var(--grey-ascendum);
   border-radius: 12px;
   overflow: hidden;
+  background: var(--white);
+}
+
+.collectionCardImageWrap {
+  border-bottom: 1px solid var(--grey-ascendum);
   aspect-ratio: 16 / 9;
   background-color: var(--lightest-grey);
+  overflow: hidden;
 }
 
 .collectionCardImageWrap img {
@@ -254,38 +321,56 @@
 
 .collectionCardBody {
   display: flex;
-  align-items: center;
-  gap: 4px;
-  padding-right: 12px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 20px;
 }
 
 .collectionCardTitle {
-  flex: 1;
-  min-width: 0;
   font-family: var(--font-h4-family);
   font-weight: var(--font-h4-weight);
   font-size: var(--font-h4-size);
   line-height: var(--font-h4-line-height);
   color: var(--blue-ascendum);
+  margin: 0;
 }
 
-.collectionCardBtn {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 100px;
-  border: 1px solid var(--blue-ascendum);
-  background: transparent;
+.collectionCardDescription {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.collectionCardDescription p {
+  margin: 0;
+}
+
+.collectionCardAssets {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--blue-ascendum);
-  transition: background-color 0.15s, color 0.15s;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.collectionCard:hover .collectionCardBtn {
-  background-color: var(--blue-ascendum);
-  color: var(--white);
+.collectionCardAssetLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+  transition: color 0.15s;
+}
+
+.collectionCardAssetLink:hover {
+  color: var(--red-ascendum);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -332,7 +417,16 @@
   border: none;
   border-top: 1px solid var(--grey-ascendum);
   margin: 0;
+}
+
+.dividerLong {
   width: 100%;
+}
+
+.dividerShort {
+  width: 80px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -399,6 +493,136 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   ICON LIBRARY BLOCK
+   ═══════════════════════════════════════════════════════════════ */
+
+.iconLibrary {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.iconLibraryTitle {
+  font-family: var(--font-h4-family);
+  font-weight: var(--font-h4-weight);
+  font-size: var(--font-h4-size);
+  line-height: var(--font-h4-line-height);
+  color: var(--blue-ascendum);
+  margin: 0;
+}
+
+.iconLibraryControls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.iconLibrarySearch {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 16px;
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 100px;
+  font-family: var(--font-body-m-family);
+  font-size: var(--font-body-m-size);
+  color: var(--blue-ascendum);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.iconLibrarySearch:focus {
+  border-color: var(--blue-ascendum);
+}
+
+.iconLibrarySearch::placeholder {
+  color: var(--blue-ascendum-60);
+}
+
+.iconLibraryTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.iconLibraryTag {
+  padding: 4px 14px;
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 100px;
+  background: transparent;
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  color: var(--darker-grey);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+}
+
+.iconLibraryTag:hover {
+  border-color: var(--blue-ascendum);
+  color: var(--blue-ascendum);
+}
+
+.iconLibraryTagActive {
+  border-color: var(--blue-ascendum);
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.iconCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 8px;
+  background: var(--white);
+  text-align: center;
+  transition: border-color 0.15s;
+}
+
+.iconCard:hover {
+  border-color: var(--blue-ascendum);
+}
+
+.iconCardImageWrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconCardImageWrap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.iconCardName {
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  color: var(--darker-grey);
+  word-break: break-word;
+}
+
+.iconLibraryEmpty {
+  font-family: var(--font-body-m-family);
+  font-size: var(--font-body-m-size);
+  color: var(--blue-ascendum-60);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
 
@@ -407,11 +631,13 @@
   .gridCols4 { grid-template-columns: repeat(2, 1fr); }
   .gridCols6 { grid-template-columns: repeat(3, 1fr); }
 
+  .iconGrid { grid-template-columns: repeat(3, 1fr); }
+
   .quoteTextRow {
     gap: 16px;
   }
 
   .quoteText {
-    font-size: 26px; /* mobile H2 */
+    font-size: 26px;
   }
 }
