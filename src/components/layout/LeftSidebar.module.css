@@ -89,26 +89,3 @@
   border-left-color: var(--red-ascendum);
 }
 
-/* ── Extras (Navigation Tips + FAQs) ─────────────────────── */
-
-.extras {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 32px 0 24px;
-  gap: 8px;
-  border-top: 1px solid var(--grey-ascendum);
-  margin-top: 8px;
-}
-
-.extraLink {
-  font-family: var(--font-body-s-family);
-  font-weight: var(--font-body-s-weight);
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--darker-grey);
-  text-decoration: none;
-}
-
-.extraLink:hover {
-  text-decoration: underline;
-}

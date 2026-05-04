@@ -6,28 +6,41 @@
 
 .inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
 }
 
-.btn {
+.chevron {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.chevron:hover {
+  opacity: 0.8;
+}
+
+.chevronDisabled {
+  background-color: var(--grey-ascendum);
+  color: var(--grey);
+  cursor: default;
+  pointer-events: none;
+}
+
+.counter {
   font-family: var(--font-body-m-semibold-family);
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
   color: var(--blue-ascendum);
-  text-decoration: none;
-  transition: opacity 0.15s;
-}
-
-.btn:hover {
-  opacity: 0.75;
-}
-
-.next {
-  margin-left: auto;
+  text-align: center;
 }

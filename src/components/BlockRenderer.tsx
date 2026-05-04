@@ -1,14 +1,11 @@
 import type { ContentPage } from '@/payload-types'
 import { RichTextBlock } from './blocks/RichTextBlock'
-import { ImageBlock } from './blocks/ImageBlock'
 import { QuoteBlock } from './blocks/QuoteBlock'
 import { NoteBlock } from './blocks/NoteBlock'
 import { TableBlock } from './blocks/TableBlock'
 import { GridBlock } from './blocks/GridBlock'
 import { CollectionCardBlock } from './blocks/CollectionCardBlock'
-import { DownloadBlock } from './blocks/DownloadBlock'
 import { DividerBlock } from './blocks/DividerBlock'
-import { FaqBlock } from './blocks/FaqBlock'
 import { SectionBlock } from './blocks/SectionBlock'
 import { IconLibraryBlock } from './blocks/IconLibraryBlock'
 
@@ -26,8 +23,6 @@ export function BlockRenderer({ blocks }: Props) {
         switch (block.blockType) {
           case 'richText':
             return <RichTextBlock key={key} block={block} />
-          case 'imageBlock':
-            return <ImageBlock key={key} block={block} />
           case 'quoteBlock':
             return <QuoteBlock key={key} block={block} />
           case 'noteBlock':
@@ -38,12 +33,8 @@ export function BlockRenderer({ blocks }: Props) {
             return <GridBlock key={key} block={block} />
           case 'collectionCardBlock':
             return <CollectionCardBlock key={key} block={block} />
-          case 'downloadBlock':
-            return <DownloadBlock key={key} block={block} />
           case 'dividerBlock':
             return <DividerBlock key={key} block={block} />
-          case 'faqBlock':
-            return <FaqBlock key={key} block={block} />
           case 'sectionBlock':
             return <SectionBlock key={key} block={block} />
           case 'iconLibraryBlock':

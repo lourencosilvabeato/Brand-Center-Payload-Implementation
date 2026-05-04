@@ -100,6 +100,20 @@
 
 .sectionBlock {
   padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionLabel {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--blue-ascendum-60);
+  text-transform: uppercase;
+  letter-spacing: 0.48px;
+  margin: 0;
 }
 
 .sectionTitle {
@@ -108,7 +122,50 @@
   font-size: var(--font-h2-size);
   line-height: var(--font-h2-line-height);
   color: var(--blue-ascendum);
-  margin: 0 0 24px;
+  margin: 0;
+}
+
+.sectionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sectionBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  border: 1px solid var(--blue-ascendum);
+  border-radius: 100px;
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.sectionBtn:hover {
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+}
+
+.sectionBody {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.sectionBody p {
+  margin: 0 0 0.75em;
+}
+
+.sectionBody p:last-child {
+  margin-bottom: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -298,32 +355,24 @@
 .collectionCard {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  border: 1px solid var(--grey-ascendum);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--white);
+  gap: 24px;
 }
 
-.collectionCardImageWrap {
-  border-bottom: 1px solid var(--grey-ascendum);
-  aspect-ratio: 16 / 9;
-  background-color: var(--lightest-grey);
-  overflow: hidden;
-}
-
-.collectionCardImageWrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.collectionCardBody {
+.collectionCardHeader {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 20px;
+}
+
+.collectionCardLabel {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--blue-ascendum-60);
+  text-transform: uppercase;
+  letter-spacing: 0.48px;
+  margin: 0;
 }
 
 .collectionCardTitle {
@@ -344,19 +393,64 @@
 }
 
 .collectionCardDescription p {
-  margin: 0;
+  margin: 0 0 0.5em;
+}
+
+.collectionCardDescription p:last-child {
+  margin-bottom: 0;
 }
 
 .collectionCardAssets {
-  list-style: none;
-  margin: 0;
-  padding: 0 20px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  gap: 16px;
 }
 
-.collectionCardAssetLink {
+.collectionCardAssetsLarge {
+  grid-template-columns: 1fr;
+}
+
+.collectionCardAssetsSmall {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.collectionAssetItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collectionAssetImageWrap {
+  border: 1px solid var(--grey-ascendum);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--lightest-grey);
+  aspect-ratio: 4 / 3;
+}
+
+.collectionAssetImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.collectionAssetDescription {
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  color: var(--darker-grey);
+}
+
+.collectionAssetDescription p {
+  margin: 0;
+}
+
+.collectionCardFooter {
+  padding-top: 8px;
+  border-top: 1px solid var(--grey-ascendum);
+}
+
+.collectionCardDownload {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -369,7 +463,7 @@
   transition: color 0.15s;
 }
 
-.collectionCardAssetLink:hover {
+.collectionCardDownload:hover {
   color: var(--red-ascendum);
 }
 
@@ -615,11 +709,63 @@
   word-break: break-word;
 }
 
+.iconLibraryDescription {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.iconLibraryDescription p {
+  margin: 0 0 0.5em;
+}
+
+.iconLibraryDescription p:last-child {
+  margin-bottom: 0;
+}
+
 .iconLibraryEmpty {
   font-family: var(--font-body-m-family);
   font-size: var(--font-body-m-size);
   color: var(--blue-ascendum-60);
   margin: 0;
+}
+
+.iconCardDownload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-ascendum-60);
+  text-decoration: none;
+  transition: color 0.15s;
+  padding: 4px;
+}
+
+.iconCardDownload:hover {
+  color: var(--blue-ascendum);
+}
+
+.iconLibraryFooter {
+  padding-top: 16px;
+  border-top: 1px solid var(--grey-ascendum);
+}
+
+.iconLibraryDownloadAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
+  transition: color 0.15s;
+}
+
+.iconLibraryDownloadAll:hover {
+  color: var(--red-ascendum);
 }
 
 /* ═══════════════════════════════════════════════════════════════
