@@ -25,13 +25,11 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
     .map((b) => ({ id: getSectionAnchorId(b), label: b.title }))
 
   const anchors: AnchorItem[] = [
-    { id: page.headerAnchorName, label: page.title },
-    ...sectionAnchors,
+    ...(page.headerAnchorName ? [{ id: page.headerAnchorName, label: page.title }] : []),
+    ...sectionAnchors.filter((a) => Boolean(a.id)),
   ]
 
   const { prev, next } = findPrevNext(siblings, currentHref)
-  const siblingPosition = siblings.findIndex((s) => s.href === currentHref) + 1
-  const siblingTotal = siblings.length
 
   const hasBreadcrumb = trail.length > 0
   const hasSidebar = siblings.length > 0
@@ -44,7 +42,10 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
         </div>
       )}
 
-      <div className={styles.titleRow} id={page.headerAnchorName}>
+      <div
+        className={styles.titleRow}
+        {...(page.headerAnchorName ? { id: page.headerAnchorName } : {})}
+      >
         <h1 className={styles.title}>{page.title}</h1>
         {page.excerpt && (
           <div className={styles.excerpt}>
@@ -75,9 +76,7 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
         {hasSidebar && <LeftSidebar siblings={siblings} currentHref={currentHref} />}
         <main className={styles.content}>
           <BlockRenderer blocks={page.layout ?? []} />
-          {hasSidebar && siblingPosition > 0 && (
-            <SiblingNav prev={prev} next={next} position={siblingPosition} total={siblingTotal} />
-          )}
+          {hasSidebar && (prev || next) && <SiblingNav prev={prev} next={next} />}
         </main>
         {anchors.length > 0 && <AnchorBar anchors={anchors} />}
       </div>

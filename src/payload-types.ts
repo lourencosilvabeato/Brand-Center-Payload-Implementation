@@ -507,50 +507,23 @@ export interface ContentPage {
             blockType: 'gridBlock';
           }
         | {
+            title: string;
             /**
-             * Optional small label displayed above the collection title.
+             * Optional label shown below the images (e.g. "Logos").
              */
             label?: string | null;
-            title: string;
-            description?: {
-              root: {
-                type: string;
-                children: {
-                  type: any;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            cardModel: 'large' | 'small';
             assets: {
               image: number | Media;
-              description?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
               id?: string | null;
             }[];
             /**
-             * Optional. When set, a "Download collection" button appears at the bottom.
+             * Optional. Shows the download icon button.
              */
             downloadFile?: (number | null) | ProtectedFile;
+            /**
+             * URL of the collection detail page. Shows the ↗ link button.
+             */
+            detailHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'collectionCardBlock';
@@ -1037,18 +1010,16 @@ export interface ContentPagesSelect<T extends boolean = true> {
         collectionCardBlock?:
           | T
           | {
-              label?: T;
               title?: T;
-              description?: T;
-              cardModel?: T;
+              label?: T;
               assets?:
                 | T
                 | {
                     image?: T;
-                    description?: T;
                     id?: T;
                   };
               downloadFile?: T;
+              detailHref?: T;
               id?: T;
               blockName?: T;
             };

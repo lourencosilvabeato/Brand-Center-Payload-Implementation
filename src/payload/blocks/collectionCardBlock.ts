@@ -1,5 +1,4 @@
 import type { Block } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const CollectionCardBlock: Block = {
   slug: 'collectionCardBlock',
@@ -9,31 +8,16 @@ export const CollectionCardBlock: Block = {
   },
   fields: [
     {
-      name: 'label',
-      type: 'text',
-      admin: {
-        description: 'Optional small label displayed above the collection title.',
-      },
-    },
-    {
       name: 'title',
       type: 'text',
       required: true,
     },
     {
-      name: 'description',
-      type: 'richText',
-      editor: lexicalEditor(),
-    },
-    {
-      name: 'cardModel',
-      type: 'select',
-      required: true,
-      defaultValue: 'large',
-      options: [
-        { label: 'Large', value: 'large' },
-        { label: 'Small', value: 'small' },
-      ],
+      name: 'label',
+      type: 'text',
+      admin: {
+        description: 'Optional label shown below the images (e.g. "Logos").',
+      },
     },
     {
       name: 'assets',
@@ -47,11 +31,6 @@ export const CollectionCardBlock: Block = {
           relationTo: 'media',
           required: true,
         },
-        {
-          name: 'description',
-          type: 'richText',
-          editor: lexicalEditor(),
-        },
       ],
     },
     {
@@ -59,7 +38,14 @@ export const CollectionCardBlock: Block = {
       type: 'relationship',
       relationTo: 'protectedFiles',
       admin: {
-        description: 'Optional. When set, a "Download collection" button appears at the bottom.',
+        description: 'Optional. Shows the download icon button.',
+      },
+    },
+    {
+      name: 'detailHref',
+      type: 'text',
+      admin: {
+        description: 'URL of the collection detail page. Shows the ↗ link button.',
       },
     },
   ],
