@@ -11,36 +11,36 @@
   gap: 16px;
 }
 
-.chevron {
+.btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--blue-ascendum);
-  color: var(--white);
+  gap: 16px;
+  padding: 12px 24px;
+  border: 1px solid var(--blue-ascendum);
+  border-radius: 100px;
   text-decoration: none;
-  flex-shrink: 0;
-  transition: opacity 0.15s;
-}
-
-.chevron:hover {
-  opacity: 0.8;
-}
-
-.chevronDisabled {
-  background-color: var(--grey-ascendum);
-  color: var(--grey);
-  cursor: default;
-  pointer-events: none;
-}
-
-.counter {
   font-family: var(--font-body-m-semibold-family);
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
   color: var(--blue-ascendum);
-  text-align: center;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background-color: var(--blue-ascendum);
+  color: var(--white);
+}
+
+.next {
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 10px 16px;
+    gap: 10px;
+    font-size: 14px;
+  }
 }
