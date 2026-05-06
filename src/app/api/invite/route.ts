@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       expiresAt,
       used: false,
       cancelled: false,
-      invitedBy: user.id,
+      invitedBy: Number(user.id),
     },
   })
 
