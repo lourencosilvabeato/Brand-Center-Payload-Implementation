@@ -6,7 +6,7 @@ export interface LoginOptions {
   serverURL?: string
   user: {
     email: string
-    password: string
+    password?: string
   }
 }
 
@@ -21,7 +21,9 @@ export async function login({
   await page.goto(`${serverURL}/admin/login`)
 
   await page.fill('#field-email', user.email)
-  await page.fill('#field-password', user.password)
+  if (user.password) {
+    await page.fill('#field-password', user.password)
+  }
   await page.click('button[type="submit"]')
 
   await page.waitForURL(`${serverURL}/admin`)

@@ -11,9 +11,9 @@ describe('API', () => {
     payload = await getPayload({ config: payloadConfig })
   })
 
-  it('fetches users', async () => {
+  it('fetches platformUsers', async () => {
     const users = await payload.find({
-      collection: 'users',
+      collection: 'platformUsers',
     })
     expect(users).toBeDefined()
   })
