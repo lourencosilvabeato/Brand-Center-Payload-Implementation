@@ -1,0 +1,54 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+  position: relative;
+  height: 384px;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+}
+
+.cardImage {
+  object-fit: cover;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.cardTitle {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  font-family: var(--font-h3-family);
+  font-weight: var(--font-h3-weight);
+  font-size: var(--font-h3-size);
+  line-height: var(--font-h3-line-height);
+  color: var(--white);
+  margin: 0;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    height: 200px;
+  }
+
+  .cardTitle {
+    top: 24px;
+    left: 24px;
+    right: 48px;
+    font-size: 20px;
+  }
+}
