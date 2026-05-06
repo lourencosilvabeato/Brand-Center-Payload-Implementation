@@ -1178,6 +1178,14 @@ export interface LoginSetting {
    */
   subtitle?: string | null;
   /**
+   * Heading shown on the Change Password page.
+   */
+  changePasswordTitle?: string | null;
+  /**
+   * Optional introductory paragraph on the Change Password page.
+   */
+  changePasswordIntroduction?: string | null;
+  /**
    * Label for the institutional link (e.g. "Visit ascendum.com").
    */
   institutionalLinkLabel?: string | null;
@@ -1286,6 +1294,8 @@ export interface LoginSettingsSelect<T extends boolean = true> {
   title?: T;
   introduction?: T;
   subtitle?: T;
+  changePasswordTitle?: T;
+  changePasswordIntroduction?: T;
   institutionalLinkLabel?: T;
   institutionalLinkUrl?: T;
   updatedAt?: T;
