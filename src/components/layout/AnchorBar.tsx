@@ -44,8 +44,8 @@ export function AnchorBar({ anchors }: AnchorBarProps) {
     <aside className={styles.bar}>
       <nav aria-label="Page sections">
         <ul className={styles.list}>
-          {anchors.map((anchor) => (
-            <li key={anchor.id}>
+          {anchors.map((anchor, i) => (
+            <li key={`${i}-${anchor.id}`}>
               <a
                 href={`#${anchor.id}`}
                 className={`${styles.link} ${activeId === anchor.id ? styles.active : ''}`}
