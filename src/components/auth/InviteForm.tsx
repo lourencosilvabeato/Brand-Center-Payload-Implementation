@@ -105,12 +105,15 @@ export function InviteForm() {
     <div className={styles.wrapper}>
       <form className={styles.form} onSubmit={handleSubmit} noValidate>
         <div className={styles.field}>
+          <label htmlFor="invite-email" className={styles.label}>
+            New user e-mail
+          </label>
           <input
             className={`${styles.input}${fieldError ? ` ${styles.inputError}` : ''}`}
             type="email"
             id="invite-email"
             name="email"
-            placeholder="Email address"
+            placeholder="name@company.com"
             autoComplete="off"
             value={email}
             onChange={(e) => {
@@ -150,10 +153,9 @@ export function InviteForm() {
 
       {pendingInvites.length > 0 && (
         <div className={styles.pendingList}>
-          <h3 className={styles.pendingTitle}>
-            Pending invites{' '}
-            <span className={styles.pendingCount}>{pendingInvites.length}</span>
-          </h3>
+          <h4 className={styles.pendingTitle}>
+            Pending invites ({pendingInvites.length})
+          </h4>
           <ul className={styles.list}>
             {pendingInvites.map((inv) => (
               <li key={inv.id} className={styles.listItem}>
@@ -162,8 +164,10 @@ export function InviteForm() {
                   className={styles.cancelBtn}
                   type="button"
                   onClick={() => void handleCancel(inv.id)}
+                  aria-label={`Cancel invitation for ${inv.email}`}
                 >
-                  Cancel invite
+                  <XIcon />
+                  <span>Cancel invite</span>
                 </button>
               </li>
             ))}
@@ -171,5 +175,14 @@ export function InviteForm() {
         </div>
       )}
     </div>
+  )
+}
+
+function XIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M4 4L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
   )
 }

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { cookies } from 'next/headers'
 
 export interface SessionUser {
   id: string
@@ -16,6 +17,27 @@ export function getSessionUserFromRequest(request: Request): SessionUser | null 
   try {
     const decoded = jwt.verify(token, process.env.PAYLOAD_SECRET ?? '') as SessionUser
     return decoded
+  } catch {
+    return null
+  }
+}
+
+export async function getSessionUser(): Promise<SessionUser | null> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+  if (!token) return null
+
+  try {
+    const decoded = jwt.verify(token, process.env.PAYLOAD_SECRET ?? '') as SessionUser & {
+      exp?: number
+    }
+    if (decoded.exp && decoded.exp * 1000 < Date.now()) return null
+    return {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+      collection: decoded.collection,
+    }
   } catch {
     return null
   }
