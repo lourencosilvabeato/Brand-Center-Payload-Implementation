@@ -1,0 +1,53 @@
+:root {
+  /* ─── Colours ─────────────────────────────────────────────── */
+  --blue-ascendum: #003846;
+  --blue-ascendum-60: rgba(0, 56, 70, 0.6);
+  --blue-ascendum-90: rgba(0, 56, 70, 0.9);
+  --red-ascendum: #e31d1a;
+  --grey-ascendum: #d6d6d6;
+  --darker-grey: #585858;
+  --grey: #b1b1b1;
+  --lightest-grey: #f4f4f4;
+  --white: #ffffff;
+
+  /* ─── Typography ──────────────────────────────────────────── */
+  --font-h1-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  --font-h1-weight: 700;
+  --font-h1-size: 40px;
+  --font-h1-line-height: 1.3;
+
+  --font-h2-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  --font-h2-weight: 700;
+  --font-h2-size: 30px;
+  --font-h2-line-height: 1.3;
+
+  --font-h4-family: var(--font-montserrat), 'Montserrat', sans-serif;
+  --font-h4-weight: 700;
+  --font-h4-size: 18px;
+  --font-h4-line-height: 1.3;
+
+  --font-h5-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+  --font-h5-weight: 600;
+  --font-h5-size: 18px;
+  --font-h5-line-height: 1.5;
+
+  --font-body-m-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+  --font-body-m-weight: 400;
+  --font-body-m-size: 16px;
+  --font-body-m-line-height: 1.5;
+
+  --font-body-m-semibold-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+  --font-body-m-semibold-weight: 600;
+  --font-body-m-semibold-size: 16px;
+  --font-body-m-semibold-line-height: 1.5;
+
+  --font-body-s-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+  --font-body-s-weight: 600;
+  --font-body-s-size: 14px;
+  --font-body-s-line-height: 1.5;
+
+  --font-body-s-regular-family: var(--font-ibm-plex-sans), 'IBM Plex Sans', sans-serif;
+  --font-body-s-regular-weight: 400;
+  --font-body-s-regular-size: 14px;
+  --font-body-s-regular-line-height: 1.0;
+}
