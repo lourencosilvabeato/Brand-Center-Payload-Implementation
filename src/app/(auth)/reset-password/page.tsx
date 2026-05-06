@@ -1,7 +1,7 @@
 import { getPayload } from '@/lib/payload'
 import type { Media, LoginSetting, FooterSetting } from '@/payload-types'
 import { ResetPasswordForm } from '@/components/auth/ResetPasswordForm'
-import { SocialIcon } from '@/components/ui/SocialIcon'
+import Image from 'next/image'
 import styles from './reset-password.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -67,7 +67,12 @@ export default async function ResetPasswordPage() {
                       rel="noopener noreferrer"
                       className={styles.socialLink}
                     >
-                      <SocialIcon platform={item.platform} />
+                      {(() => {
+                        const icon = item.icon as Media
+                        return icon?.url ? (
+                          <Image src={icon.url} alt={icon.alt ?? ''} width={32} height={32} style={{ objectFit: 'contain' }} />
+                        ) : null
+                      })()}
                     </a>
                   ))}
                 </div>
