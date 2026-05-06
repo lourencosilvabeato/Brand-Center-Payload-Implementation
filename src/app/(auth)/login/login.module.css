@@ -1,0 +1,212 @@
+/* ── Page shell ─────────────────────────────────────────────
+   Mobile:  stacked — hero above, main below
+   Desktop: side-by-side — hero left (sticky), main right
+──────────────────────────────────────────────────────────── */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+
+/* ── Hero image ─────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--blue-ascendum);
+}
+
+.heroImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroFallback {
+  position: absolute;
+  inset: 0;
+  background: var(--blue-ascendum);
+}
+
+/* ── Main column ────────────────────────────────────────── */
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.formWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 24px;
+}
+
+/* ── Editorial content above form ───────────────────────── */
+
+.editorial {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-family: var(--font-h2-family);
+  font-weight: var(--font-h2-weight);
+  font-size: var(--font-h2-size);
+  line-height: var(--font-h2-line-height);
+  color: var(--blue-ascendum);
+  margin: 0;
+}
+
+.introduction {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+/* ── Institutional link ─────────────────────────────────── */
+
+.institutionalLink {
+  align-self: flex-start;
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--blue-ascendum);
+  text-decoration: underline;
+}
+
+.institutionalLink:hover {
+  color: var(--blue-ascendum-90);
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+
+.footer {
+  flex-shrink: 0;
+  padding: 0 24px 24px;
+}
+
+.footerSeparator {
+  height: 1px;
+  background: var(--grey-ascendum);
+  margin-bottom: 16px;
+}
+
+.footerInner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.socialRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brandName {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--blue-ascendum);
+}
+
+.socialIcons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-ascendum);
+  transition: opacity 0.15s;
+}
+
+.socialLink:hover {
+  opacity: 0.7;
+}
+
+.legalRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.legalLink {
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  color: var(--blue-ascendum);
+  text-decoration: underline;
+}
+
+.legalLink:hover {
+  color: var(--blue-ascendum-90);
+}
+
+.copyright {
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  color: var(--darker-grey);
+}
+
+/* ── Desktop ─────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .page {
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .hero {
+    position: relative;
+    top: auto;
+    flex: 1;
+    width: auto;
+    height: 100vh;
+    flex-shrink: 1;
+  }
+
+  .main {
+    width: 440px;
+    min-width: 374px;
+    flex-shrink: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .formWrapper {
+    flex: 1;
+    padding: 32px;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .footer {
+    padding: 0 32px 16px;
+  }
+}
