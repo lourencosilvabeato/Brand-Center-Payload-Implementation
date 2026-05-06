@@ -51,15 +51,16 @@ export async function Footer() {
           <>
             <div className={styles.divider} aria-hidden="true" />
             <nav aria-label="Legal links" className={styles.legal}>
-              {footer.legalLinks.map((link) => {
+              {footer.legalLinks.map((link, idx) => {
                 const page = link.page as LegalPage | null | number
                 const href =
                   link.url ??
-                  (page && typeof page !== 'number' ? `/${page.slug}` : null)
+                  (page && typeof page !== 'number' && page.slug ? `/${page.slug}` : null) ??
+                  '#'
 
-                return href ? (
+                return (
                   <Link
-                    key={link.id}
+                    key={link.id ?? idx}
                     href={href}
                     className={styles.legalLink}
                     target="_blank"
@@ -67,7 +68,7 @@ export async function Footer() {
                   >
                     {link.label}
                   </Link>
-                ) : null
+                )
               })}
             </nav>
           </>
