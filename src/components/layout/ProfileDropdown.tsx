@@ -65,7 +65,8 @@ export function ProfileDropdown({ role, onClose }: ProfileDropdownProps) {
 function AdminIcon({ className }: { className?: string }) {
   return (
     <svg className={className} width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path d="M10 2.5L2.5 6.25V10C2.5 13.9844 5.8125 17.7187 10 18.75C14.1875 17.7187 17.5 13.9844 17.5 10V6.25L10 2.5Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.825 17.917h2.35l.525-2.1c.408-.108.783-.267 1.133-.467l1.884 1.05 1.65-1.65-1.05-1.883c.2-.35.358-.725.466-1.134l2.1-.525v-2.35l-2.1-.525a5.8 5.8 0 0 0-.466-1.133l1.05-1.883-1.65-1.65-1.884 1.05A5.76 5.76 0 0 0 11.7 4.25l-.525-2.1h-2.35L8.3 4.25a5.76 5.76 0 0 0-1.134.466L5.283 3.667l-1.65 1.65 1.05 1.883a5.8 5.8 0 0 0-.466 1.134l-2.1.525v2.35l2.1.525c.108.408.266.783.466 1.133l-1.05 1.884 1.65 1.65 1.883-1.05c.35.2.725.358 1.134.466l.525 2.1Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.25" />
     </svg>
   )
 }
