@@ -39,6 +39,11 @@ export const Invitations: CollectionConfig = {
       defaultValue: false,
     },
     {
+      name: 'cancelled',
+      type: 'checkbox',
+      defaultValue: false,
+    },
+    {
       name: 'invitedBy',
       type: 'relationship',
       relationTo: 'platformUsers',

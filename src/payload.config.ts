@@ -18,6 +18,7 @@ import { ProtectedFiles } from './payload/collections/protectedFiles'
 import { HomePage } from './payload/globals/homePage'
 import { Navigation } from './payload/globals/navigation'
 import { FooterSettings } from './payload/globals/footerSettings'
+import { LoginSettings } from './payload/globals/loginSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -40,7 +41,7 @@ export default buildConfig({
     Media,
     ProtectedFiles,
   ],
-  globals: [HomePage, Navigation, FooterSettings],
+  globals: [HomePage, Navigation, FooterSettings, LoginSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
+import { isAdminOrLocalAdmin } from '../access'
 
 export const FooterSettings: GlobalConfig = {
   slug: 'footerSettings',
@@ -67,7 +67,7 @@ export const FooterSettings: GlobalConfig = {
     },
   ],
   access: {
-    read: isAuthenticated,
+    read: () => true,
     update: isAdminOrLocalAdmin,
   },
 }

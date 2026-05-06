@@ -106,11 +106,13 @@ export interface Config {
     homePage: HomePage;
     navigation: Navigation;
     footerSettings: FooterSetting;
+    loginSettings: LoginSetting;
   };
   globalsSelect: {
     homePage: HomePageSelect<false> | HomePageSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     footerSettings: FooterSettingsSelect<false> | FooterSettingsSelect<true>;
+    loginSettings: LoginSettingsSelect<false> | LoginSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -176,6 +178,21 @@ export interface PlatformUser {
   avatarUrl?: string | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
   collection: 'platformUsers';
 }
 /**
@@ -220,6 +237,7 @@ export interface Invitation {
   tokenHash: string;
   expiresAt: string;
   used?: boolean | null;
+  cancelled?: boolean | null;
   invitedBy: number | PlatformUser;
   updatedAt: string;
   createdAt: string;
@@ -658,6 +676,20 @@ export interface PlatformUsersSelect<T extends boolean = true> {
   avatarUrl?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -691,6 +723,7 @@ export interface InvitationsSelect<T extends boolean = true> {
   tokenHash?: T;
   expiresAt?: T;
   used?: T;
+  cancelled?: T;
   invitedBy?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1127,6 +1160,36 @@ export interface FooterSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "loginSettings".
+ */
+export interface LoginSetting {
+  id: number;
+  image: number | Media;
+  /**
+   * Main heading shown above the login form.
+   */
+  title?: string | null;
+  /**
+   * Optional introductory paragraph shown below the title.
+   */
+  introduction?: string | null;
+  /**
+   * Optional secondary text shown below the introduction.
+   */
+  subtitle?: string | null;
+  /**
+   * Label for the institutional link (e.g. "Visit ascendum.com").
+   */
+  institutionalLinkLabel?: string | null;
+  /**
+   * URL for the institutional link. Opens in a new tab.
+   */
+  institutionalLinkUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homePage_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -1210,6 +1273,21 @@ export interface FooterSettingsSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "loginSettings_select".
+ */
+export interface LoginSettingsSelect<T extends boolean = true> {
+  image?: T;
+  title?: T;
+  introduction?: T;
+  subtitle?: T;
+  institutionalLinkLabel?: T;
+  institutionalLinkUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
