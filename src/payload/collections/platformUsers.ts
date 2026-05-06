@@ -19,6 +19,7 @@ export const PlatformUsers: CollectionConfig = {
       name: 'role',
       type: 'select',
       required: true,
+      saveToJWT: true,
       defaultValue: 'internal',
       options: [
         { label: 'Admin', value: 'admin' },
