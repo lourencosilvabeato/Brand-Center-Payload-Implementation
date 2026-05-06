@@ -1,4 +1,9 @@
-// Collections are defined here (feature/collections — prompt 0c)
-// platformUsers, externalUsers, invitations, passwordResets,
-// channelPages, contentPages, legalPages, media, protectedFiles
-export {}
+export { PlatformUsers } from './platformUsers'
+export { ExternalUsers } from './externalUsers'
+export { Invitations } from './invitations'
+export { PasswordResets } from './passwordResets'
+export { ChannelPages } from './channelPages'
+export { ContentPages } from './contentPages'
+export { LegalPages } from './legalPages'
+export { Media } from './media'
+export { ProtectedFiles } from './protectedFiles'

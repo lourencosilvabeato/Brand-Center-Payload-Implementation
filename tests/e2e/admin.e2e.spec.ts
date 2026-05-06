@@ -26,15 +26,15 @@ test.describe('Admin Panel', () => {
   })
 
   test('can navigate to list view', async () => {
-    await page.goto('http://localhost:3000/admin/collections/users')
-    await expect(page).toHaveURL('http://localhost:3000/admin/collections/users')
-    const listViewArtifact = page.locator('h1', { hasText: 'Users' }).first()
+    await page.goto('http://localhost:3000/admin/collections/platformUsers')
+    await expect(page).toHaveURL('http://localhost:3000/admin/collections/platformUsers')
+    const listViewArtifact = page.locator('h1', { hasText: 'Platform Users' }).first()
     await expect(listViewArtifact).toBeVisible()
   })
 
   test('can navigate to edit view', async () => {
-    await page.goto('http://localhost:3000/admin/collections/users/create')
-    await expect(page).toHaveURL(/\/admin\/collections\/users\/[a-zA-Z0-9-_]+/)
+    await page.goto('http://localhost:3000/admin/collections/platformUsers/create')
+    await expect(page).toHaveURL(/\/admin\/collections\/platformUsers\/[a-zA-Z0-9-_]+/)
     const editViewArtifact = page.locator('input[name="email"]')
     await expect(editViewArtifact).toBeVisible()
   })
