@@ -1,0 +1,348 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 680px;
+  margin-top: -72px; /* pull behind sticky header so image spans from viewport top */
+  overflow: hidden;
+}
+
+.heroImage {
+  object-fit: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* ── Headline ──────────────────────────────────────────────── */
+
+.heroContent {
+  position: absolute;
+  top: 104px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 638px;
+  text-align: center;
+  color: var(--white);
+  z-index: 2;
+}
+
+.heroHeadline {
+  font-family: var(--font-h1-family);
+  font-weight: var(--font-h1-weight);
+  font-size: var(--font-h1-size);
+  line-height: var(--font-h1-line-height);
+  margin: 0 0 12px;
+}
+
+.heroIntroText {
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Search bar — desktop ──────────────────────────────────── */
+
+.searchBar {
+  position: absolute;
+  top: 556px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 638px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 3;
+}
+
+.searchPillDesktop {
+  flex: 1;
+  display: flex;
+  height: 60px;
+  min-width: 0;
+}
+
+.dropdownWrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.dropdownTrigger {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 16px 0 24px;
+  background: var(--blue-ascendum-60);
+  border: 1px solid var(--white);
+  border-right: none;
+  border-radius: 30px 0 0 30px;
+  backdrop-filter: blur(12px);
+  color: var(--white);
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  line-height: var(--font-body-s-line-height);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.searchInput {
+  flex: 1;
+  height: 60px;
+  background: var(--blue-ascendum-60);
+  border: 1px solid var(--white);
+  border-left: none;
+  border-radius: 0 30px 30px 0;
+  backdrop-filter: blur(12px);
+  padding: 0 16px;
+  color: var(--white);
+  font-family: var(--font-body-s-regular-family);
+  font-weight: var(--font-body-s-regular-weight);
+  font-size: var(--font-body-s-regular-size);
+  outline: none;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchBtnDesktop {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--blue-ascendum-60);
+  border: 1px solid var(--white);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: var(--white);
+}
+
+/* ── Dropdown list (shared) ───────────────────────────────── */
+
+.dropdownList {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--blue-ascendum);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 50;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: var(--white);
+  text-align: left;
+  font-family: var(--font-body-s-family);
+  font-weight: var(--font-body-s-weight);
+  font-size: var(--font-body-s-size);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Error message ────────────────────────────────────────── */
+
+.searchError {
+  position: absolute;
+  bottom: -32px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--white);
+  font-family: var(--font-body-s-regular-family);
+  font-size: var(--font-body-s-regular-size);
+  background: rgba(227, 29, 26, 0.85);
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin: 0;
+}
+
+/* ── Scroll indicator ─────────────────────────────────────── */
+
+.scrollIndicator {
+  position: absolute;
+  top: calc(50% + 166px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  color: var(--white);
+}
+
+/* ── Mobile-only elements hidden on desktop ───────────────── */
+
+.dropdownWrapMobile,
+.searchInputWrapMobile {
+  display: none;
+}
+
+/* ── Mobile ────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .heroContent {
+    top: 120px;
+    left: 24px;
+    right: 24px;
+    width: auto;
+    transform: none;
+  }
+
+  .heroHeadline {
+    font-size: 34px;
+  }
+
+  .heroIntroText {
+    display: none; /* not shown on mobile per spec */
+  }
+
+  .scrollIndicator {
+    top: calc(50% + 110px);
+  }
+
+  /* Desktop search elements hidden */
+  .searchPillDesktop,
+  .searchBtnDesktop {
+    display: none;
+  }
+
+  /* Mobile search bar */
+  .searchBar {
+    top: 504px;
+    left: 24px;
+    right: 24px;
+    transform: none;
+    width: auto;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  /* Mobile dropdown pill */
+  .dropdownWrapMobile {
+    display: block;
+    position: relative;
+  }
+
+  .dropdownTriggerMobile {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 24px;
+    background: var(--blue-ascendum-60);
+    border: 1px solid var(--white);
+    border-radius: 30px;
+    backdrop-filter: blur(12px);
+    color: var(--white);
+    font-family: var(--font-body-s-family);
+    font-weight: var(--font-body-s-weight);
+    font-size: var(--font-body-s-size);
+    cursor: pointer;
+  }
+
+  .dropdownListMobile {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--blue-ascendum);
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 50;
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Mobile input + search button pill */
+  .searchInputWrapMobile {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background: var(--blue-ascendum-60);
+    border: 1px solid var(--white);
+    border-radius: 30px;
+    backdrop-filter: blur(12px);
+    padding: 0 16px 0 24px;
+    gap: 8px;
+  }
+
+  .searchInputMobile {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--white);
+    font-family: var(--font-body-s-regular-family);
+    font-weight: var(--font-body-s-regular-weight);
+    font-size: var(--font-body-s-regular-size);
+    min-width: 0;
+  }
+
+  .searchInputMobile::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .searchInputMobile::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .searchBtnMobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--white);
+    padding: 0;
+  }
+
+  .searchError {
+    bottom: -28px;
+  }
+}
