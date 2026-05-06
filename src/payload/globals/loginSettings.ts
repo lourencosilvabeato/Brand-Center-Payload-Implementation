@@ -35,6 +35,20 @@ export const LoginSettings: GlobalConfig = {
       },
     },
     {
+      name: 'changePasswordTitle',
+      type: 'text',
+      admin: {
+        description: 'Heading shown on the Change Password page.',
+      },
+    },
+    {
+      name: 'changePasswordIntroduction',
+      type: 'textarea',
+      admin: {
+        description: 'Optional introductory paragraph on the Change Password page.',
+      },
+    },
+    {
       name: 'institutionalLinkLabel',
       type: 'text',
       admin: {
