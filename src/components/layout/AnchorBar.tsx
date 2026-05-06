@@ -25,8 +25,10 @@ export function AnchorBar({ anchors }: AnchorBarProps) {
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        const visible = entries.find((e) => e.isIntersecting)
-        if (visible) setActiveId(visible.target.id)
+        const topmost = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
+        if (topmost) setActiveId(topmost.target.id)
       },
       { rootMargin: '-20% 0px -70% 0px', threshold: 0 },
     )

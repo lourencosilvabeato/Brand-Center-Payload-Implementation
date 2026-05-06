@@ -1,5 +1,5 @@
 .bar {
-  width: 200px;
+  width: 241px;
   flex-shrink: 0;
   position: sticky;
   top: 96px;
@@ -12,21 +12,20 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .link {
   display: block;
-  font-family: var(--font-body-s-family);
-  font-weight: 400;
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--grey);
+  /* padding-left: 23px so that border(1px) + padding(23px) = 24px total indent — matches Figma */
+  padding: 8px 24px 8px 23px;
+  border-left: 1px solid var(--grey);
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
   text-decoration: none;
-  padding: 4px 0;
-  border-left: 2px solid transparent;
-  padding-left: 12px;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s;
 }
 
 .link:hover {
@@ -34,7 +33,9 @@
 }
 
 .active {
+  /* padding-left: 21px so that border(3px) + padding(21px) = 24px total indent */
+  border-left: 3px solid var(--blue-ascendum);
+  padding-left: 21px;
   color: var(--blue-ascendum);
   font-weight: 600;
-  border-left-color: var(--red-ascendum);
 }
