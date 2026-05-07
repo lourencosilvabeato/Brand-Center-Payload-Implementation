@@ -20,6 +20,7 @@ export const ExternalUsers: CollectionConfig = {
       name: 'role',
       type: 'select',
       required: true,
+      saveToJWT: true,
       defaultValue: 'external',
       options: [{ label: 'External', value: 'external' }],
       admin: {
