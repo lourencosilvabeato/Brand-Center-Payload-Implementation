@@ -13,19 +13,21 @@ export async function Header() {
   let role: 'admin' | 'localAdmin' | 'internal' | 'external' = 'internal'
 
   if (sessionUser) {
-    role = sessionUser.role ?? 'internal'
-
     if (sessionUser.collection === 'platformUsers') {
       try {
         const user = await payload.findByID({
           collection: 'platformUsers',
           id: Number(sessionUser.id),
+          overrideAccess: true,
         }) as PlatformUser
+        role = (user.role as typeof role) ?? 'internal'
         displayName = user.displayName ?? null
         avatarUrl = user.avatarUrl ?? null
       } catch {
-        // user not found — session may be stale
+        role = sessionUser.role ?? 'internal'
       }
+    } else if (sessionUser.collection === 'externalUsers') {
+      role = 'external'
     }
   }
 
