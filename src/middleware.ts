@@ -18,13 +18,12 @@ interface TokenPayload {
 }
 
 function decodeToken(token: string): TokenPayload | null {
-  // JWT verification with PAYLOAD_SECRET is not available in the Edge runtime.
-  // Middleware performs a structural decode only; cryptographic verification
-  // happens server-side in every Payload Local API call.
+  // Middleware (Edge runtime) can't use Node crypto — decode structurally only.
+  // Cryptographic verification happens server-side in every Payload Local API call.
   try {
-    const [, payloadSegment] = token.split('.')
-    if (!payloadSegment) return null
-    const decoded = JSON.parse(atob(payloadSegment.replace(/-/g, '+').replace(/_/g, '/')))
+    const parts = token.split('.')
+    if (parts.length !== 3) return null
+    const decoded = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
     if (decoded.exp && decoded.exp * 1000 < Date.now()) return null
     return decoded as TokenPayload
   } catch {
