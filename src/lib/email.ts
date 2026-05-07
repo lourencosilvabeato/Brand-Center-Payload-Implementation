@@ -1,16 +1,18 @@
 import nodemailer from 'nodemailer'
 
-export const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: 'smtp-relay.brevo.com',
   port: 587,
   secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  authMethod: 'LOGIN',
 })
 
-const from = () => process.env.EMAIL_FROM ?? process.env.SMTP_USER
+const from = () => process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? 'noreply@ascendum.com'
 
 export async function sendPasswordRecoveryEmail(to: string, resetUrl: string): Promise<void> {
   await transporter.sendMail({

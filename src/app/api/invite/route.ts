@@ -78,7 +78,7 @@ export async function POST(request: Request) {
   const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex')
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
 
-  await payload.create({
+  const invitation = await payload.create({
     collection: 'invitations',
     data: {
       email,
@@ -91,7 +91,23 @@ export async function POST(request: Request) {
   })
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-  await sendInvitationEmail(email, `${baseUrl}/set-password?token=${rawToken}`)
+  const inviteUrl = `${baseUrl}/set-password?token=${rawToken}`
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`\n[invite] Set-password link for ${email}:\n  ${inviteUrl}\n`)
+  }
+
+  try {
+    await sendInvitationEmail(email, inviteUrl)
+  } catch (err) {
+    // Roll back the invitation so the sender can retry
+    await payload.delete({ collection: 'invitations', id: invitation.id }).catch(() => null)
+    console.error('[invite] email send failed:', err)
+    return NextResponse.json(
+      { error: 'Failed to send invitation email. Please check your email configuration and try again.' },
+      { status: 500 },
+    )
+  }
 
   return NextResponse.json({ success: true })
 }
