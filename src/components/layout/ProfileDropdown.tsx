@@ -15,6 +15,7 @@ export function ProfileDropdown({ role, onClose }: ProfileDropdownProps) {
   async function handleLogout() {
     await fetch('/api/logout', { method: 'POST' })
     router.push('/login')
+    router.refresh()
   }
 
   return (
