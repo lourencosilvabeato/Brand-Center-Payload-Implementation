@@ -35,8 +35,21 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
   const headerRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
 
-  // First path segment identifies the active L1 section
   const activeL1Slug = pathname.split('/').filter(Boolean)[0] ?? null
+
+  const closeMegaMenu = useCallback(() => {
+    setMegaMenuL1(null)
+    setMegaMenuL1Slug(null)
+  }, [])
+
+  // Stable callback — prevents ProfileDropdown's useEffect from re-running on every render
+  const handleProfileClose = useCallback(() => setProfileOpen(false), [])
+
+  const closeAll = useCallback(() => {
+    setMegaMenuL1(null)
+    setMegaMenuL1Slug(null)
+    setProfileOpen(false)
+  }, [])
 
   const openMegaMenu = useCallback((item: NavL1, slug: string) => {
     setMegaMenuL1(item)
@@ -44,33 +57,34 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
     setProfileOpen(false)
   }, [])
 
-  const closeMegaMenu = useCallback(() => {
-    setMegaMenuL1(null)
-    setMegaMenuL1Slug(null)
-  }, [])
-
-  // Close mega-menu when clicking outside the header
+  // Reset all overlay states on route change so the mobile menu never gets
+  // stuck open (it is position:fixed z-index:300 and would cover the header)
   useEffect(() => {
-    function handleDocumentClick(e: MouseEvent) {
+    setMobileOpen(false)
+    closeMegaMenu()
+    setProfileOpen(false)
+  }, [pathname, closeMegaMenu])
+
+  // Single consolidated outside-click handler — closes both mega-menu and
+  // profile dropdown when clicking anywhere outside the header
+  useEffect(() => {
+    function handleOutsideClick(e: MouseEvent) {
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
-        closeMegaMenu()
+        closeAll()
       }
     }
-    document.addEventListener('mousedown', handleDocumentClick)
-    return () => document.removeEventListener('mousedown', handleDocumentClick)
-  }, [closeMegaMenu])
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [closeAll])
 
-  // Close mega-menu on Escape
+  // Close on Escape
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        closeMegaMenu()
-        setProfileOpen(false)
-      }
+      if (e.key === 'Escape') closeAll()
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [closeMegaMenu])
+  }, [closeAll])
 
   const firstLetter = displayName?.charAt(0)?.toUpperCase() ?? '?'
 
@@ -79,14 +93,13 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
       <header ref={headerRef} className={styles.header}>
         <div className={styles.inner}>
           {/* Logo */}
-          <Link href="/" className={styles.logo} aria-label="Ascendum Brand Center home" onClick={closeMegaMenu}>
-            <Image
-              src="/logo.svg"
-              alt="Ascendum"
-              width={140}
-              height={32}
-              priority
-            />
+          <Link
+            href="/"
+            className={styles.logo}
+            aria-label="Ascendum Brand Center home"
+            onClick={closeAll}
+          >
+            <Image src="/logo.svg" alt="Ascendum" width={140} height={32} priority />
           </Link>
 
           {/* Desktop nav */}
@@ -120,7 +133,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
                       <Link
                         href={`/${slug}`}
                         className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-                        onClick={closeMegaMenu}
+                        onClick={closeAll}
                       >
                         {item.label}
                       </Link>
@@ -148,13 +161,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
             >
               {avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={avatarUrl}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={styles.avatar}
-                />
+                <img src={avatarUrl} alt="" width={40} height={40} className={styles.avatar} />
               ) : (
                 <div className={styles.avatarFallback} aria-hidden="true">
                   {firstLetter}
@@ -167,10 +174,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
             </button>
 
             {profileOpen && (
-              <ProfileDropdown
-                role={role}
-                onClose={() => setProfileOpen(false)}
-              />
+              <ProfileDropdown role={role} onClose={handleProfileClose} />
             )}
           </div>
 
@@ -187,11 +191,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
 
         {/* Mega-menu */}
         {megaMenuL1 && megaMenuL1Slug && (
-          <MegaMenu
-            l1Item={megaMenuL1}
-            l1Slug={megaMenuL1Slug}
-            onClose={closeMegaMenu}
-          />
+          <MegaMenu l1Item={megaMenuL1} l1Slug={megaMenuL1Slug} onClose={closeMegaMenu} />
         )}
       </header>
 
