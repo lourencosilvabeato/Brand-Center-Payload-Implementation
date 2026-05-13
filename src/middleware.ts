@@ -58,7 +58,10 @@ export function middleware(request: NextRequest) {
 
   // Payload admin panel — admin role only
   if (pathname.startsWith('/admin')) {
-    if (!decoded || decoded.role !== 'admin') {
+    if (!decoded) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    if (decoded.role !== 'admin') {
       return NextResponse.redirect(new URL('/', request.url))
     }
     return NextResponse.next()
