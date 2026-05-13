@@ -121,10 +121,10 @@
 }
 
 .brandName {
-  font-family: var(--font-body-s-family);
-  font-weight: var(--font-body-s-weight);
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
+  font-family: var(--font-h4-family);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--blue-ascendum);
 }
 
@@ -192,8 +192,7 @@
   }
 
   .main {
-    width: 440px;
-    min-width: 374px;
+    width: 374px;
     flex-shrink: 0;
     height: 100vh;
     overflow-y: auto;
