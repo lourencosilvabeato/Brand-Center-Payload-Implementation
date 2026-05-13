@@ -6,6 +6,13 @@ export const ExternalUsers: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Users',
+    components: {
+      edit: {
+        beforeDocumentControls: [
+          '@/payload/components/AdminResetPasswordButton#AdminResetPasswordButton',
+        ],
+      },
+    },
   },
   auth: true,
   fields: [
@@ -13,6 +20,7 @@ export const ExternalUsers: CollectionConfig = {
       name: 'role',
       type: 'select',
       required: true,
+      saveToJWT: true,
       defaultValue: 'external',
       options: [{ label: 'External', value: 'external' }],
       admin: {

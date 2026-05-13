@@ -1,16 +1,16 @@
 import type { CollectionConfig } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
 import {
   RichTextBlock,
-  ImageBlock,
   QuoteBlock,
   NoteBlock,
   TableBlock,
   GridBlock,
   CollectionCardBlock,
-  DownloadBlock,
   DividerBlock,
-  FaqBlock,
+  SectionBlock,
+  IconLibraryBlock,
 } from '../blocks'
 
 export const ContentPages: CollectionConfig = {
@@ -36,31 +36,24 @@ export const ContentPages: CollectionConfig = {
       },
     },
     {
-      name: 'excerpt',
-      type: 'textarea',
-    },
-    {
-      name: 'layout',
-      type: 'blocks',
-      blocks: [
-        RichTextBlock,
-        ImageBlock,
-        QuoteBlock,
-        NoteBlock,
-        TableBlock,
-        GridBlock,
-        CollectionCardBlock,
-        DownloadBlock,
-        DividerBlock,
-        FaqBlock,
-      ],
-    },
-    {
-      name: 'anchors',
-      type: 'array',
+      name: 'headerAnchorName',
+      type: 'text',
+      required: true,
       admin: {
-        description: 'Anchor navigation links shown in the anchor bar above the content.',
+        description: 'Anchor ID for the page title — used as the first entry in the anchor bar.',
       },
+    },
+    {
+      name: 'excerpt',
+      type: 'richText',
+      editor: lexicalEditor(),
+      admin: {
+        description: 'Optional intro text displayed below the page title.',
+      },
+    },
+    {
+      name: 'buttons',
+      type: 'array',
       fields: [
         {
           name: 'label',
@@ -68,13 +61,30 @@ export const ContentPages: CollectionConfig = {
           required: true,
         },
         {
-          name: 'anchor',
+          name: 'url',
           type: 'text',
-          required: true,
-          admin: {
-            description: 'The anchor ID to scroll to (without the # prefix).',
-          },
+          admin: { description: 'Fill either URL or File, not both.' },
         },
+        {
+          name: 'file',
+          type: 'relationship',
+          relationTo: 'protectedFiles',
+        },
+      ],
+    },
+    {
+      name: 'layout',
+      type: 'blocks',
+      blocks: [
+        SectionBlock,
+        RichTextBlock,
+        QuoteBlock,
+        NoteBlock,
+        TableBlock,
+        GridBlock,
+        CollectionCardBlock,
+        DividerBlock,
+        IconLibraryBlock,
       ],
     },
   ],

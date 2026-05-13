@@ -1,0 +1,41 @@
+.bar {
+  width: 241px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 96px;
+  align-self: flex-start;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  display: block;
+  /* padding-left: 23px so that border(1px) + padding(23px) = 24px total indent — matches Figma */
+  padding: 8px 24px 8px 23px;
+  border-left: 1px solid var(--grey);
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.link:hover {
+  color: var(--blue-ascendum);
+}
+
+.active {
+  /* padding-left: 21px so that border(3px) + padding(21px) = 24px total indent */
+  border-left: 3px solid var(--blue-ascendum);
+  padding-left: 21px;
+  color: var(--blue-ascendum);
+  font-weight: 600;
+}

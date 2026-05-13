@@ -1,4 +1,5 @@
 import type { Block } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 export const GridBlock: Block = {
   slug: 'gridBlock',
@@ -33,8 +34,28 @@ export const GridBlock: Block = {
           required: true,
         },
         {
-          name: 'url',
-          type: 'text',
+          name: 'description',
+          type: 'richText',
+          editor: lexicalEditor(),
+        },
+        {
+          name: 'button',
+          type: 'group',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+            },
+            {
+              name: 'url',
+              type: 'text',
+            },
+            {
+              name: 'file',
+              type: 'relationship',
+              relationTo: 'protectedFiles',
+            },
+          ],
         },
       ],
     },
