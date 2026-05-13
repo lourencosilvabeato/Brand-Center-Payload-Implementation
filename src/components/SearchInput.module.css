@@ -1,0 +1,44 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border-bottom: 1px solid var(--blue-ascendum);
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--blue-ascendum-60);
+}
+
+.input::placeholder {
+  color: var(--blue-ascendum-60);
+}
+
+.clearBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--blue-ascendum-60);
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.clearBtn:hover {
+  opacity: 0.75;
+}

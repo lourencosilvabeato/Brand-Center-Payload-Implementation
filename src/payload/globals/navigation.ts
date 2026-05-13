@@ -25,6 +25,14 @@ export const Navigation: GlobalConfig = {
           relationTo: ['channelPages', 'contentPages'],
         },
         {
+          name: 'showAsSearchFilter',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Show as a filter option in the homepage search bar.',
+          },
+        },
+        {
           name: 'children',
           type: 'array',
           fields: [
@@ -39,7 +47,16 @@ export const Navigation: GlobalConfig = {
               relationTo: ['channelPages', 'contentPages'],
             },
             {
-              name: 'children',
+              name: 'showAsSearchFilter',
+              type: 'checkbox',
+              defaultValue: false,
+              admin: {
+                description: 'Show as a filter option in the homepage search bar.',
+              },
+            },
+            {
+              name: 'l3Items',
+              label: 'L3 Pages',
               type: 'array',
               fields: [
                 {
