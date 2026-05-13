@@ -1,0 +1,140 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--grey-ascendum);
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: var(--font-h2-family);
+  font-weight: var(--font-h2-weight);
+  font-size: var(--font-h2-size);
+  line-height: var(--font-h2-line-height);
+  color: var(--blue-ascendum);
+  margin: 0;
+}
+
+.description {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.description p {
+  margin: 0 0 0.75em;
+}
+
+.description p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Asset grid ────────────────────────────────────────────── */
+
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.assetItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.assetThumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background-color: var(--lightest-grey);
+  overflow: hidden;
+  border: 1px solid var(--grey-ascendum);
+}
+
+.assetThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.assetDescription {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+}
+
+.assetDescription p {
+  margin: 0;
+}
+
+/* ── Sticky download bar ───────────────────────────────────── */
+
+/* Space so the last content isn't hidden behind the bar */
+.downloadSpacer {
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.downloadBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: var(--white);
+  border-top: 1px solid var(--grey-ascendum);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 32px;
+  border: 1px solid var(--blue-ascendum);
+  border-radius: 100px;
+  background: var(--blue-ascendum);
+  text-decoration: none;
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--white);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.downloadBtn:hover {
+  background-color: var(--white);
+  color: var(--blue-ascendum);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .assetGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .assetGrid {
+    grid-template-columns: 1fr;
+  }
+}
