@@ -39,3 +39,9 @@
   color: var(--blue-ascendum);
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .bar {
+    display: none;
+  }
+}
