@@ -38,3 +38,9 @@
   font-weight: 600;
   border-left-color: var(--red-ascendum);
 }
+
+@media (max-width: 768px) {
+  .bar {
+    display: none;
+  }
+}

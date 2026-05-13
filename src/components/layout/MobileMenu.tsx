@@ -36,6 +36,7 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
   async function handleLogout() {
     await fetch('/api/logout', { method: 'POST' })
     router.push('/login')
+    router.refresh()
   }
 
   return (
@@ -95,7 +96,7 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
             </ul>
 
             <div className={styles.bottom}>
-              {(role === 'admin' || role === 'localAdmin') && (
+              {role === 'localAdmin' && (
                 <Link href="/invite" className={styles.bottomItem} onClick={onClose}>
                   <InviteIcon />
                   <span>Invite new user</span>
