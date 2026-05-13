@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import styles from './ProfileDropdown.module.css'
@@ -11,18 +10,7 @@ interface ProfileDropdownProps {
 }
 
 export function ProfileDropdown({ role, onClose }: ProfileDropdownProps) {
-  const ref = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        onClose()
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [onClose])
 
   async function handleLogout() {
     await fetch('/api/logout', { method: 'POST' })
@@ -30,7 +18,7 @@ export function ProfileDropdown({ role, onClose }: ProfileDropdownProps) {
   }
 
   return (
-    <div ref={ref} className={styles.dropdown} role="menu">
+    <div className={styles.dropdown} role="menu">
       {role === 'admin' && (
         <a href="/admin" className={`${styles.item} ${styles.withBorder}`} role="menuitem">
           <AdminIcon className={styles.icon} />
