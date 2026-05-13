@@ -6,6 +6,10 @@ import styles from './login.module.css'
 
 export const dynamic = 'force-dynamic'
 
+interface Props {
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
 type SocialLinkItem = NonNullable<FooterSetting['socialLinks']>[number]
 type LegalLinkItem = NonNullable<FooterSetting['legalLinks']>[number]
 
@@ -34,7 +38,10 @@ function buildSsoUrl(): string {
   return `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/authorize?${params.toString()}`
 }
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: Props) {
+  const params = await searchParams
+  const ssoError = params.error === 'sso_failed'
+
   const { loginSettings, footerSettings } = await getLoginData()
   const ssoUrl = buildSsoUrl()
 
@@ -72,7 +79,7 @@ export default async function LoginPage() {
           )}
 
           {/* Login form — subtitle rendered as label inside */}
-          <LoginForm ssoUrl={ssoUrl} subtitle={loginSettings?.subtitle} />
+          <LoginForm ssoUrl={ssoUrl} subtitle={loginSettings?.subtitle} ssoError={ssoError} />
 
           {/* Institutional link */}
           {loginSettings?.institutionalLinkLabel && loginSettings.institutionalLinkUrl && (
