@@ -13,6 +13,33 @@ export const CollectionCardBlock: Block = {
       required: true,
     },
     {
+      name: 'slug',
+      type: 'text',
+      admin: {
+        description: 'URL-safe identifier. The detail page will be at /collection/[slug].',
+      },
+    },
+    {
+      name: 'cardModel',
+      type: 'select',
+      defaultValue: 'large',
+      required: true,
+      options: [
+        { label: 'Large', value: 'large' },
+        { label: 'Small', value: 'small' },
+      ],
+      admin: {
+        description: 'Two consecutive Small cards render side-by-side on desktop.',
+      },
+    },
+    {
+      name: 'description',
+      type: 'richText',
+      admin: {
+        description: 'Shown on the collection detail page.',
+      },
+    },
+    {
       name: 'label',
       type: 'text',
       admin: {
@@ -31,6 +58,13 @@ export const CollectionCardBlock: Block = {
           relationTo: 'media',
           required: true,
         },
+        {
+          name: 'assetDescription',
+          type: 'richText',
+          admin: {
+            description: 'Optional description shown below this asset on the detail page.',
+          },
+        },
       ],
     },
     {
@@ -38,14 +72,14 @@ export const CollectionCardBlock: Block = {
       type: 'relationship',
       relationTo: 'protectedFiles',
       admin: {
-        description: 'Optional. Shows the download icon button.',
+        description: 'Optional. Shows the download icon button and sticky download bar on detail page.',
       },
     },
     {
       name: 'detailHref',
       type: 'text',
       admin: {
-        description: 'URL of the collection detail page. Shows the ↗ link button.',
+        description: 'Deprecated — use slug instead. Kept for backwards compatibility.',
       },
     },
   ],

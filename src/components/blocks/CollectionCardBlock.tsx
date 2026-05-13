@@ -39,6 +39,10 @@ export function CollectionCardBlock({ block }: { block: Block }) {
         ? block.downloadFile
         : null
 
+  const detailHref = block.slug
+    ? `/collection/${block.slug}`
+    : block.detailHref ?? null
+
   return (
     <div className={styles.collectionCard}>
       {block.assets && block.assets.length > 0 && (
@@ -79,9 +83,9 @@ export function CollectionCardBlock({ block }: { block: Block }) {
                 <DownloadIcon />
               </a>
             )}
-            {block.detailHref && (
+            {detailHref && (
               <a
-                href={block.detailHref}
+                href={detailHref}
                 className={styles.collectionCardIconBtn}
                 aria-label="View collection detail"
               >
