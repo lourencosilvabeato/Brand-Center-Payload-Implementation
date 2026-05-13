@@ -509,19 +509,63 @@ export interface ContentPage {
         | {
             title: string;
             /**
+             * URL-safe identifier. The detail page will be at /collection/[slug].
+             */
+            slug?: string | null;
+            /**
+             * Two consecutive Small cards render side-by-side on desktop.
+             */
+            cardModel: 'large' | 'small';
+            /**
+             * Shown on the collection detail page.
+             */
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
              * Optional label shown below the images (e.g. "Logos").
              */
             label?: string | null;
             assets: {
               image: number | Media;
+              /**
+               * Optional description shown below this asset on the detail page.
+               */
+              assetDescription?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               id?: string | null;
             }[];
             /**
-             * Optional. Shows the download icon button.
+             * Optional. Shows the download icon button and sticky download bar on detail page.
              */
             downloadFile?: (number | null) | ProtectedFile;
             /**
-             * URL of the collection detail page. Shows the ↗ link button.
+             * Deprecated — use slug instead. Kept for backwards compatibility.
              */
             detailHref?: string | null;
             id?: string | null;
@@ -1011,11 +1055,15 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
+              slug?: T;
+              cardModel?: T;
+              description?: T;
               label?: T;
               assets?:
                 | T
                 | {
                     image?: T;
+                    assetDescription?: T;
                     id?: T;
                   };
               downloadFile?: T;
