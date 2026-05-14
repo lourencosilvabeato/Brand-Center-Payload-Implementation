@@ -4,6 +4,7 @@
   position: sticky;
   top: 96px;
   align-self: flex-start;
+  margin-left: auto;
 }
 
 .list {
@@ -32,10 +33,17 @@
   color: var(--blue-ascendum);
 }
 
-.active {
+.link.active {
+  /* Combined selector — specificity (0,2,0) always beats .link (0,1,0) */
   /* padding-left: 21px so that border(3px) + padding(21px) = 24px total indent */
   border-left: 3px solid var(--blue-ascendum);
   padding-left: 21px;
   color: var(--blue-ascendum);
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .bar {
+    display: none;
+  }
 }
