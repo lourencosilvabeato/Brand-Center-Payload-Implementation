@@ -14,10 +14,14 @@ interface Props {
 }
 
 export function ContentPageLayout({ page, trail, siblings, currentHref }: Props) {
-  const anchors: AnchorItem[] = (page.anchors ?? []).map((a) => ({
-    id: a.anchor,
-    label: a.label,
-  }))
+  const seen = new Set<string>()
+  const anchors: AnchorItem[] = (page.anchors ?? [])
+    .map((a) => ({ id: a.anchor, label: a.label }))
+    .filter((anchor) => {
+      if (!anchor.id || seen.has(anchor.id)) return false
+      seen.add(anchor.id)
+      return true
+    })
 
   const hasBreadcrumb = trail.length > 0
   const hasSidebar = siblings.length > 0
