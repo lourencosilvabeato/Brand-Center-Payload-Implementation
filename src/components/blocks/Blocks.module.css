@@ -1,38 +1,4 @@
 /* ═══════════════════════════════════════════════════════════════
-   IMAGE BLOCK
-   ═══════════════════════════════════════════════════════════════ */
-
-.imageBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.imageWrap {
-  border: 1px solid var(--grey-ascendum);
-  border-radius: 12px;
-  overflow: hidden;
-  aspect-ratio: 16 / 9;
-  background-color: var(--lightest-grey);
-}
-
-.imageWrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.imageCaption {
-  font-family: var(--font-body-m-family);
-  font-weight: var(--font-body-m-weight);
-  font-size: var(--font-body-m-size);
-  line-height: var(--font-body-m-line-height);
-  color: var(--darker-grey);
-  margin: 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════
    QUOTE BLOCK
    ═══════════════════════════════════════════════════════════════ */
 
@@ -469,42 +435,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DOWNLOAD BLOCK
-   ═══════════════════════════════════════════════════════════════ */
-
-.downloadBlock {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 24px;
-  border: 1px solid var(--blue-ascendum);
-  border-radius: 100px;
-  background: transparent;
-  text-decoration: none;
-  color: var(--blue-ascendum);
-  transition: background-color 0.15s, color 0.15s;
-}
-
-.downloadBlock:hover {
-  background-color: var(--blue-ascendum);
-  color: var(--white);
-}
-
-.downloadIcon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-}
-
-.downloadLabel {
-  font-family: var(--font-body-m-semibold-family);
-  font-weight: var(--font-body-m-semibold-weight);
-  font-size: var(--font-body-m-semibold-size);
-  line-height: var(--font-body-m-semibold-line-height);
-  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════════════════════════
