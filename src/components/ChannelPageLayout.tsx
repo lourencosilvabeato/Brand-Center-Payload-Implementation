@@ -50,7 +50,7 @@ export function ChannelPageLayout({ page, trail }: Props) {
             const image =
               card.image && typeof card.image !== 'number' ? (card.image as Media) : null
             return (
-              <a key={card.id ?? i} href={card.link} className={styles.card}>
+              <a key={card.id ?? i} href={card.link ?? '#'} className={styles.card}>
                 <div className={styles.cardDetails}>
                   <div className={styles.cardText}>
                     <span className={styles.cardTitle}>{card.title}</span>
