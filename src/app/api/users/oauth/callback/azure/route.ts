@@ -36,12 +36,16 @@ export async function GET(request: Request) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
   if (error || !code) {
-    console.error('[azure-oauth] Auth error from Azure:', error ?? 'no code returned')
+    const desc = url.searchParams.get('error_description') ?? 'no code returned'
+    console.error(`[azure-oauth] Auth error from Azure: ${error ?? 'none'} — ${desc}`)
     return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
   }
 
-  // Exchange authorisation code for access token
-  let accessToken: string
+  // Exchange authorisation code for tokens
+  let azureId: string
+  let email: string
+  let displayName: string
+
   try {
     const tokenRes = await fetch(
       `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
@@ -63,49 +67,43 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
     }
 
-    const tokenData = (await tokenRes.json()) as { access_token?: string }
-    if (!tokenData.access_token) {
-      console.error('[azure-oauth] No access_token in token response')
-      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+    const tokenData = (await tokenRes.json()) as {
+      access_token?: string
+      id_token?: string
     }
-    accessToken = tokenData.access_token
-  } catch (err) {
-    console.error('[azure-oauth] Token exchange threw:', err)
-    return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
-  }
 
-  // Fetch user profile from Microsoft Graph
-  let azureId: string
-  let email: string
-  let displayName: string
-  try {
-    const graphRes = await fetch(
-      'https://graph.microsoft.com/v1.0/me?$select=id,displayName,mail,userPrincipalName',
-      { headers: { Authorization: `Bearer ${accessToken}` } },
-    )
-
-    if (!graphRes.ok) {
-      console.error('[azure-oauth] Graph profile fetch failed:', graphRes.status)
+    if (!tokenData.id_token) {
+      console.error('[azure-oauth] No id_token in token response')
       return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
     }
 
-    const profile = (await graphRes.json()) as {
-      id?: string
-      displayName?: string
-      mail?: string
-      userPrincipalName?: string
+    // Decode the id_token payload — no Graph API call needed
+    // The id_token contains oid (azureId), name, email/preferred_username
+    const idPayload = tokenData.id_token.split('.')[1]
+    if (!idPayload) {
+      console.error('[azure-oauth] Malformed id_token')
+      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
     }
 
-    azureId = profile.id ?? ''
-    email = (profile.mail ?? profile.userPrincipalName ?? '').toLowerCase()
-    displayName = profile.displayName ?? email
+    const claims = JSON.parse(
+      Buffer.from(idPayload, 'base64url').toString('utf8'),
+    ) as {
+      oid?: string
+      name?: string
+      email?: string
+      preferred_username?: string
+    }
+
+    azureId = claims.oid ?? ''
+    email = (claims.email ?? claims.preferred_username ?? '').toLowerCase()
+    displayName = claims.name ?? email
 
     if (!azureId || !email) {
-      console.error('[azure-oauth] Missing id or email in Graph profile')
+      console.error('[azure-oauth] Missing oid or email in id_token claims:', JSON.stringify(claims))
       return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
     }
   } catch (err) {
-    console.error('[azure-oauth] Graph fetch threw:', err)
+    console.error('[azure-oauth] Token exchange threw:', err)
     return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
   }
 
@@ -135,9 +133,10 @@ export async function GET(request: Request) {
       }
     } else {
       // 2. Pre-created user (admin assigned a role before first login) — look up by email
+      // Use like with exact lowercased value for case-insensitive match across DB collations
       const byEmail = await payload.find({
         collection: 'platformUsers',
-        where: { email: { equals: email } },
+        where: { email: { like: email } },
         limit: 1,
       })
 
