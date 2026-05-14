@@ -9,7 +9,7 @@
   width: 267px;
   flex-shrink: 0;
   position: sticky;
-  top: 0;
+  top: 72px;
   align-self: flex-start;
 }
 
