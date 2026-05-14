@@ -41,6 +41,6 @@
   .btn {
     padding: 10px 16px;
     gap: 10px;
-    font-size: 14px;
+    font-size: var(--font-body-s-size);
   }
 }
