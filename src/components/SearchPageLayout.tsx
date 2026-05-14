@@ -144,7 +144,7 @@ export function SearchPageLayout({
                   <ChevronLeft />
                 </a>
                 <span className={styles.paginationText}>
-                  Pagina {currentPage} de {totalPages}
+                  Página {currentPage} de {totalPages}
                 </span>
                 <a
                   href={
