@@ -133,9 +133,10 @@ export async function GET(request: Request) {
       }
     } else {
       // 2. Pre-created user (admin assigned a role before first login) — look up by email
+      // Use like with exact lowercased value for case-insensitive match across DB collations
       const byEmail = await payload.find({
         collection: 'platformUsers',
-        where: { email: { equals: email } },
+        where: { email: { like: email } },
         limit: 1,
       })
 
