@@ -24,10 +24,15 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
     )
     .map((b) => ({ id: getSectionAnchorId(b), label: b.title }))
 
+  const seenIds = new Set<string>()
   const anchors: AnchorItem[] = [
     ...(page.headerAnchorName ? [{ id: page.headerAnchorName, label: page.title }] : []),
     ...sectionAnchors.filter((a) => Boolean(a.id)),
-  ]
+  ].filter((anchor) => {
+    if (seenIds.has(anchor.id)) return false
+    seenIds.add(anchor.id)
+    return true
+  })
 
   const { prev, next } = findPrevNext(siblings, currentHref)
 
