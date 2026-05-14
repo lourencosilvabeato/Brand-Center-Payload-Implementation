@@ -63,7 +63,8 @@ export async function Footer() {
                     key={link.id ?? idx}
                     href={href}
                     className={styles.legalLink}
-                    {...(link.url ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {link.label}
                   </Link>

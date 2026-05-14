@@ -23,18 +23,17 @@
 
 .divider {
   width: 1px;
-  height: 32px;
+  height: 64px;
   background: var(--grey-ascendum);
   flex-shrink: 0;
 }
 
 .followLabel {
-  font-family: var(--font-body-s-family);
-  font-weight: var(--font-body-s-weight);
-  font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
-  letter-spacing: 0.05em;
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
   white-space: nowrap;
   margin: 0;
 }
@@ -42,7 +41,7 @@
 .socials {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .socialLink {
@@ -86,8 +85,8 @@
   font-family: var(--font-body-s-family);
   font-weight: 400;
   font-size: var(--font-body-s-size);
-  line-height: var(--font-body-s-line-height);
-  color: var(--darker-grey);
+  line-height: normal;
+  color: var(--blue-ascendum);
   white-space: nowrap;
   margin-left: auto;
 }

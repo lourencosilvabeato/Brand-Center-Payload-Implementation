@@ -1,0 +1,129 @@
+/* Styles for Payload Lexical rich text output.
+   The .richText class is passed to the RichText component as className,
+   which attaches it to the container div. All selectors below are
+   descendant selectors — CSS Modules scopes the parent class name. */
+
+.richText h2 {
+  font-family: var(--font-h2-family);
+  font-weight: var(--font-h2-weight);
+  font-size: var(--font-h2-size);
+  line-height: var(--font-h2-line-height);
+  color: var(--blue-ascendum);
+  margin: 0 0 16px;
+}
+
+.richText h5 {
+  font-family: var(--font-h5-family);
+  font-weight: var(--font-h5-weight);
+  font-size: var(--font-h5-size);
+  line-height: var(--font-h5-line-height);
+  color: var(--darker-grey);
+  margin: 0 0 8px;
+}
+
+.richText p {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  margin: 0 0 16px;
+}
+
+.richText p:last-child {
+  margin-bottom: 0;
+}
+
+.richText ul,
+.richText ol {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--darker-grey);
+  margin: 0 0 16px;
+  padding-left: 24px;
+}
+
+.richText ul {
+  list-style: disc;
+}
+
+.richText ol {
+  list-style: decimal;
+}
+
+.richText li {
+  margin-bottom: 4px;
+}
+
+.richText a {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  color: var(--blue-ascendum);
+  text-decoration: underline;
+  text-decoration-color: var(--blue-ascendum);
+  transition: text-decoration-color 0.15s;
+}
+
+.richText a:hover {
+  text-decoration-color: var(--red-ascendum);
+}
+
+.richText hr {
+  border: none;
+  border-top: 1px solid var(--grey-ascendum);
+  margin: 24px 0;
+}
+
+/* Checklist — uses Lexical's ChecklistFeature which renders
+   <ul> with <li role="checkbox" aria-checked="true|false">.
+   Checked items = green tick. Unchecked items = red cross. */
+
+.richText ul[class*='PlaygroundEditorTheme__checklist'],
+.richText ul:has(> li[role='checkbox']) {
+  list-style: none;
+  padding-left: 0;
+}
+
+.richText li[role='checkbox'] {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 6px;
+  cursor: default;
+}
+
+.richText li[role='checkbox']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  border: 1.5px solid var(--grey);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.richText li[aria-checked='true']::before {
+  content: '✓';
+  background: transparent;
+  border-color: transparent;
+  color: #22a350;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.richText li[aria-checked='false']::before {
+  content: '✕';
+  background: transparent;
+  border-color: transparent;
+  color: var(--red-ascendum);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+}

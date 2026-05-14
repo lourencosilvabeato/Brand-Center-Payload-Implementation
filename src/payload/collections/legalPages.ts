@@ -2,7 +2,6 @@ import type { CollectionConfig } from 'payload'
 import { isAdminOrLocalAdmin } from '../access'
 import {
   RichTextBlock,
-  ImageBlock,
   QuoteBlock,
   NoteBlock,
   TableBlock,
@@ -34,7 +33,7 @@ export const LegalPages: CollectionConfig = {
     {
       name: 'layout',
       type: 'blocks',
-      blocks: [RichTextBlock, ImageBlock, QuoteBlock, NoteBlock, TableBlock, DividerBlock],
+      blocks: [RichTextBlock, QuoteBlock, NoteBlock, TableBlock, DividerBlock],
     },
   ],
   access: {

@@ -1,5 +1,11 @@
 import type { Navigation, ChannelPage, ContentPage } from '@/payload-types'
 
+export interface NavPageMeta {
+  href: string
+  breadcrumbText: string
+  l1Slug: string
+}
+
 export interface BreadcrumbItem {
   label: string
   href: string
@@ -14,7 +20,7 @@ export interface SiblingItem {
 
 type NavL1 = NonNullable<Navigation['items']>[number]
 type NavL2 = NonNullable<NavL1['children']>[number]
-type NavL3 = NonNullable<NavL2['children']>[number]
+type NavL3 = NonNullable<NavL2['l3Items']>[number]
 
 function getPolySlug(
   page: NavL1['page'] | NavL2['page'],
@@ -62,9 +68,9 @@ export function buildBreadcrumb(
         current: pathSegments.length === 2,
       })
 
-      if (!l3Seg || !l2.children) return trail
+      if (!l3Seg || !l2.l3Items) return trail
 
-      for (const l3 of l2.children) {
+      for (const l3 of l2.l3Items) {
         const l3Slug = getDirectSlug(l3.page)
         if (!l3Slug || l3Slug !== l3Seg) continue
 
@@ -118,9 +124,9 @@ export function findSiblings(
         })
       }
 
-      if (!l2.children) return []
+      if (!l2.l3Items) return []
 
-      return l2.children.flatMap((item) => {
+      return l2.l3Items.flatMap((item) => {
         const slug = getDirectSlug(item.page)
         return slug
           ? [{ label: item.label, href: href(l1Slug, l2Slug, slug), id: item.id ?? '' }]
@@ -142,6 +148,43 @@ export function findPrevNext(
     prev: idx > 0 ? (siblings[idx - 1] ?? null) : null,
     next: idx < siblings.length - 1 ? (siblings[idx + 1] ?? null) : null,
   }
+}
+
+// Builds a slug → NavPageMeta map for all pages in the navigation tree
+export function buildNavIndex(items: Navigation['items']): Map<string, NavPageMeta> {
+  const map = new Map<string, NavPageMeta>()
+  for (const l1 of items ?? []) {
+    const l1Slug = getPolySlug(l1.page)
+    if (!l1Slug) continue
+    map.set(l1Slug, { href: `/${l1Slug}`, breadcrumbText: l1.label, l1Slug })
+    for (const l2 of l1.children ?? []) {
+      const l2Slug = getPolySlug(l2.page)
+      if (!l2Slug) continue
+      map.set(l2Slug, {
+        href: `/${l1Slug}/${l2Slug}`,
+        breadcrumbText: `${l1.label} / ${l2.label}`,
+        l1Slug,
+      })
+      for (const l3 of l2.l3Items ?? []) {
+        const l3Slug = getDirectSlug(l3.page)
+        if (!l3Slug) continue
+        map.set(l3Slug, {
+          href: `/${l1Slug}/${l2Slug}/${l3Slug}`,
+          breadcrumbText: `${l1.label} / ${l2.label} / ${l3.label}`,
+          l1Slug,
+        })
+      }
+    }
+  }
+  return map
+}
+
+// Returns label+slug pairs for all L1 nav items — used for search filter tabs
+export function getL1NavItems(items: Navigation['items']): Array<{ label: string; slug: string }> {
+  return (items ?? []).flatMap((item) => {
+    const slug = getPolySlug(item.page)
+    return slug ? [{ label: item.label, slug }] : []
+  })
 }
 
 // Extracts L2 items for a given active L1 slug — used by mega-menu
