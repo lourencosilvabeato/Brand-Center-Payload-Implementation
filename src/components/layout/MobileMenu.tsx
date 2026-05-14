@@ -96,10 +96,22 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
             </ul>
 
             <div className={styles.bottom}>
+              {role === 'admin' && (
+                <a href="/admin" className={styles.bottomItem} onClick={onClose}>
+                  <AdminIcon />
+                  <span>Go to management panel</span>
+                </a>
+              )}
               {role === 'localAdmin' && (
                 <Link href="/invite" className={styles.bottomItem} onClick={onClose}>
                   <InviteIcon />
                   <span>Invite new user</span>
+                </Link>
+              )}
+              {role === 'external' && (
+                <Link href="/change-password" className={styles.bottomItem} onClick={onClose}>
+                  <PasswordIcon />
+                  <span>Change password</span>
                 </Link>
               )}
               <button type="button" className={styles.bottomItem} onClick={handleLogout}>
@@ -205,6 +217,24 @@ function InviteIcon() {
       <path d="M7.5 9.16667C9.34095 9.16667 10.8333 7.67428 10.8333 5.83333C10.8333 3.99238 9.34095 2.5 7.5 2.5C5.65905 2.5 4.16667 3.99238 4.16667 5.83333C4.16667 7.67428 5.65905 9.16667 7.5 9.16667Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M16.25 6.66667V11.6667" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M13.75 9.16667H18.75" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function AdminIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M8.825 17.917h2.35l.525-2.1c.408-.108.783-.267 1.133-.467l1.884 1.05 1.65-1.65-1.05-1.883c.2-.35.358-.725.466-1.134l2.1-.525v-2.35l-2.1-.525a5.8 5.8 0 0 0-.466-1.133l1.05-1.883-1.65-1.65-1.884 1.05A5.76 5.76 0 0 0 11.7 4.25l-.525-2.1h-2.35L8.3 4.25a5.76 5.76 0 0 0-1.134.466L5.283 3.667l-1.65 1.65 1.05 1.883a5.8 5.8 0 0 0-.466 1.134l-2.1.525v2.35l2.1.525c.108.408.266.783.466 1.133l-1.05 1.884 1.65 1.65 1.883-1.05c.35.2.725.358 1.134.466l.525 2.1Z" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.25" />
+    </svg>
+  )
+}
+
+function PasswordIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <rect x="2.5" y="9.16667" width="15" height="9.16667" rx="1.25" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.83333 9.16667V5.83333C5.83333 4.94928 6.18452 4.10143 6.80964 3.47631C7.43476 2.85119 8.28261 2.5 9.16667 2.5H10.8333C11.7174 2.5 12.5652 2.85119 13.1904 3.47631C13.8155 4.10143 14.1667 4.94928 14.1667 5.83333V9.16667" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
