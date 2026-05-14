@@ -432,6 +432,26 @@ Do not move to the next requirement until tests are confirmed.
 
 ---
 
+### Branch corrections and fixes
+If a fix or change is needed after a feature branch has already been created 
+and pushed, do NOT create a new branch. Instead:
+1. Switch back to the existing feature branch: `git checkout feature/[name]`
+2. Make the fix and commit it to the same branch
+3. Push to both remotes: `git push origin feature/[name]` and `git push bitbucket feature/[name]`
+
+Never create a new branch for a fix or adjustment to an already-implemented feature. 
+One branch per feature, always.
+
+**This applies across sessions too.** If a bug is reported in a new conversation, identify the correct feature branch from the table above and commit the fix there — do not create a new branch.
+
+**Banned branch name patterns** — never use these suffixes or sub-names:
+- `feature/[name]-fix`
+- `feature/[name]-bugfix`
+- `feature/[name]-v2`
+- `feature/[name]-[subpart]` (e.g. `feature/layout-header`, `feature/layout-footer`) — all sub-parts of a feature go into the single feature branch defined in the table above
+
+---
+
 ## MCP Resources
 
 | Resource | Key / ID / URL |

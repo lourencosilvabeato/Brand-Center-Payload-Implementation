@@ -76,6 +76,7 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
 .navList {
@@ -111,9 +112,7 @@
 .bottom {
   display: flex;
   flex-direction: column;
-  padding-top: 16px;
   margin-top: auto;
-  border-top: 1px solid var(--grey-ascendum);
 }
 
 .bottomItem {
@@ -140,36 +139,47 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 16px 0;
-  font-family: var(--font-body-m-semibold-family);
-  font-weight: var(--font-body-m-semibold-weight);
-  font-size: var(--font-body-m-semibold-size);
-  line-height: var(--font-body-m-semibold-line-height);
-  color: var(--blue-ascendum);
-  border-bottom: 1px solid var(--grey-ascendum);
-  width: 100%;
-  margin-bottom: 8px;
-}
-
-.l2Group {
-  padding: 8px 0;
-}
-
-.l2Header {
-  padding: 8px 0;
-}
-
-.l2Title {
+  padding: 0 0 16px;
   font-family: var(--font-body-s-family);
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
   color: var(--blue-ascendum);
+  width: 100%;
+}
+
+.l2Group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-top: 1px solid var(--grey-ascendum);
+  padding: 24px 0;
+}
+
+.l2Title {
+  font-family: var(--font-body-m-semibold-family);
+  font-weight: var(--font-body-m-semibold-weight);
+  font-size: var(--font-body-m-semibold-size);
+  line-height: var(--font-body-m-semibold-line-height);
+  color: var(--blue-ascendum);
   text-decoration: none;
 }
 
 .l3List {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   list-style: none;
   margin: 0;
-  padding: 0 0 0 16px;
+  padding: 0;
+}
+
+.l3Link {
+  font-family: var(--font-body-m-family);
+  font-weight: var(--font-body-m-weight);
+  font-size: var(--font-body-m-size);
+  line-height: var(--font-body-m-line-height);
+  color: var(--blue-ascendum);
+  text-decoration: none;
+  display: block;
 }

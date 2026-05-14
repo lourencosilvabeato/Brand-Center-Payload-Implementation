@@ -335,9 +335,84 @@ export interface ContentPage {
    * URL segment for this page (e.g. "logo-usage" for /brand-identity/logo-usage/).
    */
   slug: string;
-  excerpt?: string | null;
+  /**
+   * Anchor ID for the page title — used as the first entry in the anchor bar.
+   */
+  headerAnchorName: string;
+  /**
+   * Optional intro text displayed below the page title.
+   */
+  excerpt?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  buttons?:
+    | {
+        label: string;
+        /**
+         * Fill either URL or File, not both.
+         */
+        url?: string | null;
+        file?: (number | null) | ProtectedFile;
+        id?: string | null;
+      }[]
+    | null;
   layout?:
     | (
+        | {
+            /**
+             * Optional small label displayed above the section title.
+             */
+            label?: string | null;
+            /**
+             * Section heading (H2). Also used as the anchor bar label.
+             */
+            title: string;
+            /**
+             * Anchor ID for this section (optional — defaults to the title if left empty). No spaces or special characters.
+             */
+            anchorName?: string | null;
+            buttons?:
+              | {
+                  label: string;
+                  /**
+                   * Fill either URL or File, not both.
+                   */
+                  url?: string | null;
+                  file?: (number | null) | ProtectedFile;
+                  id?: string | null;
+                }[]
+              | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectionBlock';
+          }
         | {
             content: {
               root: {
@@ -359,14 +434,6 @@ export interface ContentPage {
             blockType: 'richText';
           }
         | {
-            image: number | Media;
-            caption?: string | null;
-            alt?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageBlock';
-          }
-        | {
             text: string;
             attribution?: string | null;
             id?: string | null;
@@ -374,8 +441,23 @@ export interface ContentPage {
             blockType: 'quoteBlock';
           }
         | {
-            text: string;
             type: 'info' | 'warning';
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'noteBlock';
@@ -398,7 +480,26 @@ export interface ContentPage {
             items: {
               image?: (number | null) | Media;
               title: string;
-              url?: string | null;
+              description?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              button?: {
+                label?: string | null;
+                url?: string | null;
+                file?: (number | null) | ProtectedFile;
+              };
               id?: string | null;
             }[];
             id?: string | null;
@@ -407,48 +508,120 @@ export interface ContentPage {
           }
         | {
             title: string;
-            image?: (number | null) | Media;
-            link: string;
+            /**
+             * URL-safe identifier. The detail page will be at /collection/[slug].
+             */
+            slug?: string | null;
+            /**
+             * Two consecutive Small cards render side-by-side on desktop.
+             */
+            cardModel: 'large' | 'small';
+            /**
+             * Shown on the collection detail page.
+             */
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Optional label shown below the images (e.g. "Logos").
+             */
+            label?: string | null;
+            assets: {
+              image: number | Media;
+              /**
+               * Optional description shown below this asset on the detail page.
+               */
+              assetDescription?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[];
+            /**
+             * Optional. Shows the download icon button and sticky download bar on detail page.
+             */
+            downloadFile?: (number | null) | ProtectedFile;
+            /**
+             * Deprecated — use slug instead. Kept for backwards compatibility.
+             */
+            detailHref?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'collectionCardBlock';
           }
         | {
-            label: string;
-            file: number | ProtectedFile;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'downloadBlock';
-          }
-        | {
+            variant: 'short' | 'long';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
           }
         | {
+            title?: string | null;
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Optional. When set, a "Download all" button appears at the bottom.
+             */
+            downloadFile?: (number | null) | ProtectedFile;
             items: {
-              question: string;
-              answer: string;
+              /**
+               * Icon name — also used as the search filter criterion.
+               */
+              name: string;
+              icon: number | Media;
+              /**
+               * Optional. Activates a per-icon download button.
+               */
+              iconFile?: (number | null) | ProtectedFile;
+              tags?:
+                | {
+                    tag: string;
+                    id?: string | null;
+                  }[]
+                | null;
               id?: string | null;
             }[];
             id?: string | null;
             blockName?: string | null;
-            blockType: 'faqBlock';
+            blockType: 'iconLibraryBlock';
           }
       )[]
-    | null;
-  /**
-   * Anchor navigation links shown in the anchor bar above the content.
-   */
-  anchors?:
-    | {
-        label: string;
-        /**
-         * The anchor ID to scroll to (without the # prefix).
-         */
-        anchor: string;
-        id?: string | null;
-      }[]
     | null;
   updatedAt: string;
   createdAt: string;
@@ -509,14 +682,6 @@ export interface LegalPage {
             blockType: 'richText';
           }
         | {
-            image: number | Media;
-            caption?: string | null;
-            alt?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageBlock';
-          }
-        | {
             text: string;
             attribution?: string | null;
             id?: string | null;
@@ -524,8 +689,23 @@ export interface LegalPage {
             blockType: 'quoteBlock';
           }
         | {
-            text: string;
             type: 'info' | 'warning';
+            title?: string | null;
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'noteBlock';
@@ -544,6 +724,7 @@ export interface LegalPage {
             blockType: 'tableBlock';
           }
         | {
+            variant: 'short' | 'long';
             id?: string | null;
             blockName?: string | null;
             blockType: 'dividerBlock';
@@ -775,23 +956,41 @@ export interface ChannelPagesSelect<T extends boolean = true> {
 export interface ContentPagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  headerAnchorName?: T;
   excerpt?: T;
+  buttons?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        file?: T;
+        id?: T;
+      };
   layout?:
     | T
     | {
+        sectionBlock?:
+          | T
+          | {
+              label?: T;
+              title?: T;
+              anchorName?: T;
+              buttons?:
+                | T
+                | {
+                    label?: T;
+                    url?: T;
+                    file?: T;
+                    id?: T;
+                  };
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
         richText?:
           | T
           | {
               content?: T;
-              id?: T;
-              blockName?: T;
-            };
-        imageBlock?:
-          | T
-          | {
-              image?: T;
-              caption?: T;
-              alt?: T;
               id?: T;
               blockName?: T;
             };
@@ -806,8 +1005,9 @@ export interface ContentPagesSelect<T extends boolean = true> {
         noteBlock?:
           | T
           | {
-              text?: T;
               type?: T;
+              title?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -838,7 +1038,14 @@ export interface ContentPagesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     title?: T;
-                    url?: T;
+                    description?: T;
+                    button?:
+                      | T
+                      | {
+                          label?: T;
+                          url?: T;
+                          file?: T;
+                        };
                     id?: T;
                   };
               id?: T;
@@ -848,45 +1055,52 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
-              image?: T;
-              link?: T;
-              id?: T;
-              blockName?: T;
-            };
-        downloadBlock?:
-          | T
-          | {
+              slug?: T;
+              cardModel?: T;
+              description?: T;
               label?: T;
-              file?: T;
+              assets?:
+                | T
+                | {
+                    image?: T;
+                    assetDescription?: T;
+                    id?: T;
+                  };
+              downloadFile?: T;
+              detailHref?: T;
               id?: T;
               blockName?: T;
             };
         dividerBlock?:
           | T
           | {
+              variant?: T;
               id?: T;
               blockName?: T;
             };
-        faqBlock?:
+        iconLibraryBlock?:
           | T
           | {
+              title?: T;
+              description?: T;
+              downloadFile?: T;
               items?:
                 | T
                 | {
-                    question?: T;
-                    answer?: T;
+                    name?: T;
+                    icon?: T;
+                    iconFile?: T;
+                    tags?:
+                      | T
+                      | {
+                          tag?: T;
+                          id?: T;
+                        };
                     id?: T;
                   };
               id?: T;
               blockName?: T;
             };
-      };
-  anchors?:
-    | T
-    | {
-        label?: T;
-        anchor?: T;
-        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -908,15 +1122,6 @@ export interface LegalPagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        imageBlock?:
-          | T
-          | {
-              image?: T;
-              caption?: T;
-              alt?: T;
-              id?: T;
-              blockName?: T;
-            };
         quoteBlock?:
           | T
           | {
@@ -928,8 +1133,9 @@ export interface LegalPagesSelect<T extends boolean = true> {
         noteBlock?:
           | T
           | {
-              text?: T;
               type?: T;
+              title?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -954,6 +1160,7 @@ export interface LegalPagesSelect<T extends boolean = true> {
         dividerBlock?:
           | T
           | {
+              variant?: T;
               id?: T;
               blockName?: T;
             };
@@ -1044,35 +1251,58 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HomePage {
   id: number;
+  heroImage: number | Media;
+  heroHeadline: string;
   /**
-   * "New in" section items shown on the homepage.
+   * Optional intro text shown below the headline (desktop only).
+   */
+  heroIntroText?: string | null;
+  newInTitle: string;
+  newInBody?: string | null;
+  /**
+   * "New in" section items. Recommended 4.
    */
   newInItems?:
     | {
         title: string;
-        excerpt?: string | null;
-        image?: (number | null) | Media;
-        link: string;
+        image: number | Media;
+        link?: string | null;
+        /**
+         * Open link in a new tab.
+         */
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
+  quickAccessTitle: string;
+  quickAccessBody?: string | null;
   /**
-   * Quick access shortcuts shown on the homepage.
+   * Quick access shortcuts. Recommended 4.
    */
   quickAccessItems?:
     | {
         title: string;
-        link: string;
+        image: number | Media;
+        link?: string | null;
+        /**
+         * Open link in a new tab.
+         */
+        newTab?: boolean | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * Help/support buttons shown on the homepage.
+   * Help/support buttons shown at the bottom of the homepage. Recommended 3.
    */
   helpButtons?:
     | {
         label: string;
         url: string;
+        newTab?: boolean | null;
+        /**
+         * Show this button on the homepage.
+         */
+        enabled?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1100,6 +1330,10 @@ export interface Navigation {
               relationTo: 'contentPages';
               value: number | ContentPage;
             } | null);
+        /**
+         * Show as a filter option in the homepage search bar.
+         */
+        showAsSearchFilter?: boolean | null;
         children?:
           | {
               label: string;
@@ -1112,7 +1346,11 @@ export interface Navigation {
                     relationTo: 'contentPages';
                     value: number | ContentPage;
                   } | null);
-              children?:
+              /**
+               * Show as a filter option in the homepage search bar.
+               */
+              showAsSearchFilter?: boolean | null;
+              l3Items?:
                 | {
                     label: string;
                     page?: (number | null) | ContentPage;
@@ -1201,20 +1439,29 @@ export interface LoginSetting {
  * via the `definition` "homePage_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
+  heroImage?: T;
+  heroHeadline?: T;
+  heroIntroText?: T;
+  newInTitle?: T;
+  newInBody?: T;
   newInItems?:
     | T
     | {
         title?: T;
-        excerpt?: T;
         image?: T;
         link?: T;
+        newTab?: T;
         id?: T;
       };
+  quickAccessTitle?: T;
+  quickAccessBody?: T;
   quickAccessItems?:
     | T
     | {
         title?: T;
+        image?: T;
         link?: T;
+        newTab?: T;
         id?: T;
       };
   helpButtons?:
@@ -1222,6 +1469,8 @@ export interface HomePageSelect<T extends boolean = true> {
     | {
         label?: T;
         url?: T;
+        newTab?: T;
+        enabled?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -1238,12 +1487,14 @@ export interface NavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         page?: T;
+        showAsSearchFilter?: T;
         children?:
           | T
           | {
               label?: T;
               page?: T;
-              children?:
+              showAsSearchFilter?: T;
+              l3Items?:
                 | T
                 | {
                     label?: T;

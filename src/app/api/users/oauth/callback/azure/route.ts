@@ -1,6 +1,204 @@
 import { NextResponse } from 'next/server'
+import { createHash, createHmac } from 'crypto'
+import { getPayload } from '@/lib/payload'
 
-// A01 — Azure AD OAuth callback (implemented in feature/auth-azure)
-export async function GET() {
-  return NextResponse.json({ message: 'Not yet implemented' }, { status: 501 })
+// Must match getSigningKey() in lib/auth.ts exactly
+function getSigningKey(): string {
+  return createHash('sha256')
+    .update(process.env.PAYLOAD_SECRET ?? '')
+    .digest('hex')
+    .slice(0, 32)
+}
+
+function b64urlEncode(buf: Buffer): string {
+  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+}
+
+function generatePayloadJWT(claims: Record<string, unknown>): string {
+  const header = b64urlEncode(Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })))
+  const payload = b64urlEncode(Buffer.from(JSON.stringify(claims)))
+  const key = getSigningKey()
+  const sig = b64urlEncode(
+    createHmac('sha256', Buffer.from(key, 'utf8'))
+      .update(`${header}.${payload}`)
+      .digest(),
+  )
+  return `${header}.${payload}.${sig}`
+}
+
+const TOKEN_EXPIRY_SECONDS = 7200 // 2 hours — matches Payload default
+
+export async function GET(request: Request) {
+  const url = new URL(request.url)
+  const code = url.searchParams.get('code')
+  const error = url.searchParams.get('error')
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
+  if (error || !code) {
+    console.error('[azure-oauth] Auth error from Azure:', error ?? 'no code returned')
+    return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+  }
+
+  // Exchange authorisation code for access token
+  let accessToken: string
+  try {
+    const tokenRes = await fetch(
+      `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: process.env.AZURE_CLIENT_ID ?? '',
+          client_secret: process.env.AZURE_CLIENT_SECRET ?? '',
+          code,
+          redirect_uri: process.env.AZURE_REDIRECT_URI ?? '',
+          grant_type: 'authorization_code',
+        }),
+      },
+    )
+
+    if (!tokenRes.ok) {
+      console.error('[azure-oauth] Token exchange failed:', tokenRes.status, await tokenRes.text())
+      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+    }
+
+    const tokenData = (await tokenRes.json()) as { access_token?: string }
+    if (!tokenData.access_token) {
+      console.error('[azure-oauth] No access_token in token response')
+      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+    }
+    accessToken = tokenData.access_token
+  } catch (err) {
+    console.error('[azure-oauth] Token exchange threw:', err)
+    return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+  }
+
+  // Fetch user profile from Microsoft Graph
+  let azureId: string
+  let email: string
+  let displayName: string
+  try {
+    const graphRes = await fetch(
+      'https://graph.microsoft.com/v1.0/me?$select=id,displayName,mail,userPrincipalName',
+      { headers: { Authorization: `Bearer ${accessToken}` } },
+    )
+
+    if (!graphRes.ok) {
+      console.error('[azure-oauth] Graph profile fetch failed:', graphRes.status)
+      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+    }
+
+    const profile = (await graphRes.json()) as {
+      id?: string
+      displayName?: string
+      mail?: string
+      userPrincipalName?: string
+    }
+
+    azureId = profile.id ?? ''
+    email = (profile.mail ?? profile.userPrincipalName ?? '').toLowerCase()
+    displayName = profile.displayName ?? email
+
+    if (!azureId || !email) {
+      console.error('[azure-oauth] Missing id or email in Graph profile')
+      return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+    }
+  } catch (err) {
+    console.error('[azure-oauth] Graph fetch threw:', err)
+    return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+  }
+
+  // Find or create the platform user
+  const payload = await getPayload()
+  let platformUser: { id: string | number; email: string; role: string }
+
+  try {
+    // 1. Returning user — look up by azureId
+    const byAzureId = await payload.find({
+      collection: 'platformUsers',
+      where: { azureId: { equals: azureId } },
+      limit: 1,
+    })
+
+    if (byAzureId.totalDocs > 0) {
+      const existing = byAzureId.docs[0]!
+      await payload.update({
+        collection: 'platformUsers',
+        id: existing.id,
+        data: { displayName },
+      })
+      platformUser = {
+        id: existing.id,
+        email: String(existing.email ?? email),
+        role: String(existing.role),
+      }
+    } else {
+      // 2. Pre-created user (admin assigned a role before first login) — look up by email
+      const byEmail = await payload.find({
+        collection: 'platformUsers',
+        where: { email: { equals: email } },
+        limit: 1,
+      })
+
+      if (byEmail.totalDocs > 0) {
+        const existing = byEmail.docs[0]!
+        await payload.update({
+          collection: 'platformUsers',
+          id: existing.id,
+          data: { azureId, displayName },
+        })
+        platformUser = {
+          id: existing.id,
+          email: String(existing.email ?? email),
+          role: String(existing.role),
+        }
+      } else {
+        // 3. First ever login — auto-create with internal role per Confluence A01 spec
+        const created = await payload.create({
+          collection: 'platformUsers',
+          data: {
+            email,
+            azureId,
+            displayName,
+            role: 'internal',
+            // Unguessable password — SSO users never use the email+password path
+            password: createHash('sha256')
+              .update(azureId + (process.env.PAYLOAD_SECRET ?? ''))
+              .digest('hex'),
+          },
+        })
+        platformUser = {
+          id: created.id,
+          email: String(created.email ?? email),
+          role: String(created.role),
+        }
+        console.log(`[azure-oauth] Created new internal user: ${email}`)
+      }
+    }
+  } catch (err) {
+    console.error('[azure-oauth] DB error:', err)
+    return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
+  }
+
+  // Issue a Payload-compatible HS256 JWT and set it as the session cookie
+  const exp = Math.floor(Date.now() / 1000) + TOKEN_EXPIRY_SECONDS
+  const token = generatePayloadJWT({
+    id: platformUser.id,
+    email: platformUser.email,
+    collection: 'platformUsers',
+    role: platformUser.role,
+    exp,
+  })
+
+  const response = NextResponse.redirect(new URL('/', baseUrl))
+  response.cookies.set('payload-token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: TOKEN_EXPIRY_SECONDS,
+    path: '/',
+  })
+
+  return response
 }

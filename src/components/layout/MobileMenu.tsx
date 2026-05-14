@@ -16,7 +16,7 @@ function getPolySlug(page: NavL1['page'] | NavL2['page']): string | null {
   return (val as ChannelPage | ContentPage).slug ?? null
 }
 
-function getDirectSlug(page: NonNullable<NavL2['children']>[number]['page']): string | null {
+function getDirectSlug(page: NonNullable<NavL2['l3Items']>[number]['page']): string | null {
   if (!page || typeof page === 'number') return null
   return (page as ContentPage).slug ?? null
 }
@@ -120,73 +120,52 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
               <span>{activeL1.label}</span>
             </button>
 
-            <ul className={styles.navList}>
+            <div>
               {(activeL1.children ?? []).map((l2) => {
                 const l2Slug = getPolySlug(l2.page)
                 const l1Slug = getPolySlug(activeL1.page)
 
                 return (
-                  <li key={l2.id ?? l2.label}>
-                    {l2.children && l2.children.length > 0 ? (
-                      <div className={styles.l2Group}>
-                        <div className={styles.l2Header}>
-                          {l2Slug && l1Slug ? (
-                            <Link
-                              href={`/${l1Slug}/${l2Slug}`}
-                              className={styles.l2Title}
-                              onClick={onClose}
-                            >
-                              {l2.label}
-                            </Link>
-                          ) : (
-                            <span className={styles.l2Title}>{l2.label}</span>
-                          )}
-                        </div>
-                        <ul className={styles.l3List}>
-                          {l2.children.map((l3) => {
-                            const l3Slug = getDirectSlug(l3.page)
-                            const l3Href =
-                              l1Slug && l2Slug && l3Slug
-                                ? `/${l1Slug}/${l2Slug}/${l3Slug}`
-                                : null
-
-                            return (
-                              <li key={l3.id ?? l3.label} className={styles.navItem}>
-                                {l3Href ? (
-                                  <Link
-                                    href={l3Href}
-                                    className={styles.navLink}
-                                    onClick={onClose}
-                                  >
-                                    <span>{l3.label}</span>
-                                  </Link>
-                                ) : (
-                                  <span className={styles.navLink}>{l3.label}</span>
-                                )}
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      </div>
+                  <div key={l2.id ?? l2.label} className={styles.l2Group}>
+                    {l2Slug && l1Slug ? (
+                      <Link
+                        href={`/${l1Slug}/${l2Slug}`}
+                        className={styles.l2Title}
+                        onClick={onClose}
+                      >
+                        {l2.label}
+                      </Link>
                     ) : (
-                      <div className={styles.navItem}>
-                        {l2Slug && l1Slug ? (
-                          <Link
-                            href={`/${l1Slug}/${l2Slug}`}
-                            className={styles.navLink}
-                            onClick={onClose}
-                          >
-                            <span>{l2.label}</span>
-                          </Link>
-                        ) : (
-                          <span className={styles.navLink}>{l2.label}</span>
-                        )}
-                      </div>
+                      <span className={styles.l2Title}>{l2.label}</span>
                     )}
-                  </li>
+
+                    {l2.l3Items && l2.l3Items.length > 0 && (
+                      <ul className={styles.l3List}>
+                        {l2.l3Items.map((l3) => {
+                          const l3Slug = getDirectSlug(l3.page)
+                          const l3Href =
+                            l1Slug && l2Slug && l3Slug
+                              ? `/${l1Slug}/${l2Slug}/${l3Slug}`
+                              : null
+
+                          return (
+                            <li key={l3.id ?? l3.label}>
+                              {l3Href ? (
+                                <Link href={l3Href} className={styles.l3Link} onClick={onClose}>
+                                  {l3.label}
+                                </Link>
+                              ) : (
+                                <span className={styles.l3Link}>{l3.label}</span>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    )}
+                  </div>
                 )
               })}
-            </ul>
+            </div>
           </>
         )}
       </div>

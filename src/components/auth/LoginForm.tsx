@@ -8,6 +8,7 @@ import styles from './LoginForm.module.css'
 interface LoginFormProps {
   ssoUrl: string
   subtitle?: string | null
+  ssoError?: boolean
 }
 
 type FieldErrors = {
@@ -15,13 +16,15 @@ type FieldErrors = {
   password?: string
 }
 
-export function LoginForm({ ssoUrl, subtitle }: LoginFormProps) {
+export function LoginForm({ ssoUrl, subtitle, ssoError = false }: LoginFormProps) {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [serverError, setServerError] = useState<string | null>(null)
+  const [serverError, setServerError] = useState<string | null>(
+    ssoError ? 'An unexpected error occurred. Please try again shortly.' : null,
+  )
   const [isLoading, setIsLoading] = useState(false)
 
   function validate(): boolean {
