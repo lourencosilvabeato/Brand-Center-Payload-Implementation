@@ -36,7 +36,8 @@ export async function GET(request: Request) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
   if (error || !code) {
-    console.error('[azure-oauth] Auth error from Azure:', error ?? 'no code returned')
+    const desc = url.searchParams.get('error_description') ?? 'no code returned'
+    console.error(`[azure-oauth] Auth error from Azure: ${error ?? 'none'} — ${desc}`)
     return NextResponse.redirect(new URL('/login?error=sso_failed', baseUrl))
   }
 
