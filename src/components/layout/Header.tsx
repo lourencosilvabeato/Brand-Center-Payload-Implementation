@@ -1,7 +1,7 @@
 import { getPayload } from '@/lib/payload'
 import { getSessionUser } from '@/lib/auth'
 import type { Navigation, PlatformUser } from '@/payload-types'
-import { filterNavByAllowedSlugs } from '@/lib/navigation'
+import { filterNavByAllowedSlugs, expandSlugsWithAncestors } from '@/lib/navigation'
 import { HeaderClient } from './HeaderClient'
 
 export async function Header() {
@@ -32,21 +32,22 @@ export async function Header() {
     } else if (sessionUser.collection === 'externalUsers') {
       role = 'external'
       // Read allowedMenuItems fresh from DB so permission changes take effect on the
-      // next page load without requiring the user to re-login
+      // next page load without requiring the user to re-login.
+      // Expand raw slugs with ancestor slugs using the nav tree already fetched above.
       try {
         const externalUser = await payload.findByID({
           collection: 'externalUsers',
           id: Number(sessionUser.id),
           overrideAccess: true,
         }) as { allowedMenuItems?: unknown }
-        const fresh = externalUser.allowedMenuItems
-        if (Array.isArray(fresh) && fresh.length > 0) {
-          allowedSlugs = fresh as string[]
+        const raw = externalUser.allowedMenuItems
+        if (Array.isArray(raw) && raw.length > 0) {
+          allowedSlugs = expandSlugsWithAncestors(raw as string[], nav.items ?? [])
         }
       } catch {
-        // Fall back to JWT value if DB read fails
+        // Fall back to JWT value on DB failure
         if (Array.isArray(sessionUser.allowedMenuItems) && sessionUser.allowedMenuItems.length > 0) {
-          allowedSlugs = sessionUser.allowedMenuItems
+          allowedSlugs = expandSlugsWithAncestors(sessionUser.allowedMenuItems, nav.items ?? [])
         }
       }
     }

@@ -1,7 +1,5 @@
 import type { CollectionConfig, FieldAccess } from 'payload'
-import type { Navigation } from '@/payload-types'
 import { isAdmin, isAdminOrLocalAdmin } from '../access'
-import { expandSlugsWithAncestors } from '@/lib/navigation'
 
 const isAdminField: FieldAccess = ({ req: { user } }) => {
   if (!user) return false
@@ -25,24 +23,22 @@ export const ExternalUsers: CollectionConfig = {
   hooks: {
     beforeChange: [
       async ({ data, req }) => {
-        // When customRole is explicitly set or cleared, sync allowedMenuItems from the new role
+        // When customRole is explicitly set or cleared, copy allowedMenuItems from
+        // the role. No navigation fetch here — ancestor expansion happens on the fly
+        // in Header.tsx and page guards using the nav tree they already have.
         if (!('customRole' in data)) return data
 
         const roleId = data.customRole ? Number(data.customRole) : null
         if (roleId) {
-          const [role, nav] = await Promise.all([
-            req.payload.findByID({
-              collection: 'customRoles',
-              id: roleId,
-              overrideAccess: true,
-            }) as Promise<{ allowedMenuItems?: unknown }>,
-            req.payload.findGlobal({ slug: 'navigation', depth: 1, overrideAccess: true }) as Promise<Navigation>,
-          ])
-          const rawSlugs = Array.isArray(role.allowedMenuItems)
-            ? (role.allowedMenuItems as string[])
-            : []
-          const expanded = expandSlugsWithAncestors(rawSlugs, nav.items)
-          ;(data as Record<string, unknown>).allowedMenuItems = expanded.length > 0 ? expanded : null
+          const role = (await req.payload.findByID({
+            collection: 'customRoles',
+            id: roleId,
+            overrideAccess: true,
+          })) as { allowedMenuItems?: unknown }
+          const raw = Array.isArray(role.allowedMenuItems) && role.allowedMenuItems.length > 0
+            ? role.allowedMenuItems
+            : null
+          ;(data as Record<string, unknown>).allowedMenuItems = raw
         } else {
           ;(data as Record<string, unknown>).allowedMenuItems = null
         }
@@ -86,7 +82,7 @@ export const ExternalUsers: CollectionConfig = {
       admin: {
         hidden: true,
         description:
-          'Denormalised cache of allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.',
+          'Raw allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.',
       },
     },
   ],
