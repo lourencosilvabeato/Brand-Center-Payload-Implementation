@@ -44,11 +44,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Static assets — pass through
+  // Static assets — pass through (public folder files + Next.js internals)
   if (
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/favicon') ||
-    pathname.endsWith('.ico')
+    /\.(ico|svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|eot|otf|mp4|mp3|pdf)$/.test(pathname)
   ) {
     return NextResponse.next()
   }
