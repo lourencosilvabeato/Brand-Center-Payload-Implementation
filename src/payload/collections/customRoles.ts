@@ -32,6 +32,28 @@ export const CustomRoles: CollectionConfig = {
         )
       },
     ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        // Clear customRole and allowedMenuItems from every user that had this role
+        const users = await req.payload.find({
+          collection: 'externalUsers',
+          where: { customRole: { equals: doc.id } },
+          limit: 1000,
+          overrideAccess: true,
+        })
+        if (users.docs.length === 0) return
+        await Promise.all(
+          users.docs.map((user) =>
+            req.payload.update({
+              collection: 'externalUsers',
+              id: user.id,
+              data: { customRole: null, allowedMenuItems: null } as Record<string, unknown>,
+              overrideAccess: true,
+            }),
+          ),
+        )
+      },
+    ],
   },
   fields: [
     {
