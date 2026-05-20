@@ -25,9 +25,10 @@ interface HeaderClientProps {
   role: 'admin' | 'localAdmin' | 'internal' | 'external'
   displayName: string | null
   avatarUrl: string | null
+  allowedSlugs: string[] | null
 }
 
-export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClientProps) {
+export function HeaderClient({ items, role, displayName, avatarUrl, allowedSlugs }: HeaderClientProps) {
   const [megaMenuL1, setMegaMenuL1] = useState<NavL1 | null>(null)
   const [megaMenuL1Slug, setMegaMenuL1Slug] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -37,10 +38,26 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
 
   const activeL1Slug = pathname.split('/').filter(Boolean)[0] ?? null
 
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const closeMegaMenu = useCallback(() => {
     setMegaMenuL1(null)
     setMegaMenuL1Slug(null)
   }, [])
+
+  const cancelClose = useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      clearTimeout(closeTimerRef.current)
+      closeTimerRef.current = null
+    }
+  }, [])
+
+  const scheduleClose = useCallback(() => {
+    cancelClose()
+    closeTimerRef.current = setTimeout(() => {
+      closeMegaMenu()
+    }, 200)
+  }, [cancelClose, closeMegaMenu])
 
   // Stable callback — prevents ProfileDropdown's useEffect from re-running on every render
   const handleProfileClose = useCallback(() => setProfileOpen(false), [])
@@ -111,25 +128,24 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
                 const isMenuOpen = megaMenuL1?.id === item.id
                 const isActive = isPathActive || isMenuOpen
 
+                const hasChildren = !!(item.children && item.children.length > 0)
+
                 return (
-                  <li key={item.id ?? item.label} className={styles.navItem}>
-                    {item.children && item.children.length > 0 ? (
-                      <button
-                        type="button"
-                        className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
-                        onClick={() => {
-                          if (isMenuOpen) {
-                            closeMegaMenu()
-                          } else if (slug) {
-                            openMegaMenu(item, slug)
-                          }
-                          setProfileOpen(false)
-                        }}
-                        aria-expanded={isMenuOpen}
-                      >
-                        {item.label}
-                      </button>
-                    ) : slug ? (
+                  <li
+                    key={item.id ?? item.label}
+                    className={styles.navItem}
+                    onMouseEnter={() => {
+                      if (hasChildren && slug) {
+                        cancelClose()
+                        openMegaMenu(item, slug)
+                        setProfileOpen(false)
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      if (hasChildren) scheduleClose()
+                    }}
+                  >
+                    {slug ? (
                       <Link
                         href={`/${slug}`}
                         className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
@@ -191,7 +207,14 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
 
         {/* Mega-menu */}
         {megaMenuL1 && megaMenuL1Slug && (
-          <MegaMenu l1Item={megaMenuL1} l1Slug={megaMenuL1Slug} onClose={closeMegaMenu} />
+          <MegaMenu
+            l1Item={megaMenuL1}
+            l1Slug={megaMenuL1Slug}
+            onClose={closeMegaMenu}
+            allowedSlugs={allowedSlugs}
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          />
         )}
       </header>
 
@@ -203,6 +226,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
           displayName={displayName}
           avatarUrl={avatarUrl}
           onClose={() => setMobileOpen(false)}
+          allowedSlugs={allowedSlugs}
         />
       )}
     </>
