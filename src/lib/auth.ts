@@ -6,6 +6,8 @@ export interface SessionUser {
   email: string
   role?: 'admin' | 'localAdmin' | 'internal' | 'external'
   collection: 'platformUsers' | 'externalUsers'
+  customRoleId: string | null
+  allowedMenuItems: string[] | null
 }
 
 // Payload derives the signing key exactly this way (see payload/dist/index.js)
@@ -40,6 +42,19 @@ function verifyAndDecodeJWT(token: string): Record<string, unknown> | null {
   }
 }
 
+function extractSessionUser(payload: Record<string, unknown>): SessionUser {
+  return {
+    id: String(payload.id),
+    email: String(payload.email),
+    role: payload.role as SessionUser['role'],
+    collection: payload.collection as SessionUser['collection'],
+    customRoleId: payload.customRole != null ? String(payload.customRole) : null,
+    allowedMenuItems: Array.isArray(payload.allowedMenuItems)
+      ? (payload.allowedMenuItems as string[])
+      : null,
+  }
+}
+
 export function getSessionUserFromRequest(request: Request): SessionUser | null {
   const cookieHeader = request.headers.get('cookie') ?? ''
   const entry = cookieHeader.split(';').find((c) => c.trim().startsWith('payload-token='))
@@ -50,12 +65,7 @@ export function getSessionUserFromRequest(request: Request): SessionUser | null 
   if (!payload) return null
   if (payload.exp && Number(payload.exp) * 1000 < Date.now()) return null
 
-  return {
-    id: String(payload.id),
-    email: String(payload.email),
-    role: payload.role as SessionUser['role'],
-    collection: payload.collection as SessionUser['collection'],
-  }
+  return extractSessionUser(payload)
 }
 
 export async function getSessionUser(): Promise<SessionUser | null> {
@@ -67,10 +77,5 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   if (!payload) return null
   if (payload.exp && Number(payload.exp) * 1000 < Date.now()) return null
 
-  return {
-    id: String(payload.id),
-    email: String(payload.email),
-    role: payload.role as SessionUser['role'],
-    collection: payload.collection as SessionUser['collection'],
-  }
+  return extractSessionUser(payload)
 }

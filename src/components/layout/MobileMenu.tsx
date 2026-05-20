@@ -27,9 +27,10 @@ interface MobileMenuProps {
   displayName: string | null
   avatarUrl: string | null
   onClose: () => void
+  allowedSlugs: string[] | null
 }
 
-export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: MobileMenuProps) {
+export function MobileMenu({ items, role, displayName, avatarUrl, onClose, allowedSlugs }: MobileMenuProps) {
   const [activeL1, setActiveL1] = useState<NavL1 | null>(null)
   const router = useRouter()
 
@@ -139,7 +140,7 @@ export function MobileMenu({ items, role, displayName, avatarUrl, onClose }: Mob
 
                 return (
                   <div key={l2.id ?? l2.label} className={styles.l2Group}>
-                    {l2Slug && l1Slug ? (
+                    {l2Slug && l1Slug && (!allowedSlugs || allowedSlugs.includes(l2Slug)) ? (
                       <Link
                         href={`/${l1Slug}/${l2Slug}`}
                         className={styles.l2Title}

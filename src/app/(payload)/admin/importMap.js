@@ -1,4 +1,5 @@
 import { AdminResetPasswordButton as AdminResetPasswordButton_fced0533081bc30309f364f4be242a5c } from '@/payload/components/AdminResetPasswordButton'
+import { AllowedMenuItemsField as AllowedMenuItemsField_5488068c36a8c3717eb274968fb66dca } from '@/payload/components/AllowedMenuItemsField'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -22,11 +23,14 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { RolePermissionsNavLink as RolePermissionsNavLink_7e93d418ea3cafac2657aee150b9f78e } from '@/payload/components/RolePermissionsNavLink'
+import { RolePermissionsView as RolePermissionsView_57547640e578868a71a90df03a06e853 } from '@/payload/views/RolePermissionsView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
   "@/payload/components/AdminResetPasswordButton#AdminResetPasswordButton": AdminResetPasswordButton_fced0533081bc30309f364f4be242a5c,
+  "@/payload/components/AllowedMenuItemsField#AllowedMenuItemsField": AllowedMenuItemsField_5488068c36a8c3717eb274968fb66dca,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -50,5 +54,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/payload/components/RolePermissionsNavLink#RolePermissionsNavLink": RolePermissionsNavLink_7e93d418ea3cafac2657aee150b9f78e,
+  "@/payload/views/RolePermissionsView#RolePermissionsView": RolePermissionsView_57547640e578868a71a90df03a06e853,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
