@@ -259,7 +259,7 @@ export interface CustomRole {
    */
   description?: string | null;
   /**
-   * Array of page slugs this role can access. Managed via the Role Permissions view. Empty or null means unrestricted.
+   * Select which pages this role can access. Leave everything unticked for unrestricted access.
    */
   allowedMenuItems?:
     | {

@@ -55,7 +55,10 @@ export const CustomRoles: CollectionConfig = {
       type: 'json',
       admin: {
         description:
-          'Array of page slugs this role can access. Managed via the Role Permissions view. Empty or null means unrestricted.',
+          'Select which pages this role can access. Leave everything unticked for unrestricted access.',
+        components: {
+          Field: '@/payload/components/AllowedMenuItemsField#AllowedMenuItemsField',
+        },
       },
     },
   ],
