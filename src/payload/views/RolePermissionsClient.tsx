@@ -25,6 +25,7 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
   const [isCreating, setIsCreating] = useState(false)
   const [newName, setNewName] = useState('')
   const [newDescription, setNewDescription] = useState('')
+  const [newCheckedSlugs, setNewCheckedSlugs] = useState<Set<string>>(new Set())
   const [createError, setCreateError] = useState<string | null>(null)
   const [isSubmittingCreate, setIsSubmittingCreate] = useState(false)
 
@@ -57,6 +58,15 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
     setSaveState(null)
   }, [])
 
+  const toggleNewSlug = useCallback((slug: string) => {
+    setNewCheckedSlugs((prev) => {
+      const next = new Set(prev)
+      if (next.has(slug)) next.delete(slug)
+      else next.add(slug)
+      return next
+    })
+  }, [])
+
   async function handleCreate() {
     if (!newName.trim()) {
       setCreateError('Role name is required.')
@@ -64,11 +74,16 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
     }
     setIsSubmittingCreate(true)
     setCreateError(null)
+    const slugs = Array.from(newCheckedSlugs)
     try {
       const res = await fetch('/api/customRoles', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newName.trim(), description: newDescription.trim() || undefined }),
+        body: JSON.stringify({
+          name: newName.trim(),
+          description: newDescription.trim() || undefined,
+          allowedMenuItems: slugs,
+        }),
       })
       if (!res.ok) {
         const body = (await res.json()) as { errors?: Array<{ message: string }> }
@@ -76,17 +91,18 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
         setCreateError(msg)
         return
       }
-      const created = (await res.json()) as { doc: { id: number; name: string; description?: string | null; allowedMenuItems?: unknown } }
+      const created = (await res.json()) as { doc: { id: number; name: string; description?: string | null } }
       const newRole: RoleInfo = {
         id: String(created.doc.id),
         name: created.doc.name,
         description: created.doc.description ?? null,
-        allowedMenuItems: [],
+        allowedMenuItems: slugs,
       }
       setRoles((prev) => [...prev, newRole])
       setIsCreating(false)
       setNewName('')
       setNewDescription('')
+      setNewCheckedSlugs(new Set())
       selectRole(newRole.id)
     } catch {
       setCreateError('An unexpected error occurred.')
@@ -178,6 +194,7 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
             onClick={() => {
               setIsCreating(true)
               setCreateError(null)
+              setNewCheckedSlugs(new Set())
             }}
             style={{ ...btnStyle, ...btnSecondaryStyle }}
             disabled={isCreating}
@@ -258,6 +275,25 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
                   style={inputStyle}
                 />
               </div>
+              {navTree.length > 0 && (
+                <div>
+                  <p style={{ ...labelStyle, marginBottom: '0.375rem' }}>Page access</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--theme-elevation-450)', marginBottom: '0.5rem' }}>
+                    Tick the pages this role can access. Leave everything unticked for unrestricted access.
+                  </p>
+                  <div style={{ border: '1px solid var(--theme-border-color)', borderRadius: '4px', overflow: 'hidden' }}>
+                    {navTree.map((item, idx) => (
+                      <NavTreeRow
+                        key={idx}
+                        item={item}
+                        checked={item.slug !== null && newCheckedSlugs.has(item.slug)}
+                        onToggle={item.canSelect && item.slug ? () => toggleNewSlug(item.slug!) : undefined}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {createError && (
                 <p style={{ color: 'var(--theme-error-500)', fontSize: '0.8125rem', margin: 0 }}>
                   {createError}
@@ -274,7 +310,7 @@ export function RolePermissionsClient({ roles: initialRoles, navTree }: RolePerm
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setIsCreating(false); setNewName(''); setNewDescription(''); setCreateError(null) }}
+                  onClick={() => { setIsCreating(false); setNewName(''); setNewDescription(''); setNewCheckedSlugs(new Set()); setCreateError(null) }}
                   style={{ ...btnStyle, ...btnSecondaryStyle }}
                 >
                   Cancel
