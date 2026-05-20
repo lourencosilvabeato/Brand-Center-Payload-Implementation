@@ -63,6 +63,15 @@ RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# Files required by the `migrator` service (payload migrate). Standalone output
+# does not include the Payload CLI nor the migration sources, so we ship them
+# alongside the runtime so the same image can be reused for both purposes.
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/src ./src
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
+
 USER nextjs
 
 EXPOSE 3000
