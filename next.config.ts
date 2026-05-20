@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   experimental: {
     // Payload uploads (e.g. POST /api/media) can exceed Next's default 10MB limit in dev.
     middlewareClientMaxBodySize: '25mb',
