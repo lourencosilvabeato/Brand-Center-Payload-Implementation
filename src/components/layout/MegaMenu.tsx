@@ -24,6 +24,8 @@ interface MegaMenuProps {
   l1Slug: string
   onClose: () => void
   allowedSlugs: string[] | null
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
 const MAX_LINES_PER_COL = 8
@@ -48,7 +50,7 @@ function buildColumns(l2Items: NavL2[]): NavL2[][] {
   return columns
 }
 
-export function MegaMenu({ l1Item, l1Slug, onClose, allowedSlugs }: MegaMenuProps) {
+export function MegaMenu({ l1Item, l1Slug, onClose, allowedSlugs, onMouseEnter, onMouseLeave }: MegaMenuProps) {
   const columns = buildColumns(l1Item.children ?? [])
 
   if (columns.length === 0) return null
@@ -58,6 +60,8 @@ export function MegaMenu({ l1Item, l1Slug, onClose, allowedSlugs }: MegaMenuProp
       className={styles.overlay}
       role="region"
       aria-label="Navigation menu"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className={styles.inner}>
         {columns.map((col, colIdx) => (
