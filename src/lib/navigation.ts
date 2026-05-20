@@ -179,11 +179,39 @@ export function buildNavIndex(items: Navigation['items']): Map<string, NavPageMe
   return map
 }
 
+// Expands a set of allowed slugs to include all ancestor slugs in the nav tree.
+// Allowing an L3 implicitly allows its L2 and L1 ancestors so the user can
+// navigate through the full URL path without being blocked by the middleware.
+export function expandSlugsWithAncestors(
+  slugs: string[],
+  items: Navigation['items'],
+): string[] {
+  if (!items || slugs.length === 0) return slugs
+  const set = new Set(slugs)
+
+  for (const l1 of items) {
+    const l1Slug = getPolySlug(l1.page)
+    for (const l2 of l1.children ?? []) {
+      const l2Slug = getPolySlug(l2.page)
+      for (const l3 of l2.l3Items ?? []) {
+        const l3Slug = getDirectSlug(l3.page)
+        if (l3Slug && set.has(l3Slug)) {
+          if (l2Slug) set.add(l2Slug)
+          if (l1Slug) set.add(l1Slug)
+        }
+      }
+      if (l2Slug && set.has(l2Slug) && l1Slug) {
+        set.add(l1Slug)
+      }
+    }
+  }
+
+  return Array.from(set)
+}
+
 // Filters nav items to only those accessible for a given set of allowed slugs.
-// Items with no page (section headers) are always visible.
-// Parent items (L1/L2) are kept as structural containers when they have visible children,
-// even if their own page slug is not in the allowed set.
-// Pass an empty array or null to skip filtering entirely.
+// The allowedSlugs set is expected to already include ancestor slugs (via
+// expandSlugsWithAncestors) so parent items are always reachable.
 export function filterNavByAllowedSlugs(
   items: Navigation['items'],
   allowedSlugs: string[],
@@ -209,8 +237,14 @@ export function filterNavByAllowedSlugs(
     const hasOriginalChildren = (l1.children?.length ?? 0) > 0
 
     if (hasOriginalChildren) {
-      // Keep L1 as mega-menu trigger only if it still has visible children
-      if (filteredChildren.length === 0) return []
+      if (filteredChildren.length === 0) {
+        // All children filtered out — if the L1 page itself is allowed, show it as
+        // a plain link without a mega menu (e.g. admin allowed the overview page only)
+        if (l1Slug && allowedSlugs.includes(l1Slug)) {
+          return [{ ...l1, children: [] }]
+        }
+        return []
+      }
       return [{ ...l1, children: filteredChildren }]
     }
 
