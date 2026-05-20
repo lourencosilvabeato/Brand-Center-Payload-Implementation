@@ -31,11 +31,23 @@ export async function Header() {
       }
     } else if (sessionUser.collection === 'externalUsers') {
       role = 'external'
-      if (
-        Array.isArray(sessionUser.allowedMenuItems) &&
-        sessionUser.allowedMenuItems.length > 0
-      ) {
-        allowedSlugs = sessionUser.allowedMenuItems
+      // Read allowedMenuItems fresh from DB so permission changes take effect on the
+      // next page load without requiring the user to re-login
+      try {
+        const externalUser = await payload.findByID({
+          collection: 'externalUsers',
+          id: Number(sessionUser.id),
+          overrideAccess: true,
+        }) as { allowedMenuItems?: unknown }
+        const fresh = externalUser.allowedMenuItems
+        if (Array.isArray(fresh) && fresh.length > 0) {
+          allowedSlugs = fresh as string[]
+        }
+      } catch {
+        // Fall back to JWT value if DB read fails
+        if (Array.isArray(sessionUser.allowedMenuItems) && sessionUser.allowedMenuItems.length > 0) {
+          allowedSlugs = sessionUser.allowedMenuItems
+        }
       }
     }
   }
