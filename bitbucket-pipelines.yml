@@ -43,7 +43,7 @@ definitions:
         services: [docker]
         size: 2x
         script:
-          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/payload-brand-center"
+          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/projeto-sombra"
           - |
             case "$BITBUCKET_BRANCH" in
               dev|env__staging) export IMAGE_TAG="staging" ;;
@@ -59,8 +59,8 @@ definitions:
         name: "Deploy - Production"
         deployment: Production
         script:
-          - export APP_DIR="/home/ec2-user/payload-brand-center"
-          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/payload-brand-center"
+          - export APP_DIR="/home/ec2-user/projeto-sombra"
+          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/projeto-sombra"
           - |
             case "$BITBUCKET_BRANCH" in
               dev|env__staging) export IMAGE_TAG="staging" ;;
@@ -86,7 +86,7 @@ definitions:
               printf 'NEXT_PUBLIC_APP_URL=%s\n'   "${NEXT_PUBLIC_APP_URL}"
               printf 'PAYLOAD_SECRET=%s\n'        "${PAYLOAD_SECRET}"
               printf 'POSTGRES_PASSWORD=%s\n'     "${POSTGRES_PASSWORD}"
-              printf 'DATABASE_URL=%s\n'          "postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/payload-brand-center"
+              printf 'DATABASE_URL=%s\n'          "postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/projeto-sombra"
               printf 'AZURE_CLIENT_ID=%s\n'       "${AZURE_CLIENT_ID}"
               printf 'AZURE_CLIENT_SECRET=%s\n'   "${AZURE_CLIENT_SECRET}"
               printf 'AZURE_TENANT_ID=%s\n'       "${AZURE_TENANT_ID}"
