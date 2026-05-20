@@ -222,11 +222,12 @@ export function filterNavByAllowedSlugs(
     const filteredChildren = (l1.children ?? []).flatMap((l2) => {
       const filteredL3 = (l2.l3Items ?? []).filter((l3) => {
         const slug = getDirectSlug(l3.page)
-        return !slug || allowedSlugs.includes(slug)
+        // Only include items that have a slug AND that slug is explicitly allowed
+        return slug != null && allowedSlugs.includes(slug)
       })
 
       const l2Slug = getPolySlug(l2.page)
-      const l2OwnAllowed = !l2Slug || allowedSlugs.includes(l2Slug)
+      const l2OwnAllowed = l2Slug != null && allowedSlugs.includes(l2Slug)
       const hasVisibleL3 = filteredL3.length > 0
       if (!l2OwnAllowed && !hasVisibleL3) return []
 
@@ -238,9 +239,9 @@ export function filterNavByAllowedSlugs(
 
     if (hasOriginalChildren) {
       if (filteredChildren.length === 0) {
-        // All children filtered out — if the L1 page itself is allowed, show it as
-        // a plain link without a mega menu (e.g. admin allowed the overview page only)
-        if (l1Slug && allowedSlugs.includes(l1Slug)) {
+        // All children filtered out — if the L1 page itself is explicitly allowed,
+        // show it as a plain leaf link without a mega menu
+        if (l1Slug != null && allowedSlugs.includes(l1Slug)) {
           return [{ ...l1, children: [] }]
         }
         return []
@@ -248,8 +249,8 @@ export function filterNavByAllowedSlugs(
       return [{ ...l1, children: filteredChildren }]
     }
 
-    // Leaf L1: only show when its own slug is allowed (or it has no slug)
-    if (!l1Slug || allowedSlugs.includes(l1Slug)) {
+    // Leaf L1: only show when its own slug is explicitly allowed
+    if (l1Slug != null && allowedSlugs.includes(l1Slug)) {
       return [l1]
     }
     return []
