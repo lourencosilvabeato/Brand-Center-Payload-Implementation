@@ -13,18 +13,32 @@ export default async function SlugPage({ params }: Props) {
   const { slug } = await params
   const slugStr = slug[slug.length - 1]
 
-  // Secondary server-side guard for custom role page access
-  const sessionUser = await getSessionUser()
-  if (
-    sessionUser?.collection === 'externalUsers' &&
-    Array.isArray(sessionUser.allowedMenuItems) &&
-    sessionUser.allowedMenuItems.length > 0 &&
-    !sessionUser.allowedMenuItems.includes(slugStr)
-  ) {
-    redirect('/')
-  }
+  const [sessionUser, payload] = await Promise.all([getSessionUser(), getPayload()])
 
-  const payload = await getPayload()
+  // Secondary server-side guard for custom role page access.
+  // Read fresh from DB (not JWT) so permission changes take effect immediately.
+  if (sessionUser?.collection === 'externalUsers') {
+    try {
+      const externalUser = await payload.findByID({
+        collection: 'externalUsers',
+        id: Number(sessionUser.id),
+        overrideAccess: true,
+      }) as { allowedMenuItems?: unknown }
+      const fresh = externalUser.allowedMenuItems
+      if (Array.isArray(fresh) && fresh.length > 0 && !fresh.includes(slugStr)) {
+        redirect('/')
+      }
+    } catch {
+      // If DB read fails, fall back to JWT value
+      if (
+        Array.isArray(sessionUser.allowedMenuItems) &&
+        sessionUser.allowedMenuItems.length > 0 &&
+        !sessionUser.allowedMenuItems.includes(slugStr)
+      ) {
+        redirect('/')
+      }
+    }
+  }
 
   const [contentResult, channelResult, nav] = await Promise.all([
     payload.find({
