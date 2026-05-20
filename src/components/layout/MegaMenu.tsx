@@ -23,6 +23,9 @@ interface MegaMenuProps {
   l1Item: NavL1
   l1Slug: string
   onClose: () => void
+  allowedSlugs: string[] | null
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
 const MAX_LINES_PER_COL = 8
@@ -47,7 +50,7 @@ function buildColumns(l2Items: NavL2[]): NavL2[][] {
   return columns
 }
 
-export function MegaMenu({ l1Item, l1Slug, onClose }: MegaMenuProps) {
+export function MegaMenu({ l1Item, l1Slug, onClose, allowedSlugs, onMouseEnter, onMouseLeave }: MegaMenuProps) {
   const columns = buildColumns(l1Item.children ?? [])
 
   if (columns.length === 0) return null
@@ -57,13 +60,17 @@ export function MegaMenu({ l1Item, l1Slug, onClose }: MegaMenuProps) {
       className={styles.overlay}
       role="region"
       aria-label="Navigation menu"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className={styles.inner}>
         {columns.map((col, colIdx) => (
           <div key={colIdx} className={styles.column}>
             {col.map((l2) => {
               const l2Slug = getPolySlug(l2.page)
-              const l2Href = l2Slug ? `/${l1Slug}/${l2Slug}` : undefined
+              // Render as link only if slug exists and is not restricted
+              const l2Accessible = l2Slug && (!allowedSlugs || allowedSlugs.includes(l2Slug))
+              const l2Href = l2Accessible ? `/${l1Slug}/${l2Slug}` : undefined
 
               return (
                 <div key={l2.id ?? l2.label} className={styles.group}>
