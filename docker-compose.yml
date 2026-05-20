@@ -16,6 +16,18 @@ services:
       timeout: 5s
       retries: 5
 
+  migrator:
+    image: ${ECR_REPOSITORY}:${IMAGE_TAG}
+    restart: 'no'
+    command: ['npx', 'payload', 'migrate']
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: ${DATABASE_URL}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   payload:
     image: ${ECR_REPOSITORY}:${IMAGE_TAG}
     restart: always
@@ -38,6 +50,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:
