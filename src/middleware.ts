@@ -9,16 +9,11 @@ const API_PREFIX = '/api'
 // Payload admin sub-paths that are always accessible (login, setup)
 const ADMIN_PUBLIC = ['/admin/login', '/admin/create-first-user', '/admin/logout']
 
-// Platform paths always accessible to all authenticated users (not subject to role restrictions)
-const UNRESTRICTED_PLATFORM_PATHS = new Set(['search', 'contact', 'faqs', 'navigation-tips'])
-
 interface TokenPayload {
   id: string
   email: string
   collection: string
   role?: 'admin' | 'localAdmin' | 'internal' | 'external'
-  customRole?: number | null
-  allowedMenuItems?: string[] | null
   exp?: number
 }
 
@@ -86,22 +81,6 @@ export function middleware(request: NextRequest) {
     const response = NextResponse.redirect(new URL('/login', request.url))
     response.cookies.delete('payload-token')
     return response
-  }
-
-  // Custom role page-access enforcement for external users
-  if (
-    decoded.collection === 'externalUsers' &&
-    Array.isArray(decoded.allowedMenuItems) &&
-    decoded.allowedMenuItems.length > 0
-  ) {
-    const segments = pathname.split('/').filter(Boolean)
-    if (segments.length > 0 && !UNRESTRICTED_PLATFORM_PATHS.has(segments[0])) {
-      // The page is identified by the last URL segment (the document slug)
-      const pageSlug = segments[segments.length - 1]
-      if (!decoded.allowedMenuItems.includes(pageSlug)) {
-        return NextResponse.redirect(new URL('/', request.url))
-      }
-    }
   }
 
   return NextResponse.next()
