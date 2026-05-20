@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 import { PlatformUsers } from './payload/collections/platformUsers'
 import { ExternalUsers } from './payload/collections/externalUsers'
+import { CustomRoles } from './payload/collections/customRoles'
 import { Invitations } from './payload/collections/invitations'
 import { PasswordResets } from './payload/collections/passwordResets'
 import { ChannelPages } from './payload/collections/channelPages'
@@ -29,10 +30,22 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      views: {
+        rolePermissions: {
+          Component: '@/payload/views/RolePermissionsView#RolePermissionsView',
+          path: '/role-permissions',
+        },
+      },
+      afterNavLinks: [
+        '@/payload/components/RolePermissionsNavLink#RolePermissionsNavLink',
+      ],
+    },
   },
   collections: [
     PlatformUsers,
     ExternalUsers,
+    CustomRoles,
     Invitations,
     PasswordResets,
     ChannelPages,

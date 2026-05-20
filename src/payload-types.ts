@@ -70,6 +70,7 @@ export interface Config {
   collections: {
     platformUsers: PlatformUser;
     externalUsers: ExternalUser;
+    customRoles: CustomRole;
     invitations: Invitation;
     passwordResets: PasswordReset;
     channelPages: ChannelPage;
@@ -86,6 +87,7 @@ export interface Config {
   collectionsSelect: {
     platformUsers: PlatformUsersSelect<false> | PlatformUsersSelect<true>;
     externalUsers: ExternalUsersSelect<false> | ExternalUsersSelect<true>;
+    customRoles: CustomRolesSelect<false> | CustomRolesSelect<true>;
     invitations: InvitationsSelect<false> | InvitationsSelect<true>;
     passwordResets: PasswordResetsSelect<false> | PasswordResetsSelect<true>;
     channelPages: ChannelPagesSelect<false> | ChannelPagesSelect<true>;
@@ -205,6 +207,22 @@ export interface ExternalUser {
    * External users always have the external role.
    */
   role: 'external';
+  /**
+   * Optional custom role for granular page access. If set, restricts visible pages to those configured in the Role Permissions view.
+   */
+  customRole?: (number | null) | CustomRole;
+  /**
+   * Denormalised cache of allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.
+   */
+  allowedMenuItems?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -223,6 +241,37 @@ export interface ExternalUser {
     | null;
   password?: string | null;
   collection: 'externalUsers';
+}
+/**
+ * Custom permission roles for external users. Use the Role Permissions view to configure page access.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customRoles".
+ */
+export interface CustomRole {
+  id: number;
+  /**
+   * Display name for this role, e.g. "Agency Partner" or "Supplier".
+   */
+  name: string;
+  /**
+   * Optional internal note about this role.
+   */
+  description?: string | null;
+  /**
+   * Array of page slugs this role can access. Managed via the Role Permissions view. Empty or null means unrestricted.
+   */
+  allowedMenuItems?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -767,6 +816,10 @@ export interface PayloadLockedDocument {
         value: number | ExternalUser;
       } | null)
     | ({
+        relationTo: 'customRoles';
+        value: number | CustomRole;
+      } | null)
+    | ({
         relationTo: 'invitations';
         value: number | Invitation;
       } | null)
@@ -878,6 +931,8 @@ export interface PlatformUsersSelect<T extends boolean = true> {
  */
 export interface ExternalUsersSelect<T extends boolean = true> {
   role?: T;
+  customRole?: T;
+  allowedMenuItems?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -894,6 +949,17 @@ export interface ExternalUsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customRoles_select".
+ */
+export interface CustomRolesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  allowedMenuItems?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
