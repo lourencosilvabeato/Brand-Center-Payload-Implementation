@@ -25,9 +25,10 @@ interface HeaderClientProps {
   role: 'admin' | 'localAdmin' | 'internal' | 'external'
   displayName: string | null
   avatarUrl: string | null
+  allowedSlugs: string[] | null
 }
 
-export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClientProps) {
+export function HeaderClient({ items, role, displayName, avatarUrl, allowedSlugs }: HeaderClientProps) {
   const [megaMenuL1, setMegaMenuL1] = useState<NavL1 | null>(null)
   const [megaMenuL1Slug, setMegaMenuL1Slug] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -191,7 +192,12 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
 
         {/* Mega-menu */}
         {megaMenuL1 && megaMenuL1Slug && (
-          <MegaMenu l1Item={megaMenuL1} l1Slug={megaMenuL1Slug} onClose={closeMegaMenu} />
+          <MegaMenu
+            l1Item={megaMenuL1}
+            l1Slug={megaMenuL1Slug}
+            onClose={closeMegaMenu}
+            allowedSlugs={allowedSlugs}
+          />
         )}
       </header>
 
@@ -203,6 +209,7 @@ export function HeaderClient({ items, role, displayName, avatarUrl }: HeaderClie
           displayName={displayName}
           avatarUrl={avatarUrl}
           onClose={() => setMobileOpen(false)}
+          allowedSlugs={allowedSlugs}
         />
       )}
     </>

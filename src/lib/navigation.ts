@@ -179,6 +179,75 @@ export function buildNavIndex(items: Navigation['items']): Map<string, NavPageMe
   return map
 }
 
+// Filters nav items to only those accessible for a given set of allowed slugs.
+// Items with no page (section headers) are always visible.
+// Parent items (L1/L2) are kept as structural containers when they have visible children,
+// even if their own page slug is not in the allowed set.
+// Pass an empty array or null to skip filtering entirely.
+export function filterNavByAllowedSlugs(
+  items: Navigation['items'],
+  allowedSlugs: string[],
+): Navigation['items'] {
+  if (!items) return items
+
+  return items.flatMap((l1) => {
+    const filteredChildren = (l1.children ?? []).flatMap((l2) => {
+      const filteredL3 = (l2.l3Items ?? []).filter((l3) => {
+        const slug = getDirectSlug(l3.page)
+        return !slug || allowedSlugs.includes(slug)
+      })
+
+      const l2Slug = getPolySlug(l2.page)
+      const l2OwnAllowed = !l2Slug || allowedSlugs.includes(l2Slug)
+      const hasVisibleL3 = filteredL3.length > 0
+      if (!l2OwnAllowed && !hasVisibleL3) return []
+
+      return [{ ...l2, l3Items: filteredL3 }]
+    })
+
+    const l1Slug = getPolySlug(l1.page)
+    const hasOriginalChildren = (l1.children?.length ?? 0) > 0
+
+    if (hasOriginalChildren) {
+      // Keep L1 as mega-menu trigger only if it still has visible children
+      if (filteredChildren.length === 0) return []
+      return [{ ...l1, children: filteredChildren }]
+    }
+
+    // Leaf L1: only show when its own slug is allowed (or it has no slug)
+    if (!l1Slug || allowedSlugs.includes(l1Slug)) {
+      return [l1]
+    }
+    return []
+  })
+}
+
+// Flat representation of a nav item used by the Role Permissions admin view
+export interface PermissionsNavItem {
+  label: string
+  slug: string | null
+  level: 1 | 2 | 3
+  canSelect: boolean
+}
+
+// Builds a flat ordered list of all nav items for the permissions checkbox tree
+export function buildPermissionsNavTree(items: Navigation['items']): PermissionsNavItem[] {
+  const result: PermissionsNavItem[] = []
+  for (const l1 of items ?? []) {
+    const l1Slug = getPolySlug(l1.page)
+    result.push({ label: l1.label, slug: l1Slug, level: 1, canSelect: !!l1Slug })
+    for (const l2 of l1.children ?? []) {
+      const l2Slug = getPolySlug(l2.page)
+      result.push({ label: l2.label, slug: l2Slug, level: 2, canSelect: !!l2Slug })
+      for (const l3 of l2.l3Items ?? []) {
+        const l3Slug = getDirectSlug(l3.page)
+        result.push({ label: l3.label, slug: l3Slug, level: 3, canSelect: !!l3Slug })
+      }
+    }
+  }
+  return result
+}
+
 // Returns label+slug pairs for all L1 nav items — used for search filter tabs
 export function getL1NavItems(items: Navigation['items']): Array<{ label: string; slug: string }> {
   return (items ?? []).flatMap((item) => {

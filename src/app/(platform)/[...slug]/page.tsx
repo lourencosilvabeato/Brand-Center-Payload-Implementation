@@ -1,5 +1,6 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getPayload } from '@/lib/payload'
+import { getSessionUser } from '@/lib/auth'
 import { buildBreadcrumb, findSiblings } from '@/lib/navigation'
 import { ContentPageLayout } from '@/components/ContentPageLayout'
 import { ChannelPageLayout } from '@/components/ChannelPageLayout'
@@ -11,6 +12,17 @@ interface Props {
 export default async function SlugPage({ params }: Props) {
   const { slug } = await params
   const slugStr = slug[slug.length - 1]
+
+  // Secondary server-side guard for custom role page access
+  const sessionUser = await getSessionUser()
+  if (
+    sessionUser?.collection === 'externalUsers' &&
+    Array.isArray(sessionUser.allowedMenuItems) &&
+    sessionUser.allowedMenuItems.length > 0 &&
+    !sessionUser.allowedMenuItems.includes(slugStr)
+  ) {
+    redirect('/')
+  }
 
   const payload = await getPayload()
 
