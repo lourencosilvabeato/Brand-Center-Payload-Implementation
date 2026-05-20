@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import type { Navigation } from '@/payload-types'
 import { isAdmin } from '../access'
+import { expandSlugsWithAncestors } from '@/lib/navigation'
 
 export const CustomRoles: CollectionConfig = {
   slug: 'customRoles',
@@ -12,20 +14,28 @@ export const CustomRoles: CollectionConfig = {
   hooks: {
     afterChange: [
       async ({ doc, req }) => {
-        // Propagate allowedMenuItems to every externalUser assigned this role
-        const users = await req.payload.find({
-          collection: 'externalUsers',
-          where: { customRole: { equals: doc.id } },
-          limit: 1000,
-          overrideAccess: true,
-        })
+        // Propagate allowedMenuItems (ancestor-expanded) to every externalUser assigned this role
+        const [users, nav] = await Promise.all([
+          req.payload.find({
+            collection: 'externalUsers',
+            where: { customRole: { equals: doc.id } },
+            limit: 1000,
+            overrideAccess: true,
+          }),
+          req.payload.findGlobal({ slug: 'navigation', depth: 1, overrideAccess: true }) as Promise<Navigation>,
+        ])
         if (users.docs.length === 0) return
+        const rawSlugs = Array.isArray(doc.allowedMenuItems)
+          ? (doc.allowedMenuItems as string[])
+          : []
+        const expanded = expandSlugsWithAncestors(rawSlugs, nav.items)
+        const value = expanded.length > 0 ? expanded : null
         await Promise.all(
           users.docs.map((user) =>
             req.payload.update({
               collection: 'externalUsers',
               id: user.id,
-              data: { allowedMenuItems: (doc.allowedMenuItems ?? null) as null },
+              data: { allowedMenuItems: value } as Record<string, unknown>,
               overrideAccess: true,
             }),
           ),

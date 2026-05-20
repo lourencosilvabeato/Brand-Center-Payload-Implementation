@@ -1,5 +1,7 @@
 import type { CollectionConfig, FieldAccess } from 'payload'
+import type { Navigation } from '@/payload-types'
 import { isAdmin, isAdminOrLocalAdmin } from '../access'
+import { expandSlugsWithAncestors } from '@/lib/navigation'
 
 const isAdminField: FieldAccess = ({ req: { user } }) => {
   if (!user) return false
@@ -28,16 +30,19 @@ export const ExternalUsers: CollectionConfig = {
 
         const roleId = data.customRole ? Number(data.customRole) : null
         if (roleId) {
-          const role = (await req.payload.findByID({
-            collection: 'customRoles',
-            id: roleId,
-            overrideAccess: true,
-          })) as { allowedMenuItems?: unknown }
-          ;(data as Record<string, unknown>).allowedMenuItems = Array.isArray(
-            role.allowedMenuItems,
-          )
-            ? role.allowedMenuItems
-            : null
+          const [role, nav] = await Promise.all([
+            req.payload.findByID({
+              collection: 'customRoles',
+              id: roleId,
+              overrideAccess: true,
+            }) as Promise<{ allowedMenuItems?: unknown }>,
+            req.payload.findGlobal({ slug: 'navigation', depth: 1, overrideAccess: true }) as Promise<Navigation>,
+          ])
+          const rawSlugs = Array.isArray(role.allowedMenuItems)
+            ? (role.allowedMenuItems as string[])
+            : []
+          const expanded = expandSlugsWithAncestors(rawSlugs, nav.items)
+          ;(data as Record<string, unknown>).allowedMenuItems = expanded.length > 0 ? expanded : null
         } else {
           ;(data as Record<string, unknown>).allowedMenuItems = null
         }
