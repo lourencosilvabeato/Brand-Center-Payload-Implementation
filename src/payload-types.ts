@@ -212,7 +212,7 @@ export interface ExternalUser {
    */
   customRole?: (number | null) | CustomRole;
   /**
-   * Denormalised cache of allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.
+   * Raw allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.
    */
   allowedMenuItems?:
     | {
