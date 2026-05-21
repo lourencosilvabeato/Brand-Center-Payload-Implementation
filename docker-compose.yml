@@ -1,5 +1,6 @@
 services:
   postgres:
+    container_name: postgres
     image: postgres:16-alpine
     restart: always
     environment:
@@ -17,6 +18,7 @@ services:
       retries: 5
 
   migrator:
+    container_name: migrator
     image: ${ECR_REPOSITORY}:${IMAGE_TAG}
     restart: 'no'
     command: ['npx', 'payload', 'migrate']
@@ -29,6 +31,7 @@ services:
         condition: service_healthy
 
   payload:
+    container_name: payload
     image: ${ECR_REPOSITORY}:${IMAGE_TAG}
     restart: always
     ports:
