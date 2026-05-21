@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import { getPayload } from '@/lib/payload'
 import type { ContentPage, Media, ProtectedFile } from '@/payload-types'
+import { CollectionDetailViewer } from './CollectionDetailViewer'
+import type { AssetMeta } from './CollectionDetailViewer'
 import styles from './CollectionDetail.module.css'
 
 type CollectionBlock = Extract<
@@ -33,20 +35,6 @@ async function findCollectionBlock(slug: string): Promise<CollectionBlock | null
   return null
 }
 
-function DownloadIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path
-        d="M10 3V13M10 13L6.5 9.5M10 13L13.5 9.5M3.5 15.5H16.5"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 export default async function CollectionDetailPage({ params }: Props) {
   const { slug } = await params
   const block = await findCollectionBlock(slug)
@@ -60,55 +48,38 @@ export default async function CollectionDetailPage({ params }: Props) {
         ? block.downloadFile
         : null
 
+  // Pre-render sidebar description server-side
+  const sidebarDescription = block.description ? (
+    <RichText data={block.description} className={styles.sidebarDescription} />
+  ) : null
+
+  // Build asset metadata + pre-render per-asset descriptions server-side
+  const assets: AssetMeta[] = (block.assets ?? []).map((asset, i) => {
+    const media = asset.image && typeof asset.image !== 'number' ? (asset.image as Media) : null
+    return {
+      id: asset.id ?? String(i),
+      imageUrl: media?.url ?? null,
+      imageWidth: media?.width ?? null,
+      imageHeight: media?.height ?? null,
+      imageAlt: media?.alt ?? '',
+      downloadUrl: media?.url ?? null,
+    }
+  })
+
+  const assetDescriptions = (block.assets ?? []).map((asset, i) =>
+    asset.assetDescription ? (
+      <RichText key={i} data={asset.assetDescription} className={styles.assetDescription} />
+    ) : null,
+  )
+
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{block.title}</h1>
-        {block.description && (
-          <RichText data={block.description} className={styles.description} />
-        )}
-      </div>
-
-      {block.assets && block.assets.length > 0 && (
-        <div className={styles.assetGrid}>
-          {block.assets.map((asset, i) => {
-            const media =
-              asset.image && typeof asset.image !== 'number' ? (asset.image as Media) : null
-
-            return (
-              <div key={asset.id ?? i} className={styles.assetItem}>
-                <div className={styles.assetThumb}>
-                  {media?.url && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={media.url} alt={media.alt ?? ''} />
-                  )}
-                </div>
-                {asset.assetDescription && (
-                  <RichText
-                    data={asset.assetDescription}
-                    className={styles.assetDescription}
-                  />
-                )}
-              </div>
-            )
-          })}
-        </div>
-      )}
-
-      {downloadFileId && <div className={styles.downloadSpacer} />}
-
-      {downloadFileId && (
-        <div className={styles.downloadBar}>
-          <a
-            href={`/api/download/${downloadFileId}`}
-            className={styles.downloadBtn}
-            download
-          >
-            <DownloadIcon />
-            Download collection
-          </a>
-        </div>
-      )}
-    </div>
+    <CollectionDetailViewer
+      title={block.title}
+      label={block.label ?? null}
+      sidebarDescription={sidebarDescription}
+      assetDescriptions={assetDescriptions}
+      downloadFileId={downloadFileId}
+      assets={assets}
+    />
   )
 }
