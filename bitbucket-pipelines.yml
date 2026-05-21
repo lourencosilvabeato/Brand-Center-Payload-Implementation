@@ -134,11 +134,3 @@ pipelines:
     main:
       - step: *build-push
       - step: *deploy
-    dev:
-      - step:
-          <<: *build-push
-          name: "Build & Push Docker - Staging"
-      - step:
-          <<: *deploy
-          name: "Deploy - Staging"
-          deployment: Staging
