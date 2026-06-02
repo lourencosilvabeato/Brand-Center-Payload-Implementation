@@ -1,11 +1,14 @@
 services:
   postgres:
+    container_name: postgres
     image: postgres:16-alpine
     restart: always
     environment:
       POSTGRES_DB: payload-brand-center
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -14,7 +17,21 @@ services:
       timeout: 5s
       retries: 5
 
+  migrator:
+    container_name: migrator
+    image: ${ECR_REPOSITORY}:${IMAGE_TAG}
+    restart: 'no'
+    command: ['npx', 'payload', 'migrate']
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: ${DATABASE_URL}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   payload:
+    container_name: payload
     image: ${ECR_REPOSITORY}:${IMAGE_TAG}
     restart: always
     ports:
@@ -36,6 +53,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:

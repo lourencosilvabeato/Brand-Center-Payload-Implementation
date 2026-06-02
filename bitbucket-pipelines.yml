@@ -56,8 +56,8 @@ definitions:
           - docker push "${ECR_REPOSITORY}:${IMAGE_TAG}"
 
     - step: &deploy
-        name: "Deploy - Production"
-        deployment: Production
+        name: "Deploy - Staging"
+        deployment: Staging
         script:
           - export APP_DIR="/home/ec2-user/projeto-sombra"
           - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/projeto-sombra"
@@ -134,11 +134,3 @@ pipelines:
     main:
       - step: *build-push
       - step: *deploy
-    dev:
-      - step:
-          <<: *build-push
-          name: "Build & Push Docker - Staging"
-      - step:
-          <<: *deploy
-          name: "Deploy - Staging"
-          deployment: Staging
