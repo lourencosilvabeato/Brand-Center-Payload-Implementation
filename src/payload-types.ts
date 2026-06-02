@@ -518,6 +518,24 @@ export interface ContentPage {
             blockType: 'richText';
           }
         | {
+            items: {
+              text: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkmarksBlock';
+          }
+        | {
+            items: {
+              text: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'crossesBlock';
+          }
+        | {
             text: string;
             attribution?: string | null;
             id?: string | null;
@@ -1097,6 +1115,30 @@ export interface ContentPagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        checkmarksBlock?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        crossesBlock?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

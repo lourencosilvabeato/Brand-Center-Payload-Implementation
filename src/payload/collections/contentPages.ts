@@ -21,6 +21,8 @@ import {
   DividerBlock,
   SectionBlock,
   IconLibraryBlock,
+  CheckmarksBlock,
+  CrossesBlock,
 } from '../blocks'
 
 export const ContentPages: CollectionConfig = {
@@ -98,6 +100,8 @@ export const ContentPages: CollectionConfig = {
       blocks: [
         SectionBlock,
         RichTextBlock,
+        CheckmarksBlock,
+        CrossesBlock,
         QuoteBlock,
         NoteBlock,
         TableBlock,
