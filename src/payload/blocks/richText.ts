@@ -1,5 +1,6 @@
 import type { Block } from 'payload'
 import { lexicalEditor, UnorderedListFeature, OrderedListFeature } from '@payloadcms/richtext-lexical'
+import { ChecklistOptionsFeature } from '../lexical/ChecklistOptionsFeature'
 
 export const RichTextBlock: Block = {
   slug: 'richText',
@@ -12,6 +13,7 @@ export const RichTextBlock: Block = {
           ...defaultFeatures,
           UnorderedListFeature(),
           OrderedListFeature(),
+          ChecklistOptionsFeature(),
         ],
       }),
       required: true,

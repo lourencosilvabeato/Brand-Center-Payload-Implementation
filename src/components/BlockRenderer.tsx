@@ -8,8 +8,6 @@ import { CollectionCardBlock } from './blocks/CollectionCardBlock'
 import { DividerBlock } from './blocks/DividerBlock'
 import { SectionBlock } from './blocks/SectionBlock'
 import { IconLibraryBlock } from './blocks/IconLibraryBlock'
-import { CheckmarksBlock } from './blocks/CheckmarksBlock'
-import { CrossesBlock } from './blocks/CrossesBlock'
 import styles from './blocks/Blocks.module.css'
 
 type Block = NonNullable<ContentPage['layout']>[number]
@@ -72,12 +70,6 @@ export function BlockRenderer({ blocks }: Props) {
         break
       case 'iconLibraryBlock':
         rendered.push(<IconLibraryBlock key={key} block={block} />)
-        break
-      case 'checkmarksBlock':
-        rendered.push(<CheckmarksBlock key={key} block={block} />)
-        break
-      case 'crossesBlock':
-        rendered.push(<CrossesBlock key={key} block={block} />)
         break
     }
     i++
