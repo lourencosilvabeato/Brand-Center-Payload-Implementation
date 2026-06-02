@@ -76,10 +76,13 @@
   margin: 24px 0;
 }
 
-/* Checklist — Lexical's ChecklistFeature renders
-   <li role="checkbox" aria-checked="true|false"> items.
-   SVG background-image approach is used for reliable cross-browser rendering.
-   Checked items = green ✓. Unchecked items = red ✕. */
+/* Checklist — Payload's JSX converter renders:
+   <li role="checkbox" aria-checked="true|false">
+     <input type="checkbox" /> <label>text</label> <br />
+   </li>
+   We hide the native input and br, display the label as plain text,
+   and use SVG background-image on the li for the visual icon.
+   Checked = green ✓  /  Unchecked = red ✕ */
 
 .richText ul:has(> li[role='checkbox']) {
   list-style: none;
@@ -93,6 +96,18 @@
   background-repeat: no-repeat;
   background-position: 0 3px;
   background-size: 18px 18px;
+}
+
+/* Hide the native checkbox input and the trailing <br> */
+.richText li[role='checkbox'] input[type='checkbox'],
+.richText li[role='checkbox'] br {
+  display: none;
+}
+
+/* Make the label render as plain inline text */
+.richText li[role='checkbox'] label {
+  display: inline;
+  cursor: default;
 }
 
 /* Green checkmark for checked items */
