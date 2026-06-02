@@ -1,6 +1,16 @@
 import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
+
+function toSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
 import {
   RichTextBlock,
   QuoteBlock,
@@ -19,6 +29,16 @@ export const ContentPages: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'updatedAt'],
+  },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (!data.slug && data.title) {
+          data.slug = toSlug(data.title)
+        }
+        return data
+      },
+    ],
   },
   fields: [
     {

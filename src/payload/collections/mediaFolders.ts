@@ -1,36 +1,35 @@
 import type { CollectionConfig } from 'payload'
 import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
 
-export const Media: CollectionConfig = {
-  slug: 'media',
-  admin: {
-    useAsTitle: 'filename',
-    group: 'Media',
-    defaultColumns: ['filename', 'folder', 'mimeType', 'updatedAt'],
+export const MediaFolders: CollectionConfig = {
+  slug: 'mediaFolders',
+  labels: {
+    singular: 'Media Folder',
+    plural: 'Media Folders',
   },
-  upload: true,
+  admin: {
+    useAsTitle: 'name',
+    group: 'Media',
+    defaultColumns: ['name', 'parent', 'updatedAt'],
+  },
   fields: [
     {
-      name: 'alt',
+      name: 'name',
       type: 'text',
+      required: true,
     },
     {
-      name: 'caption',
-      type: 'text',
-    },
-    {
-      name: 'folder',
+      name: 'parent',
       type: 'relationship',
       relationTo: 'mediaFolders',
       admin: {
-        description: 'Assign this file to a folder for organisation.',
-        position: 'sidebar',
+        description: 'Leave empty for a root-level folder.',
       },
     },
   ],
   access: {
     create: isAdminOrLocalAdmin,
-    read: () => true,
+    read: isAuthenticated,
     update: isAdminOrLocalAdmin,
     delete: isAdminOrLocalAdmin,
   },

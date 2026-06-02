@@ -14,6 +14,7 @@ import { ChannelPages } from './payload/collections/channelPages'
 import { ContentPages } from './payload/collections/contentPages'
 import { LegalPages } from './payload/collections/legalPages'
 import { Media } from './payload/collections/media'
+import { MediaFolders } from './payload/collections/mediaFolders'
 import { ProtectedFiles } from './payload/collections/protectedFiles'
 
 import { HomePage } from './payload/globals/homePage'
@@ -52,6 +53,7 @@ export default buildConfig({
     ContentPages,
     LegalPages,
     Media,
+    MediaFolders,
     ProtectedFiles,
   ],
   globals: [HomePage, Navigation, FooterSettings, LoginSettings],

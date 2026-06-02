@@ -2,12 +2,31 @@ import type { CollectionConfig } from 'payload'
 import { isAdminOrLocalAdmin, isAuthenticated } from '../access'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
+function toSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
 export const ChannelPages: CollectionConfig = {
   slug: 'channelPages',
   admin: {
     useAsTitle: 'title',
     group: 'Content',
     defaultColumns: ['title', 'slug', 'updatedAt'],
+  },
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (!data.slug && data.title) {
+          data.slug = toSlug(data.title)
+        }
+        return data
+      },
+    ],
   },
   fields: [
     {
@@ -21,7 +40,8 @@ export const ChannelPages: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'URL segment for this page (e.g. "brand-identity" for /brand-identity/).',
+        description:
+          'URL segment for this page (e.g. "brand-identity"). Auto-generated from title if left empty.',
       },
     },
     {
@@ -68,9 +88,21 @@ export const ChannelPages: CollectionConfig = {
           relationTo: 'media',
         },
         {
+          name: 'page',
+          type: 'relationship',
+          relationTo: ['channelPages', 'contentPages'],
+          admin: {
+            description:
+              'Pick an existing page. Takes priority over the custom URL below.',
+          },
+        },
+        {
           name: 'link',
           type: 'text',
-          required: true,
+          admin: {
+            description:
+              'Custom URL (e.g. an external link). Used only when no page is selected above.',
+          },
         },
       ],
     },

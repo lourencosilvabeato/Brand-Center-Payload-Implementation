@@ -4,10 +4,17 @@
   padding: 16px 32px;
 }
 
+/* ── Page intro — two-column: H1 (284px left) | excerpt + buttons (right) ── */
+
 .titleRow {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.titleRowSingle {
+  display: block;
 }
 
 .title {
@@ -17,6 +24,21 @@
   line-height: var(--font-h1-line-height);
   color: var(--blue-ascendum);
   margin: 0;
+  width: 284px;
+  flex-shrink: 0;
+}
+
+.titleRowSingle .title {
+  width: auto;
+}
+
+.titleRight {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-top: 8px;
 }
 
 .excerpt {
@@ -25,7 +47,6 @@
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
   color: var(--darker-grey);
-  max-width: 644px;
 }
 
 .excerpt p {
@@ -40,7 +61,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 8px;
 }
 
 .headerBtn {
@@ -64,6 +84,15 @@
   color: var(--white);
 }
 
+/* Divider between page intro and first content block */
+.introDivider {
+  border: none;
+  border-top: 1px solid var(--grey-ascendum);
+  margin: 0;
+}
+
+/* ── Three-column shell: sidebar | content | anchor bar ── */
+
 .body {
   display: flex;
   align-items: flex-start;
@@ -76,10 +105,9 @@
 .content {
   flex: 1;
   min-width: 0;
-  max-width: 644px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 60px;
 }
 
 @media (max-width: 1024px) {
@@ -94,8 +122,14 @@
     padding: 16px;
   }
 
+  .titleRow {
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .title {
     font-size: 34px;
+    width: auto;
   }
 
   .body {
@@ -105,8 +139,7 @@
   }
 
   .content {
-    max-width: 100%;
-    gap: 30px;
+    gap: 40px;
   }
 
   .headerButtons {

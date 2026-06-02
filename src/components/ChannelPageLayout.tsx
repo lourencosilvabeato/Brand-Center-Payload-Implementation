@@ -1,16 +1,39 @@
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import Image from 'next/image'
 import { Breadcrumb } from './layout/Breadcrumb'
+import { buildNavIndex } from '@/lib/navigation'
 import type { BreadcrumbItem } from '@/lib/navigation'
-import type { ChannelPage, Media } from '@/payload-types'
+import type { ChannelPage, Media, Navigation } from '@/payload-types'
 import styles from './ChannelPageLayout.module.css'
 
 interface Props {
   page: ChannelPage
   trail: BreadcrumbItem[]
+  nav: Navigation
 }
 
-export function ChannelPageLayout({ page, trail }: Props) {
+function resolveCardHref(
+  card: NonNullable<ChannelPage['cards']>[number],
+  navIndex: Map<string, { href: string }>,
+): string {
+  const pageField = card.page
+  if (pageField) {
+    const pageVal = pageField.value
+    if (typeof pageVal !== 'number') {
+      const slug = pageVal.slug
+      if (slug) {
+        const found = navIndex.get(slug)
+        if (found) return found.href
+        return `/${slug}`
+      }
+    }
+  }
+  return card.link ?? '#'
+}
+
+export function ChannelPageLayout({ page, trail, nav }: Props) {
+  const navIndex = buildNavIndex(nav.items)
+
   const hasRightColumn =
     page.description != null || (page.buttons != null && page.buttons.length > 0)
 
@@ -49,8 +72,9 @@ export function ChannelPageLayout({ page, trail }: Props) {
           {page.cards.map((card, i) => {
             const image =
               card.image && typeof card.image !== 'number' ? (card.image as Media) : null
+            const href = resolveCardHref(card, navIndex)
             return (
-              <a key={card.id ?? i} href={card.link ?? '#'} className={styles.card}>
+              <a key={card.id ?? i} href={href} className={styles.card}>
                 <div className={styles.cardDetails}>
                   <div className={styles.cardText}>
                     <span className={styles.cardTitle}>{card.title}</span>
