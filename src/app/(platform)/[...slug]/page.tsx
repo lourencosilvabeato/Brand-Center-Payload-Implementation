@@ -57,7 +57,7 @@ export default async function SlugPage({ params }: Props) {
   }
 
   if (channelResult.docs[0]) {
-    return <ChannelPageLayout page={channelResult.docs[0]} trail={trail} />
+    return <ChannelPageLayout page={channelResult.docs[0]} trail={trail} nav={nav} />
   }
 
   notFound()

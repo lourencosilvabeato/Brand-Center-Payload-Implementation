@@ -77,6 +77,7 @@ export interface Config {
     contentPages: ContentPage;
     legalPages: LegalPage;
     media: Media;
+    mediaFolders: MediaFolder;
     protectedFiles: ProtectedFile;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -94,6 +95,7 @@ export interface Config {
     contentPages: ContentPagesSelect<false> | ContentPagesSelect<true>;
     legalPages: LegalPagesSelect<false> | LegalPagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    mediaFolders: MediaFoldersSelect<false> | MediaFoldersSelect<true>;
     protectedFiles: ProtectedFilesSelect<false> | ProtectedFilesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -212,7 +214,7 @@ export interface ExternalUser {
    */
   customRole?: (number | null) | CustomRole;
   /**
-   * Denormalised cache of allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.
+   * Raw allowedMenuItems from the assigned customRole. Managed automatically — do not edit directly.
    */
   allowedMenuItems?:
     | {
@@ -315,7 +317,7 @@ export interface ChannelPage {
   id: number;
   title: string;
   /**
-   * URL segment for this page (e.g. "brand-identity" for /brand-identity/).
+   * URL segment for this page (e.g. "brand-identity"). Auto-generated from title if left empty.
    */
   slug: string;
   excerpt?: string | null;
@@ -346,7 +348,22 @@ export interface ChannelPage {
         title: string;
         excerpt?: string | null;
         image?: (number | null) | Media;
-        link: string;
+        /**
+         * Pick an existing page. Takes priority over the custom URL below.
+         */
+        page?:
+          | ({
+              relationTo: 'channelPages';
+              value: number | ChannelPage;
+            } | null)
+          | ({
+              relationTo: 'contentPages';
+              value: number | ContentPage;
+            } | null);
+        /**
+         * Custom URL (e.g. an external link). Used only when no page is selected above.
+         */
+        link?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -361,6 +378,10 @@ export interface Media {
   id: number;
   alt?: string | null;
   caption?: string | null;
+  /**
+   * Assign this file to a folder for organisation.
+   */
+  folder?: (number | null) | MediaFolder;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -372,6 +393,20 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mediaFolders".
+ */
+export interface MediaFolder {
+  id: number;
+  name: string;
+  /**
+   * Leave empty for a root-level folder.
+   */
+  parent?: (number | null) | MediaFolder;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -844,6 +879,10 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'mediaFolders';
+        value: number | MediaFolder;
+      } | null)
+    | ({
         relationTo: 'protectedFiles';
         value: number | ProtectedFile;
       } | null);
@@ -1009,6 +1048,7 @@ export interface ChannelPagesSelect<T extends boolean = true> {
         title?: T;
         excerpt?: T;
         image?: T;
+        page?: T;
         link?: T;
         id?: T;
       };
@@ -1241,6 +1281,7 @@ export interface LegalPagesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  folder?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1252,6 +1293,16 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mediaFolders_select".
+ */
+export interface MediaFoldersSelect<T extends boolean = true> {
+  name?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

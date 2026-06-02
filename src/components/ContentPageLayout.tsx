@@ -38,6 +38,11 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
 
   const hasBreadcrumb = trail.length > 0
   const hasSidebar = siblings.length > 0
+  const hasContent = (page.layout ?? []).length > 0
+
+  const hasRightColumn =
+    page.excerpt != null ||
+    (page.buttons != null && page.buttons.length > 0)
 
   return (
     <>
@@ -50,35 +55,43 @@ export function ContentPageLayout({ page, trail, siblings, currentHref }: Props)
       <div className={styles.body}>
         {hasSidebar && <LeftSidebar siblings={siblings} currentHref={currentHref} />}
         <main className={styles.content}>
+          {/* Page intro — two-column: H1 left, excerpt + buttons right */}
           <div
-            className={styles.titleRow}
+            className={hasRightColumn ? styles.titleRow : styles.titleRowSingle}
             {...(page.headerAnchorName ? { id: page.headerAnchorName } : {})}
           >
             <h1 className={styles.title}>{page.title}</h1>
-            {page.excerpt && (
-              <div className={styles.excerpt}>
-                <RichText data={page.excerpt} />
-              </div>
-            )}
-            {page.buttons && page.buttons.length > 0 && (
-              <div className={styles.headerButtons}>
-                {page.buttons.map((btn, i) => {
-                  const fileId =
-                    btn.file && typeof btn.file !== 'number'
-                      ? (btn.file as ProtectedFile).id
-                      : typeof btn.file === 'number'
-                        ? btn.file
-                        : null
-                  const href = btn.url ?? (fileId ? `/api/download/${fileId}` : '#')
-                  return (
-                    <a key={btn.id ?? i} href={href} className={styles.headerBtn}>
-                      {btn.label}
-                    </a>
-                  )
-                })}
+            {hasRightColumn && (
+              <div className={styles.titleRight}>
+                {page.excerpt && (
+                  <div className={styles.excerpt}>
+                    <RichText data={page.excerpt} />
+                  </div>
+                )}
+                {page.buttons && page.buttons.length > 0 && (
+                  <div className={styles.headerButtons}>
+                    {page.buttons.map((btn, i) => {
+                      const fileId =
+                        btn.file && typeof btn.file !== 'number'
+                          ? (btn.file as ProtectedFile).id
+                          : typeof btn.file === 'number'
+                            ? btn.file
+                            : null
+                      const href = btn.url ?? (fileId ? `/api/download/${fileId}` : '#')
+                      return (
+                        <a key={btn.id ?? i} href={href} className={styles.headerBtn}>
+                          {btn.label}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
+
+          {hasContent && <hr className={styles.introDivider} />}
+
           <BlockRenderer blocks={page.layout ?? []} />
           {hasSidebar && (prev || next) && <SiblingNav prev={prev} next={next} />}
         </main>
