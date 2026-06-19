@@ -52,7 +52,7 @@ export const LoginSettings: GlobalConfig = {
       name: 'institutionalLinkLabel',
       type: 'text',
       admin: {
-        description: 'Label for the institutional link (e.g. "Visit ascendum.com").',
+        description: 'Label for the institutional link (e.g. "Visit our website").',
       },
     },
     {

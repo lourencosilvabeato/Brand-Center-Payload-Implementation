@@ -179,7 +179,7 @@ export function LoginForm({ ssoUrl, subtitle, ssoError = false }: LoginFormProps
 
       <a className={styles.ssoBtn} href={ssoUrl}>
         <MicrosoftIcon />
-        <span>Login with Ascendum account</span>
+        <span>Login with SSO account</span>
       </a>
     </form>
   )

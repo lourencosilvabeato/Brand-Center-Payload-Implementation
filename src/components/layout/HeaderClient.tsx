@@ -113,10 +113,10 @@ export function HeaderClient({ items, role, displayName, avatarUrl, allowedSlugs
           <Link
             href="/"
             className={styles.logo}
-            aria-label="Ascendum Brand Center home"
+            aria-label="Brand Center home"
             onClick={closeAll}
           >
-            <Image src="/logo.svg" alt="Ascendum" width={140} height={32} priority />
+            <Image src="/logo.svg" alt="Brand Center" width={140} height={32} priority />
           </Link>
 
           {/* Desktop nav */}

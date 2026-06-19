@@ -1541,7 +1541,7 @@ export interface LoginSetting {
    */
   changePasswordIntroduction?: string | null;
   /**
-   * Label for the institutional link (e.g. "Visit ascendum.com").
+   * Label for the institutional link (e.g. "Visit our website").
    */
   institutionalLinkLabel?: string | null;
   /**

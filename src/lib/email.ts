@@ -12,17 +12,17 @@ const transporter = nodemailer.createTransport({
   authMethod: 'LOGIN',
 })
 
-const from = () => process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? 'noreply@ascendum.com'
+const from = () => process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? 'noreply@example.com'
 
 export async function sendPasswordRecoveryEmail(to: string, resetUrl: string): Promise<void> {
   await transporter.sendMail({
     from: from(),
     to,
-    subject: 'Reset your Ascendum Brand Center password',
+    subject: 'Reset your Brand Center password',
     html: `<!DOCTYPE html>
 <html lang="en">
 <body style="font-family:'IBM Plex Sans',Arial,sans-serif;color:#585858;max-width:600px;margin:0 auto;padding:32px;">
-  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Ascendum Brand Center</h2>
+  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Brand Center</h2>
   <p style="margin:0 0 12px;">We received a request to reset the password for your account.</p>
   <p style="margin:0 0 32px;">Click the button below to define a new password:</p>
   <p style="margin:0 0 32px;">
@@ -43,11 +43,11 @@ export async function sendAdminPasswordResetEmail(to: string, resetUrl: string):
   await transporter.sendMail({
     from: from(),
     to,
-    subject: 'Reset your Ascendum Brand Center password',
+    subject: 'Reset your Brand Center password',
     html: `<!DOCTYPE html>
 <html lang="en">
 <body style="font-family:'IBM Plex Sans',Arial,sans-serif;color:#585858;max-width:600px;margin:0 auto;padding:32px;">
-  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Ascendum Brand Center</h2>
+  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Brand Center</h2>
   <p style="margin:0 0 12px;">Your account password has been reset by an administrator.</p>
   <p style="margin:0 0 32px;">Click the button below to define a new password:</p>
   <p style="margin:0 0 32px;">
@@ -68,12 +68,12 @@ export async function sendInvitationEmail(to: string, inviteUrl: string): Promis
   await transporter.sendMail({
     from: from(),
     to,
-    subject: "You've been invited to Ascendum Brand Center",
+    subject: "You've been invited to Brand Center",
     html: `<!DOCTYPE html>
 <html lang="en">
 <body style="font-family:'IBM Plex Sans',Arial,sans-serif;color:#585858;max-width:600px;margin:0 auto;padding:32px;">
-  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Ascendum Brand Center</h2>
-  <p style="margin:0 0 12px;">You have been invited to access the Ascendum Brand Center.</p>
+  <h2 style="color:#003846;font-family:Montserrat,sans-serif;margin:0 0 16px;">Brand Center</h2>
+  <p style="margin:0 0 12px;">You have been invited to access the Brand Center.</p>
   <p style="margin:0 0 32px;">Click the button below to set your password and activate your account:</p>
   <p style="margin:0 0 32px;">
     <a href="${inviteUrl}"

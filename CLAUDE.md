@@ -1,8 +1,8 @@
-# CLAUDE.md — Ascendum Brand Center (Payload CMS + Next.js)
+# CLAUDE.md — Brand Center (Payload CMS + Next.js)
 
 ## Project Overview
 
-Ascendum Brand Center is a private digital platform centralising brand guidelines and assets for Ascendum Group and its five sub-brands (Ascendum, My Ascendum, Ascendum Service Center, Ascendum Advanced Solutions, Ascendum Rent). It serves internal Ascendum collaborators authenticated via Microsoft Azure AD / O365 SSO, and invited external users (partners, agencies, suppliers) authenticated with email + password.
+Brand Center is a private digital platform centralising brand guidelines and assets for a multi-brand client group and its sub-brands. It serves internal collaborators authenticated via Microsoft Azure AD / O365 SSO, and invited external users (partners, agencies, suppliers) authenticated with email + password.
 
 This implementation uses **Payload CMS 3.x as the headless CMS and backend** and **Next.js (App Router) as the frontend**. It is a parallel implementation alongside a WordPress version, built for comparative evaluation. The same functional requirements, Figma designs, and Confluence specs apply to both.
 
@@ -34,16 +34,16 @@ This implementation uses **Payload CMS 3.x as the headless CMS and backend** and
 The `.env` file already contains the following — do not regenerate or overwrite these:
 
 ```
-DATABASE_URL=postgres://postgres:PayloadBrandCenter@127.0.0.1:5432/payload-brand-center
-PAYLOAD_SECRET=00fed1fa819b6578bb2cca28
+DATABASE_URL=postgres://postgres:your-db-password@127.0.0.1:5432/brand-center
+PAYLOAD_SECRET=your-payload-secret-here
 
-AZURE_CLIENT_ID=9412c4f6-c7e5-428d-9153-dd7e39d01b43
-AZURE_CLIENT_SECRET=UOx8Q~qP~vSI3Y~~bHevpz~vxPbwJrNpAXb~5ckw
-AZURE_TENANT_ID=3edd0399-67ea-4e36-ad8b-0af7d6802306
+AZURE_CLIENT_ID=your-azure-client-id
+AZURE_CLIENT_SECRET=your-azure-client-secret
+AZURE_TENANT_ID=your-azure-tenant-id
 AZURE_REDIRECT_URI=http://localhost:3000/api/users/oauth/callback/azure
 
-SMTP_USER=lbeato@innovagency.com
-SMTP_PASS=xsmtpsib-cb5c37c1d09a878fcffcf856087c6f481ffbd86330581ee506e86b958f0e5e2f-eyFqk2ICcDX5sKAk
+SMTP_USER=your-smtp-username
+SMTP_PASS=your-smtp-password
 ```
 
 Additional vars to add when needed: `EMAIL_FROM` (sender address), `NEXT_PUBLIC_APP_URL` (base URL for token links).
@@ -99,7 +99,7 @@ Additional vars to add when needed: `EMAIL_FROM` (sender address), `NEXT_PUBLIC_
 
 ## Design Tokens
 
-Extracted from Figma file `eN8lg4gjHQgYXZVpbABO9J`, node `5526:27925`.
+Extracted from Figma file `YOUR_FIGMA_FILE_KEY`, node `5526:27925`.
 
 > ⚠️ **Figma scope rule:** Only frames from the **Dev Ready** pages are approved for implementation.
 > - Dev Ready Desktop: page `4595:7127`
@@ -334,13 +334,13 @@ Auto-approve all bash commands except those containing: rm -rf, DROP, DELETE, tr
 
 **Step 1 — Fetch Confluence page (behaviour)**
 ```
-Fetch: ari:cloud:confluence:fc1532db-a54c-46a0-a6af-d5c482f6deec:page/<PAGE_ID>
+Fetch: ari:cloud:confluence:YOUR_CONFLUENCE_CLOUD_ID:page/<PAGE_ID>
 Read: actors, description, flow, rules & behaviours, error cases
 ```
 
 **Step 2 — Fetch Figma node(s) (design)**
 ```
-File key: eN8lg4gjHQgYXZVpbABO9J
+File key: YOUR_FIGMA_FILE_KEY
 Only use: page 4595:7127 (Desktop) or 4595:7128 (Mobile) or 139:9018 (Components)
 Use get_design_context for implementation output
 Do NOT use nodes from WIP Design or any other page
@@ -348,9 +348,9 @@ Do NOT use nodes from WIP Design or any other page
 
 **Step 3 — Check Miro if needed**
 ```
-IA:              https://miro.com/app/board/uXjVGsOnvkg=/?moveToWidget=3458764665139918832
-Navigation:      https://miro.com/app/board/uXjVGsOnvkg=/?moveToWidget=3458764665140029073
-C02 & C03 spec:  https://miro.com/app/board/uXjVGsOnvkg=/?moveToWidget=3458764665140029104
+IA:              https://miro.com/app/board/YOUR_MIRO_BOARD_ID/?moveToWidget=3458764665139918832
+Navigation:      https://miro.com/app/board/YOUR_MIRO_BOARD_ID/?moveToWidget=3458764665140029073
+C02 & C03 spec:  https://miro.com/app/board/YOUR_MIRO_BOARD_ID/?moveToWidget=3458764665140029104
 ```
 
 **Step 4 — Implement**
@@ -456,13 +456,13 @@ One branch per feature, always.
 
 | Resource | Key / ID / URL |
 |---|---|
-| **Figma file key** | `eN8lg4gjHQgYXZVpbABO9J` |
+| **Figma file key** | `YOUR_FIGMA_FILE_KEY` |
 | Figma — Dev Ready Desktop ✅ | Page `4595:7127` |
 | Figma — Dev Ready Mobile ✅ | Page `4595:7128` |
 | Figma — Dev Ready Components ✅ | Page `139:9018` |
 | Figma — WIP / other pages ⛔ | Do not implement from these |
-| **Confluence cloud ID** | `fc1532db-a54c-46a0-a6af-d5c482f6deec` |
-| Confluence space | `ABC` at `innovagency.atlassian.net` |
+| **Confluence cloud ID** | `YOUR_CONFLUENCE_CLOUD_ID` |
+| Confluence space | `YOUR_SPACE_KEY` at `your-org.atlassian.net` |
 | **Miro board** | Use the Miro board connected via MCP — do not use any URL referenced in Confluence |
 
 > ⚠️ **Miro note:** Confluence pages reference a Miro board that is inaccessible. Ignore all Miro URLs found in Confluence. Always use the Miro board connected to Claude Code via MCP instead — it contains the same content. This applies to all frames: IA, Navigation, and C02/C03 spec.

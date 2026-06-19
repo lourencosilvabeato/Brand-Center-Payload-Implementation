@@ -55,7 +55,7 @@ export default async function LoginPage({ searchParams }: Props) {
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={image?.alt ?? 'Ascendum Brand Center'}
+            alt={image?.alt ?? 'Brand Center'}
             className={styles.heroImg}
           />
         ) : (

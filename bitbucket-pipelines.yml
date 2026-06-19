@@ -5,7 +5,7 @@
 #   AWS_ACCESS_KEY_ID              (secured)
 #   AWS_SECRET_ACCESS_KEY          (secured)
 #   AWS_DEFAULT_REGION             ex.: eu-west-1
-#   AWS_ACCOUNT_ID                 ex.: 788026934736
+#   AWS_ACCOUNT_ID                 ex.: YOUR_AWS_ACCOUNT_ID
 #   EC2_SECURITY_GROUP_ID          sg-xxxxxxxxxxxxxxxxx
 #   EC2_SSH_PRIVATE_KEY            (secured) chave privada SSH em base64
 #
@@ -13,16 +13,16 @@
 #   EC2_HOST                       IP ou hostname da EC2
 #   PORT                           porta exposta no host (ex.: 3000)
 #   NODE_ENV                       staging | production
-#   NEXT_PUBLIC_APP_URL            URL pública ex.: https://brandcenter.ascendum.com
+#   NEXT_PUBLIC_APP_URL            URL pública ex.: https://your-domain.com
 #   PAYLOAD_SECRET                 (secured) segredo JWT do Payload
 #   POSTGRES_PASSWORD              (secured) senha do Postgres containerizado
 #   AZURE_CLIENT_ID                Azure AD App Registration — Application (client) ID
 #   AZURE_CLIENT_SECRET            (secured) Azure AD App Registration — client secret
 #   AZURE_TENANT_ID                Azure AD Directory (tenant) ID
-#   AZURE_REDIRECT_URI             ex.: https://brandcenter.ascendum.com/api/users/oauth/callback/azure
+#   AZURE_REDIRECT_URI             ex.: https://your-domain.com/api/users/oauth/callback/azure
 #   SMTP_USER                      utilizador SMTP
 #   SMTP_PASS                      (secured) senha SMTP
-#   EMAIL_FROM                     endereço remetente, ex.: noreply@ascendum.com
+#   EMAIL_FROM                     endereço remetente, ex.: noreply@example.com
 #
 # Pré-requisitos na EC2:
 #   - Docker + Docker Compose v2 instalados
@@ -43,7 +43,7 @@ definitions:
         services: [docker]
         size: 2x
         script:
-          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/projeto-sombra"
+          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/brand-center"
           - |
             case "$BITBUCKET_BRANCH" in
               dev|env__staging) export IMAGE_TAG="staging" ;;
@@ -59,8 +59,8 @@ definitions:
         name: "Deploy - Staging"
         deployment: Staging
         script:
-          - export APP_DIR="/home/ec2-user/projeto-sombra"
-          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/projeto-sombra"
+          - export APP_DIR="/home/ec2-user/brand-center"
+          - export ECR_REPOSITORY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/brand-center"
           - |
             case "$BITBUCKET_BRANCH" in
               dev|env__staging) export IMAGE_TAG="staging" ;;
@@ -86,7 +86,7 @@ definitions:
               printf 'NEXT_PUBLIC_APP_URL=%s\n'   "${NEXT_PUBLIC_APP_URL}"
               printf 'PAYLOAD_SECRET=%s\n'        "${PAYLOAD_SECRET}"
               printf 'POSTGRES_PASSWORD=%s\n'     "${POSTGRES_PASSWORD}"
-              printf 'DATABASE_URL=%s\n'          "postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/projeto-sombra"
+              printf 'DATABASE_URL=%s\n'          "postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/brand-center"
               printf 'AZURE_CLIENT_ID=%s\n'       "${AZURE_CLIENT_ID}"
               printf 'AZURE_CLIENT_SECRET=%s\n'   "${AZURE_CLIENT_SECRET}"
               printf 'AZURE_TENANT_ID=%s\n'       "${AZURE_TENANT_ID}"
