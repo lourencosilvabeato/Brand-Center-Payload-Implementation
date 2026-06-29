@@ -47,6 +47,8 @@ next-env.d.ts
 /.payload/
 
 /media
+/protectedFiles
+database-dump.sql
 
 # Claude Code local settings
 .claude/settings.local.json

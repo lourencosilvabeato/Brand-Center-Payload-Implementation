@@ -24,9 +24,9 @@ export default async function SlugPage({ params }: Props) {
           overrideAccess: true,
         }) as Promise<{ allowedMenuItems?: unknown }>)
       : Promise.resolve(null),
-    payload.find({ collection: 'contentPages', where: { slug: { equals: slugStr } }, depth: 2, limit: 1 }),
-    payload.find({ collection: 'channelPages', where: { slug: { equals: slugStr } }, depth: 2, limit: 1 }),
-    payload.findGlobal({ slug: 'navigation' }),
+    payload.find({ collection: 'contentPages', where: { slug: { equals: slugStr } }, depth: 2, limit: 1, overrideAccess: true }),
+    payload.find({ collection: 'channelPages', where: { slug: { equals: slugStr } }, depth: 2, limit: 1, overrideAccess: true }),
+    payload.findGlobal({ slug: 'navigation', overrideAccess: true }),
   ])
 
   // Server-side access guard — reads fresh from DB and expands ancestor slugs
@@ -42,6 +42,9 @@ export default async function SlugPage({ params }: Props) {
 
   const trail = buildBreadcrumb(nav.items, slug)
   const currentHref = '/' + slug.join('/')
+
+  // v2
+  console.log('[slug-page] slug:', slugStr, 'content:', contentResult.docs.length, 'channel:', channelResult.docs.length)
 
   if (contentResult.docs[0]) {
     const page = contentResult.docs[0]
