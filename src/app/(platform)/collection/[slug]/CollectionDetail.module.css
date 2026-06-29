@@ -24,9 +24,9 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1.5px solid var(--blue-ascendum);
+  border: 1.5px solid var(--color-primary);
   background: var(--white);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@
 }
 
 .backBtn:hover {
-  background: var(--blue-ascendum);
+  background: var(--color-primary);
   color: var(--white);
 }
 
@@ -71,7 +71,7 @@
 
 .assetDescription p:first-child {
   font-weight: 600;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .assetDescription p:last-child {
@@ -113,7 +113,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--blue-ascendum);
+  background: var(--color-primary);
   color: var(--white);
   display: flex;
   align-items: center;
@@ -141,9 +141,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1.5px solid var(--grey-ascendum);
+  border: 1.5px solid var(--color-grey-light);
   background: var(--white);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,7 +154,7 @@
 }
 
 .navBtn:hover {
-  border-color: var(--blue-ascendum);
+  border-color: var(--color-primary);
 }
 
 .counterText {
@@ -179,9 +179,9 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1.5px solid var(--grey-ascendum);
+  border: 1.5px solid var(--color-grey-light);
   background: var(--white);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,7 +192,7 @@
 }
 
 .thumbNavBtn:hover {
-  border-color: var(--blue-ascendum);
+  border-color: var(--color-primary);
 }
 
 .thumbList {
@@ -228,7 +228,7 @@
 }
 
 .thumbActive {
-  border-color: var(--blue-ascendum);
+  border-color: var(--color-primary);
 }
 
 /* ── Right — sidebar ────────────────────────────────────────── */
@@ -256,7 +256,7 @@
   font-weight: var(--font-h4-weight);
   font-size: var(--font-h4-size);
   line-height: var(--font-h4-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -277,7 +277,7 @@
   font-family: var(--font-body-s-family);
   font-weight: var(--font-body-s-weight);
   font-size: 12px;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   background: rgba(0, 56, 70, 0.08);
   border-radius: 100px;
   padding: 3px 10px;
@@ -307,7 +307,7 @@
   font-family: var(--font-body-s-family);
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   margin-top: 16px;
   margin-bottom: 2px;
 }
@@ -324,7 +324,7 @@
   align-items: center;
   justify-content: center;
   padding: 14px 32px;
-  border: 1.5px solid var(--blue-ascendum);
+  border: 1.5px solid var(--color-primary);
   border-radius: 100px;
   background: var(--white);
   text-decoration: none;
@@ -332,12 +332,12 @@
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   transition: background-color 0.15s, color 0.15s;
   flex-shrink: 0;
 }
 
 .downloadCollectionBtn:hover {
-  background-color: var(--blue-ascendum);
+  background-color: var(--color-primary);
   color: var(--white);
 }

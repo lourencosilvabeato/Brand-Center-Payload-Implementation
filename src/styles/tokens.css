@@ -11,11 +11,11 @@ body {
 
 :root {
   /* ─── Colours ─────────────────────────────────────────────── */
-  --blue-ascendum: #003846;
-  --blue-ascendum-60: rgba(0, 56, 70, 0.6);
-  --blue-ascendum-90: rgba(0, 56, 70, 0.9);
-  --red-ascendum: #e31d1a;
-  --grey-ascendum: #d6d6d6;
+  --color-primary: #003846;
+  --color-primary-60: rgba(0, 56, 70, 0.6);
+  --color-primary-90: rgba(0, 56, 70, 0.9);
+  --color-accent: #e31d1a;
+  --color-grey-light: #d6d6d6;
   --darker-grey: #585858;
   --grey: #b1b1b1;
   --lightest-grey: #f4f4f4;

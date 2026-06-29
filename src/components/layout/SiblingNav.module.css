@@ -1,5 +1,5 @@
 .nav {
-  border-top: 1px solid var(--grey-ascendum);
+  border-top: 1px solid var(--color-grey-light);
   padding-top: 32px;
   margin-top: 48px;
 }
@@ -16,20 +16,20 @@
   align-items: center;
   gap: 16px;
   padding: 12px 24px;
-  border: 1px solid var(--blue-ascendum);
+  border: 1px solid var(--color-primary);
   border-radius: 100px;
   text-decoration: none;
   font-family: var(--font-body-m-semibold-family);
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   transition: background-color 0.15s, color 0.15s;
   white-space: nowrap;
 }
 
 .btn:hover {
-  background-color: var(--blue-ascendum);
+  background-color: var(--color-primary);
   color: var(--white);
 }
 

@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   height: 48px;
-  border-bottom: 1px solid var(--blue-ascendum);
+  border-bottom: 1px solid var(--color-primary);
   gap: 8px;
 }
 
@@ -17,11 +17,11 @@
   font-weight: var(--font-body-m-weight);
   font-size: var(--font-body-m-size);
   line-height: var(--font-body-m-line-height);
-  color: var(--blue-ascendum-60);
+  color: var(--color-primary-60);
 }
 
 .input::placeholder {
-  color: var(--blue-ascendum-60);
+  color: var(--color-primary-60);
 }
 
 .clearBtn {
@@ -31,7 +31,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--blue-ascendum-60);
+  color: var(--color-primary-60);
   padding: 0;
   width: 20px;
   height: 20px;

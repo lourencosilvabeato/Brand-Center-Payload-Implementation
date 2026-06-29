@@ -3,7 +3,7 @@
   align-items: center;
   gap: 16px;
   padding: 60px 64px;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .title {

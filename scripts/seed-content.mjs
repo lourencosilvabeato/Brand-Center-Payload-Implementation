@@ -100,7 +100,7 @@ const channelUpdates = [
       title: 'Brand Identity',
       excerpt: 'Our visual identity defines how we present ourselves to the world. Explore our logo, colour system, typography, and the rules for using them consistently.',
       description: lexDoc(
-        lexParagraph('The Ascendum visual identity is built on a precise set of elements that work together to create a consistent, recognisable brand across every touchpoint.'),
+        lexParagraph('The Acme visual identity is built on a precise set of elements that work together to create a consistent, recognisable brand across every touchpoint.'),
         lexParagraph('This section covers the foundational elements: our logo, colour palette, and typographic system. Follow these guidelines to ensure brand integrity in every application.'),
       ),
       buttons: [
@@ -109,7 +109,7 @@ const channelUpdates = [
       cards: [
         {
           title: 'Logo',
-          excerpt: 'Discover how to use the Ascendum logo correctly — from clear space rules to size restrictions and approved colour variants.',
+          excerpt: 'Discover how to use the Acme logo correctly — from clear space rules to size restrictions and approved colour variants.',
           page: { value: ch['logo'], relationTo: 'channelPages' },
         },
         {
@@ -124,7 +124,7 @@ const channelUpdates = [
     slug: 'brand-principles',
     data: {
       title: 'Brand Strategy',
-      excerpt: 'Discover the thinking and principles behind the Ascendum brand — our mission, values, and the story we tell the world.',
+      excerpt: 'Discover the thinking and principles behind the Acme brand — our mission, values, and the story we tell the world.',
       description: lexDoc(
         lexParagraph('A strong brand is built on a foundation of clear, consistent principles. Understanding who we are and what we stand for is the starting point for every brand decision.'),
         lexParagraph('This section contains our brand mission, core values, and the strategic framework that guides everything from campaign themes to day-to-day communications.'),
@@ -137,7 +137,7 @@ const channelUpdates = [
     slug: 'digital-applications',
     data: {
       title: 'Digital Applications',
-      excerpt: 'Guidelines for applying the Ascendum brand across digital channels — websites, social media, email marketing, and digital advertising.',
+      excerpt: 'Guidelines for applying the Acme brand across digital channels — websites, social media, email marketing, and digital advertising.',
       description: lexDoc(
         lexParagraph('Consistent digital brand application builds recognition and trust across all online platforms. This section provides specifications for every major digital format.'),
         lexParagraph('From responsive web layouts to social media templates and email signatures, you will find the rules and ready-to-use assets to get it right every time.'),
@@ -156,7 +156,7 @@ const channelUpdates = [
     slug: 'physical-applications',
     data: {
       title: 'Physical Applications',
-      excerpt: 'From business cards to large-format signage, this section covers how to apply the Ascendum brand in the physical world.',
+      excerpt: 'From business cards to large-format signage, this section covers how to apply the Acme brand in the physical world.',
       description: lexDoc(
         lexParagraph('Brand consistency in print and physical environments is just as important as digital. This section provides print-ready specifications, bleed settings, and material guidance.'),
         lexParagraph('Whether you are ordering printed collateral, specifying signage, or designing branded merchandise, start here for the correct files and specifications.'),
@@ -169,7 +169,7 @@ const channelUpdates = [
     slug: 'global-campaigns',
     data: {
       title: 'Global Campaigns',
-      excerpt: 'Explore the templates, assets, and guidelines that underpin Ascendum\'s global marketing campaigns.',
+      excerpt: 'Explore the templates, assets, and guidelines that underpin Acme\'s global marketing campaigns.',
       description: lexDoc(
         lexParagraph('Global campaigns require tight brand consistency across regions and languages. This section provides the master templates and assets for each campaign.'),
         lexParagraph('All local adaptations must begin from the approved master files found here and should be reviewed by the Brand Team before production.'),
@@ -182,7 +182,7 @@ const channelUpdates = [
     slug: 'logo',
     data: {
       title: 'Logo',
-      excerpt: 'The Ascendum logo is the cornerstone of our visual identity. Use it correctly and it will do enormous work for us.',
+      excerpt: 'The Acme logo is the cornerstone of our visual identity. Use it correctly and it will do enormous work for us.',
       description: lexDoc(
         lexParagraph('The logo must always be reproduced from the approved master files available in this section. Never redraw, distort, or recreate the logo from scratch.'),
         lexParagraph('Explore the subsections below for detailed usage rules, size restrictions, colour variants, and prohibited treatments.'),
@@ -210,7 +210,7 @@ const channelUpdates = [
       title: 'Colour System',
       excerpt: 'Our colour palette is carefully selected to communicate trust, clarity, and energy across all brand touchpoints.',
       description: lexDoc(
-        lexParagraph('Colour is one of the most powerful tools we have for building brand recognition. The Ascendum palette is defined precisely to ensure consistency across print, screen, and environmental applications.'),
+        lexParagraph('Colour is one of the most powerful tools we have for building brand recognition. The Acme palette is defined precisely to ensure consistency across print, screen, and environmental applications.'),
         lexParagraph('Explore the primary and secondary colour roles, usage rules, and accessibility guidance in the sections below.'),
       ),
       buttons: [],
@@ -243,7 +243,7 @@ const contentUpdates = [
       title: 'Logo Usage Guidelines',
       headerAnchorName: 'overview',
       excerpt: lexDoc(
-        lexParagraph('These guidelines govern how the Ascendum logo is used in all materials. Following them ensures our logo retains its integrity and impact wherever it appears.'),
+        lexParagraph('These guidelines govern how the Acme logo is used in all materials. Following them ensures our logo retains its integrity and impact wherever it appears.'),
       ),
       layout: [
         {
@@ -251,7 +251,7 @@ const contentUpdates = [
           title: 'Overview',
           anchorName: 'overview',
           body: lexDoc(
-            lexParagraph('The Ascendum logo consists of a wordmark and symbol. The two elements must never be separated, rearranged, or altered in any way.'),
+            lexParagraph('The Acme logo consists of a wordmark and symbol. The two elements must never be separated, rearranged, or altered in any way.'),
             lexParagraph('Always download the latest master files from this portal. Do not use logo files from older presentations, email signatures, or third-party sources.'),
           ),
         },
@@ -276,7 +276,7 @@ const contentUpdates = [
           anchorName: 'clear-space',
           body: lexDoc(
             lexParagraph('Clear space is the minimum breathing room around the logo that must be kept free of other graphic elements, text, and the edge of a page or screen.'),
-            lexParagraph('The minimum clear space is defined as the cap-height of the "A" in Ascendum on all four sides of the logo.'),
+            lexParagraph('The minimum clear space is defined as the cap-height of the "A" in Acme on all four sides of the logo.'),
           ),
         },
         {
@@ -340,7 +340,7 @@ const contentUpdates = [
       title: 'Colour Palette',
       headerAnchorName: 'primary-colours',
       excerpt: lexDoc(
-        lexParagraph('The Ascendum colour palette is the result of extensive research into colour psychology and competitive differentiation. Use these values exactly as specified.'),
+        lexParagraph('The Acme colour palette is the result of extensive research into colour psychology and competitive differentiation. Use these values exactly as specified.'),
       ),
       layout: [
         {
@@ -348,15 +348,15 @@ const contentUpdates = [
           title: 'Primary Colours',
           anchorName: 'primary-colours',
           body: lexDoc(
-            lexParagraph('Our primary colours are the dominant tones of the Ascendum brand. Navy Blue is our anchor — it communicates stability, trust, and expertise. Red Ascendum is reserved exclusively as an accent.'),
+            lexParagraph('Our primary colours are the dominant tones of the Acme brand. Navy Blue is our anchor — it communicates stability, trust, and expertise. Red Acme is reserved exclusively as an accent.'),
           ),
         },
         {
           blockType: 'tableBlock',
           rows: [
             { cells: [{ content: 'Colour', isHeader: true }, { content: 'Name', isHeader: true }, { content: 'Hex', isHeader: true }, { content: 'RGB', isHeader: true }, { content: 'CMYK', isHeader: true }] },
-            { cells: [{ content: '■', isHeader: false }, { content: 'Navy Blue (Ascendum)', isHeader: false }, { content: '#003846', isHeader: false }, { content: '0 / 56 / 70', isHeader: false }, { content: '100 / 20 / 0 / 73', isHeader: false }] },
-            { cells: [{ content: '■', isHeader: false }, { content: 'Red (Ascendum)', isHeader: false }, { content: '#E31D1A', isHeader: false }, { content: '227 / 29 / 26', isHeader: false }, { content: '0 / 87 / 89 / 11', isHeader: false }] },
+            { cells: [{ content: '■', isHeader: false }, { content: 'Navy Blue (Acme)', isHeader: false }, { content: '#003846', isHeader: false }, { content: '0 / 56 / 70', isHeader: false }, { content: '100 / 20 / 0 / 73', isHeader: false }] },
+            { cells: [{ content: '■', isHeader: false }, { content: 'Red (Acme)', isHeader: false }, { content: '#E31D1A', isHeader: false }, { content: '227 / 29 / 26', isHeader: false }, { content: '0 / 87 / 89 / 11', isHeader: false }] },
             { cells: [{ content: '■', isHeader: false }, { content: 'White', isHeader: false }, { content: '#FFFFFF', isHeader: false }, { content: '255 / 255 / 255', isHeader: false }, { content: '0 / 0 / 0 / 0', isHeader: false }] },
           ],
         },
@@ -375,7 +375,7 @@ const contentUpdates = [
           blockType: 'tableBlock',
           rows: [
             { cells: [{ content: 'Colour', isHeader: true }, { content: 'Name', isHeader: true }, { content: 'Hex', isHeader: true }, { content: 'Usage', isHeader: true }] },
-            { cells: [{ content: '■', isHeader: false }, { content: 'Grey (Ascendum)', isHeader: false }, { content: '#D6D6D6', isHeader: false }, { content: 'Backgrounds, borders, dividers', isHeader: false }] },
+            { cells: [{ content: '■', isHeader: false }, { content: 'Grey (Acme)', isHeader: false }, { content: '#D6D6D6', isHeader: false }, { content: 'Backgrounds, borders, dividers', isHeader: false }] },
             { cells: [{ content: '■', isHeader: false }, { content: 'Darker Grey', isHeader: false }, { content: '#585858', isHeader: false }, { content: 'Body text', isHeader: false }] },
             { cells: [{ content: '■', isHeader: false }, { content: 'Grey', isHeader: false }, { content: '#B1B1B1', isHeader: false }, { content: 'Inactive / disabled states', isHeader: false }] },
             { cells: [{ content: '■', isHeader: false }, { content: 'Lightest Grey', isHeader: false }, { content: '#F4F4F4', isHeader: false }, { content: 'Sidebar active background, subtle fills', isHeader: false }] },
@@ -397,9 +397,9 @@ const contentUpdates = [
           content: lexDoc(
             lexBulletList(
               'Navy Blue must be the dominant colour on any branded surface',
-              'Red Ascendum is an accent only — never use it as a background colour over large areas',
+              'Red Acme is an accent only — never use it as a background colour over large areas',
               'Do not create new tints or shades not listed in this palette',
-              'Do not use Navy Blue and Red Ascendum in equal proportion',
+              'Do not use Navy Blue and Red Acme in equal proportion',
               'White is the only approved background for body copy areas',
             ),
           ),
@@ -407,7 +407,7 @@ const contentUpdates = [
         {
           blockType: 'quoteBlock',
           text: 'Colour is the first thing people notice and the last thing they forget. Protect it with the same rigour you would apply to the logo.',
-          attribution: 'Ascendum Brand Strategy Team',
+          attribution: 'Acme Brand Strategy Team',
         },
         {
           blockType: 'dividerBlock',
@@ -500,7 +500,7 @@ const contentUpdates = [
       title: 'Digital Typography',
       headerAnchorName: 'typefaces',
       excerpt: lexDoc(
-        lexParagraph('Typography is a critical part of the Ascendum brand voice. These specifications ensure legibility, hierarchy, and consistency across all digital products.'),
+        lexParagraph('Typography is a critical part of the Acme brand voice. These specifications ensure legibility, hierarchy, and consistency across all digital products.'),
       ),
       layout: [
         {
@@ -508,14 +508,14 @@ const contentUpdates = [
           title: 'Typefaces',
           anchorName: 'typefaces',
           body: lexDoc(
-            lexParagraph('The Ascendum digital type system uses two typefaces: Montserrat for headings and display text, and IBM Plex Sans for body copy and UI elements.'),
+            lexParagraph('The Acme digital type system uses two typefaces: Montserrat for headings and display text, and IBM Plex Sans for body copy and UI elements.'),
           ),
         },
         {
           blockType: 'richText',
           content: lexDoc(
             lexHeading('h3', 'Montserrat'),
-            lexParagraph('A geometric sans-serif used exclusively for headings. Its strong, modern proportions reflect the confidence and ambition of the Ascendum brand.'),
+            lexParagraph('A geometric sans-serif used exclusively for headings. Its strong, modern proportions reflect the confidence and ambition of the Acme brand.'),
             lexHeading('h3', 'IBM Plex Sans'),
             lexParagraph('A humanist sans-serif optimised for on-screen legibility. Used for all body copy, captions, labels, navigation, and form elements.'),
           ),
@@ -569,7 +569,7 @@ const contentUpdates = [
         {
           blockType: 'quoteBlock',
           text: 'Typography is the detail and presentation of text. It gives language a visual form. Getting it right is as important as the words themselves.',
-          attribution: 'Ascendum Design System',
+          attribution: 'Acme Design System',
         },
       ],
     },
@@ -656,9 +656,9 @@ await payload.updateGlobal({
   slug: 'footerSettings',
   overrideAccess: true,
   data: {
-    brandName: 'Ascendum',
-    contactEmail: 'brand@ascendum.com',
-    copyright: '© 2025 Ascendum Group. All rights reserved.',
+    brandName: 'Acme',
+    contactEmail: 'brand@acmecorp.com',
+    copyright: '© 2025 Acme Group. All rights reserved.',
     socialLinks: [],
     legalLinks: [
       { label: 'Privacy Policy', url: '/privacy-policy' },
@@ -677,8 +677,8 @@ try {
     slug: 'homePage',
     overrideAccess: true,
     data: {
-      heroHeadline: 'Welcome to the Ascendum Brand Center',
-      heroIntroText: 'Your single source of truth for brand guidelines, assets, and creative resources across all Ascendum sub-brands.',
+      heroHeadline: 'Welcome to the Acme Brand Center',
+      heroIntroText: 'Your single source of truth for brand guidelines, assets, and creative resources across all Acme sub-brands.',
       newInTitle: 'NEW IN',
       newInBody: 'The latest updates and additions to our brand guidelines.',
       quickAccessTitle: 'QUICK ACCESS',

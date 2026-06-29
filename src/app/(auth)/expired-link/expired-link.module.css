@@ -18,7 +18,7 @@
   height: 300px;
   flex-shrink: 0;
   overflow: hidden;
-  background: var(--blue-ascendum);
+  background: var(--color-primary);
 }
 
 .heroImg {
@@ -33,7 +33,7 @@
 .heroFallback {
   position: absolute;
   inset: 0;
-  background: var(--blue-ascendum);
+  background: var(--color-primary);
 }
 
 /* ── Main column ────────────────────────────────────────── */
@@ -65,7 +65,7 @@
   font-weight: var(--font-h2-weight);
   font-size: var(--font-h2-size);
   line-height: var(--font-h2-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -91,7 +91,7 @@
   font-weight: var(--font-body-m-semibold-weight);
   font-size: var(--font-body-m-semibold-size);
   line-height: var(--font-body-m-semibold-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .expiredMessage {
@@ -109,21 +109,21 @@
   width: 100%;
   height: 48px;
   padding: 0 24px;
-  border: 1px solid var(--blue-ascendum);
+  border: 1px solid var(--color-primary);
   border-radius: 100px;
   background: transparent;
   font-family: var(--font-body-s-family);
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   text-decoration: none;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
 .loginBtn:hover {
-  background: var(--blue-ascendum);
+  background: var(--color-primary);
   color: var(--white);
 }
 
@@ -136,7 +136,7 @@
 
 .footerSeparator {
   height: 1px;
-  background: var(--grey-ascendum);
+  background: var(--color-grey-light);
   margin-bottom: 16px;
 }
 
@@ -159,7 +159,7 @@
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .socialIcons {
@@ -172,7 +172,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   transition: opacity 0.15s;
 }
 
@@ -192,12 +192,12 @@
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   text-decoration: underline;
 }
 
 .legalLink:hover {
-  color: var(--blue-ascendum-90);
+  color: var(--color-primary-90);
 }
 
 .copyright {

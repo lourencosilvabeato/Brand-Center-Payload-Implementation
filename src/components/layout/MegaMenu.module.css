@@ -43,7 +43,7 @@
   font-weight: var(--font-body-s-weight);
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
@@ -66,7 +66,7 @@
   font-weight: 400;
   font-size: var(--font-body-s-size);
   line-height: var(--font-body-s-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   text-decoration: none;
 }
 

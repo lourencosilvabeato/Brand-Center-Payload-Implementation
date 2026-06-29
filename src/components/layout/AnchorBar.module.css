@@ -30,15 +30,15 @@
 }
 
 .link:hover {
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .link.active {
   /* Combined selector — specificity (0,2,0) always beats .link (0,1,0) */
   /* padding-left: 21px so that border(3px) + padding(21px) = 24px total indent */
-  border-left: 3px solid var(--blue-ascendum);
+  border-left: 3px solid var(--color-primary);
   padding-left: 21px;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   font-weight: 600;
 }
 

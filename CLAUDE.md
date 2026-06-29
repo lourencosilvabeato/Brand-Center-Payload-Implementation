@@ -110,11 +110,11 @@ Extracted from Figma file `YOUR_FIGMA_FILE_KEY`, node `5526:27925`.
 
 | Token | Hex | Usage |
 |---|---|---|
-| `--blue-ascendum` | `#003846` | Primary — logo, headings, nav, brand containers |
-| `--blue-ascendum-60` | `rgba(0,56,70,0.6)` | Placeholder text, muted elements |
-| `--blue-ascendum-90` | `rgba(0,56,70,0.9)` | Footer border |
-| `--red-ascendum` | `#E31D1A` | Accent only — highlights, CTAs |
-| `--grey-ascendum` | `#D6D6D6` | Backgrounds, dividers |
+| `--color-primary` | `#003846` | Primary — logo, headings, nav, brand containers |
+| `--color-primary-60` | `rgba(0,56,70,0.6)` | Placeholder text, muted elements |
+| `--color-primary-90` | `rgba(0,56,70,0.9)` | Footer border |
+| `--color-accent` | `#E31D1A` | Accent only — highlights, CTAs |
+| `--color-grey-light` | `#D6D6D6` | Backgrounds, dividers |
 | `--darker-grey` | `#585858` | Body text |
 | `--grey` | `#B1B1B1` | Inactive states |
 | `--lightest-grey` | `#F4F4F4` | Sidebar active background |

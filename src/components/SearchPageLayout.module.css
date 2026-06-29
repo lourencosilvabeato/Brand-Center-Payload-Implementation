@@ -48,9 +48,9 @@
 
 .active {
   font-weight: 600;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   background-color: var(--lightest-grey);
-  border-left-color: var(--red-ascendum);
+  border-left-color: var(--color-accent);
 }
 
 /* ── Main content ─────────────────────────────────────────── */
@@ -58,7 +58,7 @@
 .content {
   flex: 1;
   min-width: 0;
-  border-left: 1px solid var(--blue-ascendum);
+  border-left: 1px solid var(--color-primary);
   padding: 60px 64px;
 }
 
@@ -71,7 +71,7 @@
   font-weight: var(--font-h2-weight);
   font-size: var(--font-h2-size);
   line-height: var(--font-h2-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   margin: 0 0 8px;
 }
 
@@ -86,7 +86,7 @@
 
 .resultCountTerm {
   font-weight: 600;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 /* ── Results list ─────────────────────────────────────────── */
@@ -122,7 +122,7 @@
   font-weight: var(--font-h5-weight);
   font-size: var(--font-h5-size);
   line-height: var(--font-h5-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .resultExcerpt {
@@ -139,7 +139,7 @@
   font-weight: var(--font-body-s-regular-weight);
   font-size: var(--font-body-s-regular-size);
   line-height: var(--font-body-s-regular-line-height);
-  color: var(--blue-ascendum-60);
+  color: var(--color-primary-60);
   margin: 0;
 }
 
@@ -153,12 +153,12 @@
 
 .chevronIcon {
   flex-shrink: 0;
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
 }
 
 .separator {
   border: none;
-  border-top: 1px solid var(--grey-ascendum);
+  border-top: 1px solid var(--color-grey-light);
   margin: 0;
 }
 
@@ -188,8 +188,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--blue-ascendum);
-  color: var(--blue-ascendum);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
   text-decoration: none;
   transition: opacity 0.15s;
   flex-shrink: 0;
@@ -210,7 +210,7 @@
   font-weight: var(--font-body-s-regular-weight);
   font-size: var(--font-body-s-regular-size);
   line-height: var(--font-body-s-regular-line-height);
-  color: var(--blue-ascendum);
+  color: var(--color-primary);
   padding: 0 8px;
 }
 
@@ -232,7 +232,7 @@
 
   .content {
     border-left: none;
-    border-top: 1px solid var(--blue-ascendum);
+    border-top: 1px solid var(--color-primary);
     padding: 32px 24px;
   }
 }

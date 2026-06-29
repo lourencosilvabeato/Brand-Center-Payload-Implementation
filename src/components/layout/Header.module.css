@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: var(--blue-ascendum);
+  background-color: var(--color-primary);
 }
 
 .inner {
@@ -68,7 +68,7 @@
 
 .navLink:hover,
 .navLinkActive {
-  border-bottom-color: var(--red-ascendum);
+  border-bottom-color: var(--color-accent);
 }
 
 /* Profile */
