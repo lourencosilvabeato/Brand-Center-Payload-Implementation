@@ -1,6 +1,8 @@
 # Brand Center — Payload CMS + Next.js
 
-A private digital platform centralising brand guidelines and assets for a multi-brand corporate group. Internal staff authenticate via Azure AD SSO; external partners are invited by admins and authenticate with email and password. Built as a parallel implementation alongside a WordPress version for comparative CMS evaluation.
+A private digital platform centralising brand guidelines and assets for a multi-brand corporate group. Internal staff authenticate via Azure AD SSO; external partners are invited by admins and authenticate with email and password. Built as a parallel implementation alongside a [WordPress version](https://github.com/lourencosilvabeato/Brand-Center-WordPress-Implementation) — same functional requirements, same Figma designs, same Confluence specifications — implemented on a different technology stack to evaluate AI-assisted development across different CMS environments.
+
+
 
 ---
 
