@@ -1,227 +1,224 @@
 # Brand Center — Payload CMS + Next.js
 
-A private digital platform centralising brand guidelines and assets for a multi-brand corporate group. Built as a Payload CMS 3.x + Next.js application with dual authentication (Azure AD SSO for internal users, email+password for external partners).
+A private digital platform centralising brand guidelines and assets for a multi-brand corporate group. Internal staff authenticate via Azure AD SSO; external partners are invited by admins and authenticate with email and password. Built as a parallel implementation alongside a WordPress version for comparative CMS evaluation.
 
-This project is one of two parallel implementations of the same product — the other built on WordPress — produced for comparative evaluation of CMS platforms against identical requirements, Figma designs, and specifications.
+---
+
+## Overview
+
+Brand Center gives a corporate group and its sub-brands a single authenticated space for brand guidelines, downloadable assets, and editorial content. The platform serves two distinct user types: internal collaborators who sign in via Microsoft Azure AD, and invited external users — agencies, suppliers, and partners — who use Payload's built-in email+password auth.
+
+Content is entirely CMS-driven through Payload's Admin UI. Editors build pages from a library of 10 block types using the Lexical rich text editor. A three-level navigation tree managed as a Payload global drives every nav component simultaneously — mega-menu, mobile menu, left sidebar, and breadcrumb — from a single source of truth.
+
+---
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Homepage](docs/screenshots/homepage.png) |
+| Login — SSO + email/password | Homepage — New In + Quick Access |
+| ![Channel page](docs/screenshots/channel-page.png) | ![Content page](docs/screenshots/content-page.png) |
+| Channel page — child card grid | Content page — block layout + anchor bar |
+| ![Search](docs/screenshots/search.png) | ![Mega-menu](docs/screenshots/mega-menu.png) |
+| Search results | Mega-menu — 3-level navigation |
+| ![Payload admin](docs/screenshots/admin.png) | ![Mobile](docs/screenshots/mobile.png) |
+| Payload Admin — content management | Mobile menu |
 
 ---
 
 ## Key Features
 
-- **Dual authentication** — Azure AD OAuth for internal/SSO users; Payload built-in auth for external users (partners, agencies)
-- **Role-based access control** — four roles (Admin, Local Admin, Internal, External) with different capabilities
-- **Invite flow** — Admins invite external users via tokenised email links; tokens are SHA-256 hashed and expire after 24 hours
-- **Rich content pages** — block-based layout system (10 block types) built on Payload's Lexical editor
-- **3-level navigation** — mega-menu with dynamic content sourced entirely from Payload globals
-- **Protected file downloads** — authenticated-only access to brand assets via a separate Payload collection
-- **Transactional email** — Nodemailer SMTP for invitations, password recovery, admin-initiated resets, and contact form
-- **Full-text search** — Payload-powered search across all content pages
-- **Mobile-responsive** — custom mobile menu and responsive layout throughout
+**Dual Authentication and Role System**
+Internal users authenticate via Azure AD OAuth through a custom callback route. External users are invited by admins and authenticate with Payload's built-in email+password. Four roles — Admin, Local Admin, Internal, External — control what each user can access. All role assignments live in Payload collections, not in Azure AD.
+
+**Secure Token Flows**
+Invite links, password recovery, and admin-initiated resets share the same pattern: a SHA-256 hashed token stored in a dedicated Payload collection with a 24-hour expiry and a `used` flag. Raw tokens are never persisted.
+
+**Block-Based Content Pages**
+Editors build pages from 10 block types — rich text (Lexical), image, quote, note/callout, table, grid, download, FAQ accordion, divider, and collection card. All editorial content is Payload-driven with no hardcoded copy in components.
+
+**Navigation-Driven Layout**
+A three-level navigation tree lives in a single Payload global and simultaneously drives the mega-menu, mobile menu, left sidebar, and breadcrumb. Changing the tree in the Admin UI updates every layout component at once.
+
+**Protected File Downloads**
+Brand assets live in a separate `protectedFiles` collection. A custom API route verifies the session before streaming the file — unauthenticated requests are rejected before the stream opens.
+
+**Transactional Email**
+Four email triggers — invite, password recovery, admin-initiated reset, contact form — all route through a single Nodemailer transporter configured from environment variables. No email logic is duplicated across routes.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| CMS / Backend | Payload CMS 3.x |
-| Frontend | Next.js 14 (App Router) |
-| Database | PostgreSQL via Drizzle ORM (`@payloadcms/db-postgres`) |
-| Auth — Internal | Azure AD OAuth (custom callback route) |
-| Auth — External | Payload built-in email+password |
-| Styling | CSS Modules + CSS custom properties |
-| Language | TypeScript (strict) |
-| Email | Nodemailer (SMTP) |
-| Deployment | Docker + AWS ECR/EC2 via Bitbucket Pipelines |
+| Layer | Technology | Rationale |
+|---|---|---|
+| Framework | Next.js 14 (App Router) | Server Components + Route Handlers in one deploy |
+| CMS / Backend | Payload CMS 3.x | Collections, globals, blocks, access control, and Admin UI in one package |
+| Database | PostgreSQL via Drizzle ORM | `@payloadcms/db-postgres` — typed queries, migrations managed by Payload |
+| Auth — Internal | Azure AD OAuth (custom route) | SSO for internal users without storing passwords |
+| Auth — External | Payload built-in email+password | Invite-only onboarding with Payload managing hashing and sessions |
+| Styling | CSS Modules + CSS custom properties | Scoped styles, design tokens via variables — no Tailwind |
+| Language | TypeScript strict | End-to-end types from Payload-generated `payload-types.ts` |
+| Email | Nodemailer via SMTP | Single transporter reused across all email triggers |
+| Deployment | Docker + AWS ECR/EC2 | Bitbucket Pipelines CI/CD with automatic security group management |
 
 ---
 
 ## Architecture
 
-### Monorepo — Payload embedded in Next.js
-
-Payload runs inside the same Next.js app. The Payload Admin UI is served at `/admin`. All content queries use the Payload **Local API** server-side — no HTTP round-trips, no REST calls from the frontend.
-
 ```
-app/
-├── (auth)/        # Login, set-password, reset-password, expired-link
-├── (platform)/    # Authenticated shell — header, footer, sidebar
-│   └── [...slug]/ # Dynamic routing → channelPage or contentPage
-├── (public)/      # Unauthenticated legal pages
-└── api/
-    ├── [...payload]/          # Payload REST API + Admin
-    └── users/oauth/callback/  # Azure AD callback
+Browser (React Client Components)
+        ↕  Custom API routes  /api/...
+Next.js App Router + Payload CMS 3.x
+        ↕  Payload Local API (no HTTP — direct function call)
+PostgreSQL (Drizzle ORM)
+        ↕
+Local filesystem (media)     Azure AD (SSO)     SMTP (email)
 ```
 
-### Authentication flow
+**Key architectural principles:**
 
-```
-Internal users  →  Azure AD OAuth  →  /api/users/oauth/callback/azure  →  Payload session
-External users  →  Payload email+password login  →  Payload session
-```
-
-Both paths converge on a Payload JWT cookie (`payload-token`). Middleware verifies the token on every request to `(platform)/` routes.
-
-### Content model
-
-| Collection | Purpose |
-|---|---|
-| `platformUsers` | Internal/SSO users with role |
-| `externalUsers` | External users with Payload-managed passwords |
-| `channelPages` | Landing pages with child cards (C01) |
-| `contentPages` | Block-layout content pages (C02) |
-| `legalPages` | Public legal pages |
-| `media` | Image uploads |
-| `protectedFiles` | Auth-gated downloadable brand assets |
-| `invitations` / `passwordResets` | Secure token storage (hashed) |
-
-Globals: `homePage`, `navigation`, `footerSettings`.
+- Payload runs **inside** Next.js — one deploy, shared TypeScript types generated automatically via `npm run generate:types`
+- All content queries use the **Payload Local API** server-side — no HTTP round-trips between the frontend and the CMS
+- Authentication converges on a single **`payload-token` JWT cookie** regardless of login method (SSO or email+password)
+- The **middleware** (Edge runtime) decodes the JWT structurally and enforces role-based route access before any page renders
+- Every secure token (invite, reset) is **SHA-256 hashed before storage** — the raw token only ever exists in the email link
 
 ---
 
 ## AI Integration
 
-This project was built using **Claude Code** (Anthropic's CLI agent) as the primary development tool, following a structured prompt library methodology.
+This project was built entirely using **Claude Code** (Anthropic's CLI agent) as the primary implementation tool, driven by a structured prompt library approach.
 
-### What this means in practice
+The repository includes a `CLAUDE.md` file — a persistent context document that Claude Code reads at the start of every session. It encodes the full technical specification, design token values, coding conventions, branch naming rules, and a 6-step per-requirement workflow connecting three MCP-integrated tools:
 
-The repository includes a `CLAUDE.md` file — a persistent context document that Claude Code reads at the start of every session. It defines:
+1. **Confluence MCP** — fetches the functional specification for each requirement
+2. **Figma MCP** — reads component designs and design tokens directly from the Figma file
+3. **Miro MCP** — accesses IA diagrams and navigation flow specs
 
-- The full technical specification (stack, architecture, collections, auth flow)
-- Design token values extracted from Figma
-- A 6-step per-requirement workflow (fetch Confluence spec → fetch Figma design → check Miro IA → implement → cross-check → test)
-- Coding conventions, branch naming rules, and commit workflow
-- Links to connected MCP tools (Figma, Confluence, Miro)
+Each feature was implemented by prompting Claude Code with a requirement reference (e.g. "implement A02 — invite flow"). Claude would fetch the Confluence spec, read the Figma design, implement the feature end-to-end, and commit to the correct feature branch — all in one session.
 
-Each feature was implemented by prompting Claude Code with the requirement reference (e.g. "implement A02 — invite flow"). Claude would then fetch the Confluence spec, read the Figma design via the Figma MCP server, implement the feature end-to-end, and follow the defined git workflow to branch, commit, and push.
-
-### MCP integrations used
-
-- **Figma MCP** — fetched component designs and design tokens directly from the Figma file
-- **Confluence MCP** — fetched functional specifications from the project's Confluence space
-- **Miro MCP** — accessed IA diagrams and flow specs from the design board
-
-### Why this approach
-
-Building a CMS platform from scratch with a well-structured CLAUDE.md allowed consistent, specification-driven implementation across 20+ feature branches without context loss between sessions. The methodology is documented in the repo itself — `CLAUDE.md` is the single source of truth for how the project was built.
+`PROMPTS.md` (in this repository) documents every feature that was built — implementation notes, file locations, and extension guides — structured as a reference for future Claude Code sessions.
 
 ---
 
 ## Project Structure
 
 ```
-├── app/                  # Next.js App Router
-├── src/
-│   ├── components/
-│   │   ├── layout/       # Header, Footer, MegaMenu, MobileMenu, Sidebar, Breadcrumb, AnchorBar
-│   │   ├── blocks/       # Block renderer + 10 block components
-│   │   ├── auth/         # LoginForm, InviteForm, ResetPasswordForm, SetPasswordForm, ChangePasswordForm
-│   │   └── homepage/     # HomepageHero, HomepageNewIn, HomepageQuickAccess
-│   ├── lib/
-│   │   ├── auth.ts       # Session helpers + Azure AD OAuth logic
-│   │   ├── email.ts      # Nodemailer transporter + all email templates
-│   │   ├── payload.ts    # getPayload() helper for Local API
-│   │   └── tokens.ts     # Secure token generation and verification
-│   ├── payload/
-│   │   ├── collections/  # All Payload collection definitions
-│   │   ├── globals/      # homePage, navigation, footerSettings, loginSettings
-│   │   └── blocks/       # All block definitions (richText, image, quote, note, table, grid, download, faq…)
-│   └── styles/
-│       └── tokens.css    # CSS custom properties (colours, typography)
-├── CLAUDE.md             # AI context document — project spec, workflow, conventions
-├── bitbucket-pipelines.yml  # CI/CD pipeline (Docker → AWS ECR → EC2)
-└── .env.example          # All required environment variables with descriptions
+src/
+├── app/
+│   ├── (auth)/                             — Unauthenticated pages
+│   │   ├── login/                          — Custom login (A01)
+│   │   ├── set-password/                   — Invite onboarding (A02)
+│   │   ├── reset-password/                 — Password recovery (A03)
+│   │   └── expired-link/                   — Token expiry feedback
+│   ├── (platform)/                         — Authenticated shell
+│   │   ├── layout.tsx                      — Header + Footer + auth guard
+│   │   ├── page.tsx                        — Homepage (B01)
+│   │   ├── [...slug]/page.tsx              — Channel (C01) or Content (C02)
+│   │   ├── search/                         — Full-text search (D01)
+│   │   ├── contact/                        — Contact form (E01)
+│   │   ├── faqs/                           — FAQ page (E02)
+│   │   └── change-password/                — Change password (A05)
+│   ├── (public)/                           — Unauthenticated legal pages (E03)
+│   └── api/
+│       ├── invite/                         — Invite creation + redemption
+│       ├── reset-password/                 — Recovery request + confirm
+│       ├── admin-reset-password/           — Admin-initiated reset (A04)
+│       ├── change-password/                — Authenticated password change
+│       ├── download/[fileId]/              — Protected file streaming
+│       ├── logout/                         — Session teardown
+│       └── users/oauth/callback/azure/     — Azure AD OAuth callback
+├── components/
+│   ├── layout/                             — Header, Footer, MegaMenu, MobileMenu,
+│   │                                         LeftSidebar, Breadcrumb, AnchorBar
+│   ├── blocks/                             — Blocks.tsx dispatcher + 10 block components
+│   ├── auth/                               — LoginForm, InviteForm, ResetPasswordForm,
+│   │                                         SetPasswordForm, ChangePasswordForm
+│   └── homepage/                           — HomepageHero, HomepageNewIn, HomepageQuickAccess
+├── payload/
+│   ├── collections/                        — platformUsers, externalUsers, invitations,
+│   │                                         passwordResets, channelPages, contentPages,
+│   │                                         legalPages, media, protectedFiles
+│   ├── globals/                            — homePage, navigation, footerSettings, loginSettings
+│   ├── blocks/                             — richText, imageBlock, quoteBlock, noteBlock,
+│   │                                         tableBlock, gridBlock, collectionCardBlock,
+│   │                                         downloadBlock, dividerBlock, faqBlock
+│   └── payload.config.ts
+├── lib/
+│   ├── auth.ts                             — Session helpers + Azure AD OAuth logic
+│   ├── email.ts                            — Nodemailer transporter + all email templates
+│   ├── payload.ts                          — getPayload() helper for Local API
+│   └── tokens.ts                           — SHA-256 token generation and verification
+└── styles/
+    └── tokens.css                          — CSS custom properties (colours, typography)
 ```
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 20+
-- PostgreSQL running locally
-- An Azure AD App Registration (for SSO — optional for local dev, can be skipped)
-- SMTP credentials (for email — optional for local dev)
-
-### Setup
-
 ```bash
-# 1. Clone and install
-git clone https://github.com/lourencosilvabeato-blip/Brand-Center---Payload.git
+git clone https://github.com/lourencosilvabeato/Brand-Center---Payload.git
 cd Brand-Center---Payload
 npm install
-
-# 2. Configure environment
 cp .env.example .env
-# Edit .env with your local values
+# fill in DATABASE_URL and PAYLOAD_SECRET at minimum
+```
 
-# 3. Create the PostgreSQL database
-createdb brand-center
+**Start PostgreSQL:**
 
-# 4. Start the dev server (Payload auto-migrates on first run)
+```bash
+docker run -d --name brand-center-db \
+  -e POSTGRES_DB=brand-center \
+  -e POSTGRES_PASSWORD=yourpassword \
+  -p 5432:5432 postgres:16
+```
+
+**Run dev server (Payload auto-migrates on first start):**
+
+```bash
 npm run dev
 ```
 
-The app starts at `http://localhost:3000`. Payload Admin is at `http://localhost:3000/admin`.
+Open [http://localhost:3000/admin](http://localhost:3000/admin) to create the first admin user via Payload's setup flow, then go to [http://localhost:3000/login](http://localhost:3000/login) to access the platform.
 
-On first run, navigate to `/admin` to create the first admin user via Payload's built-in setup flow.
-
----
-
-## Test Credentials
-
-For local testing without Azure AD:
-
-1. In Payload Admin, create a document in the `externalUsers` collection with an email and password
-2. Log in at `/login` using that email and password
-
-To test the SSO flow, an Azure AD App Registration with the correct redirect URI is required.
+For SSO testing, an Azure AD App Registration with the matching redirect URI is required. For email+password testing only, create a user directly in Payload Admin under `externalUsers`.
 
 ---
 
 ## Environment Variables
 
-See `.env.example` for all required variables with comments. The key ones:
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `PAYLOAD_SECRET` | Yes | JWT signing secret — use a long random string |
+| `AZURE_CLIENT_ID` | Yes (for SSO) | Azure AD App Registration client ID |
+| `AZURE_CLIENT_SECRET` | Yes (for SSO) | Azure AD App Registration client secret |
+| `AZURE_TENANT_ID` | Yes (for SSO) | Azure AD directory (tenant) ID |
+| `AZURE_REDIRECT_URI` | Yes (for SSO) | Must match a Redirect URI registered in Azure |
+| `SMTP_USER` | Yes (for email) | SMTP username / login |
+| `SMTP_PASS` | Yes (for email) | SMTP password or API key |
+| `EMAIL_FROM` | No | Sender address — falls back to `SMTP_USER` |
+| `NEXT_PUBLIC_APP_URL` | Yes | Base URL used to build links in emails |
 
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `PAYLOAD_SECRET` | JWT signing secret for Payload sessions |
-| `AZURE_CLIENT_ID` | Azure AD app registration client ID |
-| `AZURE_CLIENT_SECRET` | Azure AD app registration client secret |
-| `AZURE_TENANT_ID` | Azure AD directory (tenant) ID |
-| `AZURE_REDIRECT_URI` | Must match a registered redirect URI in Azure |
-| `SMTP_USER` / `SMTP_PASS` | SMTP credentials for transactional email |
-| `EMAIL_FROM` | Sender address for outgoing emails |
-| `NEXT_PUBLIC_APP_URL` | Base URL used in email links |
+See `.env.example` for the complete template with descriptions.
 
 ---
 
 ## Scope and Roadmap
 
-### Implemented
+**Implemented:** Full authentication lifecycle (SSO, invite, password recovery, admin reset, change password, logout), block-based content pages (10 block types), channel landing pages, 3-level navigation, mega-menu and mobile menu, left sidebar and anchor bar, homepage, full-text search, contact form, protected file downloads, public legal pages, 404, and CI/CD pipeline to AWS EC2 via Docker.
 
-- Authentication: SSO (Azure AD), email+password, invite flow, password recovery, admin-initiated reset, change password, logout
-- Layout: Header, mega-menu, mobile menu, left sidebar, breadcrumb, anchor bar, footer
-- Page types: Homepage, channel pages (with cards), content pages (block layout), legal pages (public)
-- Block types: Rich text (Lexical), image, quote, note/callout, table, grid, download, FAQ accordion, divider, collection card
-- Search: Full-text across all content
-- Contact form with email notification
-- Protected file downloads (auth-gated)
-- 404 page
-- Responsive across desktop and mobile
-
-### Not in scope (this implementation)
-
-- Sub-brand switching UI
-- Analytics / usage tracking
-- Payload Admin customisation beyond default
+**Not in scope for this implementation:** Sub-brand switching UI, analytics and usage tracking, Payload Admin customisation beyond default, and the WordPress parallel implementation (separate repository).
 
 ---
 
 ## Development Approach
 
-Feature branches follow the naming convention in `CLAUDE.md`. Each feature was developed in a dedicated branch, merged into `dev`, and deployed to staging via CI/CD on merge to `main`.
-
-The CI/CD pipeline (`bitbucket-pipelines.yml`) builds a Docker image, pushes it to AWS ECR, and deploys to EC2 via SSH — with automatic security group ingress/egress management for the pipeline IP.
+- Architected and implemented with [Claude Code](https://claude.ai/code) using `CLAUDE.md` as persistent project context across sessions
+- `PROMPTS.md` documents every built feature — implementation notes, file locations, and extension guides — as a reference for future sessions
+- Specification-driven: each feature was implemented by fetching the Confluence spec and Figma design via MCP before writing any code
+- 20+ logical feature branches with structured commit messages for full traceability
+- Parallel implementation alongside a WordPress version against identical requirements — same Figma file, same Confluence specs, same functional brief
